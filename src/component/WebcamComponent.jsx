@@ -1,100 +1,55 @@
 import React, { useRef, useEffect, useState } from 'react';
+import axios from 'axios';
 
 const WebcamComponent = () => {
-    const videoRef = useRef(null);
-    const [isCameraOn, setIsCameraOn] = useState(false);
-    const [stream, setStream] = useState(null);
-    const [processedImage, setProcessedImage] = useState(null);
+    const [articles, setArticles] = useState([]);
+    const [keyword, setKeyword] = useState("");
 
-    const startCamera = async () => {
+    const searchData = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                setStream(stream);
-            }
-            setIsCameraOn(true);
+            const response = await axios.post('http://127.0.0.1:8080/data', { keyword });
+            setArticles(response.data);
         } catch (err) {
-            console.error("Error accessing webcam: ", err);
+            console.error("Error searching data from server: ", err);
         }
     };
 
-    const stopCamera = () => {
-        if (videoRef.current) {
-            videoRef.current.srcObject = null;
-        }
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-        }
-        setIsCameraOn(false);
-    };
+    const onInputChange = (event) => {
+        setKeyword(event.target.value);
+    }
 
-    const sendFrameToServer = async (frame) => {
-        try {
-            const response = await fetch('http://127.0.0.1:8080/data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ frame })
-            });
-            const data = await response.json();
-            setProcessedImage(`data:image/jpeg;base64,${data.processed_image}`);
-        } catch (err) {
-            console.error("Error sending frame to server: ", err);
-        }
-    };
-
-    useEffect(() => {
-        if (isCameraOn && videoRef.current) {
-            const interval = setInterval(() => {
-                const canvas = document.createElement('canvas');
-                canvas.width = videoRef.current.videoWidth;
-                canvas.height = videoRef.current.videoHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-                const frame = canvas.toDataURL('image/jpeg');
-                sendFrameToServer(frame);
-            }, 1000); // 1초마다 프레임 전송
-
-            return () => clearInterval(interval);
-        }
-    }, [isCameraOn]);
-
-    useEffect(() => {
-        return () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-        };
-    }, [stream]);
-
-    const saveImage = () => {
-        if (processedImage) {
-            const link = document.createElement('a');
-            link.href = processedImage;
-            link.download = 'processed_image.jpg';
-            link.click();
-        }
-    };
+    const onSearch = (event) => {
+        event.preventDefault();
+        searchData();
+    }
 
     return (
         <>
-            <h1>Webcam 화면</h1>
-            <div>
-                <button onClick={isCameraOn ? stopCamera : startCamera}>
-                    {isCameraOn ? '카메라 끄기' : '카메라 켜기'}
+            <h1>네이버 IT 기사</h1>
+            <form onSubmit={onSearch}>
+                <input value={keyword} onChange={onInputChange} />
+                <button type="submit" class="search-button">
+                    검색
                 </button>
-                <button onClick={saveImage} disabled={!processedImage}>
-                    사진 저장
-                </button>
-            </div>
-            <div style={{ display: "flex" }}>
-                <video ref={videoRef} autoPlay playsInline />
-                <div>
-                    {processedImage && <img src={processedImage} alt="Processed" />}
-                </div>
-            </div>
+            </form>
+            <ul className="article-list">
+                {articles.map((article, index) => (
+                    <li key={index} className="article-item">
+                        <a href={article.link} target="_blank" rel="noreferrer" className="article-link">
+                            <div className="image-container">
+                                <img src={article.image} alt="image" className="article-image" />
+                            </div>
+                            <div className="article-info">
+                                <h3 className="article-title">{article.title}</h3>
+                                <p className="article-content">내용: {article.content}</p>
+                                <p className="article-time">시간: {article.time}</p>
+                                <p className="article-source">출처: {article.source}</p>
+                            </div>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+
         </>
     );
 };
