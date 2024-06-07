@@ -1,70 +1,23 @@
-# Getting Started with Create React App
+# nain
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 커밋 앤 푸쉬 코멘트 Rule
 
-## Available Scripts
+- 커밋
+   커밋제목은 영어로 통일
+   변경사항이 있는 경우 매 시간마다 커밋 권장.
+   코멘트 몰아서 달지 않도록 작업한 뭉치마다 커밋 권장.
 
-In the project directory, you can run:
+- 작성 내용
+   1. 무엇을 (파일이름)
+   2. 어떻게 (추가, 수정, 삭제)
+   3. 내용 : 이유, 도출된 결과
+   4. 참고사항 : 별도 학습 내용, 참고 링크
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   타이틀명 Insert | Update | Delete 파일명
+-  기능이 여러개 존재시 커밋 따로 권장
+-  ex member 패키지안 Member.java memberNo 수정시
+   ex. Update Member.java memberNo String > Long
+-  내용 : Update Member.java memberNo String > Long
+-  Member fin
+   CommunityController 게시글 작성, 게시글 수정 메소드 새로 추가하였음. Service 및 Repository 에 관련 내용 추가 필요.
+   게시글 작성시 파일 업로드 부분에 대한 내용이 미흡하여 서치하여 참고하였음. (https://velog.io/@gun_123/java-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%B2%98%EB%A6%AC)
