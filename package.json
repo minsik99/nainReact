@@ -18,15 +18,15 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-responsive": "^9.0.2",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "proxy": "http://localhost:8080",
   "scripts": {
-    "dev": "next dev -p 3000",
-    "build": "next build -p 3000",
-    "start": "next start -p 3000"
-  },
+  "start": "react-scripts start",
+  "build": "react-scripts build"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
