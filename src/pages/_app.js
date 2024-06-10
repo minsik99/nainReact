@@ -28,7 +28,7 @@ const MyApp = ({ Component, pageProps }) => {
                 <Container fluid className="navigation-container">
                     <NavigationBar/>
                 </Container>
-                <WebcamComponent />
+                {/* <WebcamComponent /> */}
                 <Container fluid className="flex-container">
                     <Component {...pageProps} authStore={authStore} />
                 </Container>
