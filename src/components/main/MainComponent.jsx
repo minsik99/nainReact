@@ -1,14 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 
-const MainComponent = () => {
-    return (
-        <>
-            <h1>main 화면</h1>
-            <div>
-                테스트
-            </div>
-        </>
-    );
+
+  return (
+    <>
+      <h1>main 화면</h1>
+    </>
+  );
 };
+
 export default MainComponent;
