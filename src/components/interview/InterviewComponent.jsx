@@ -87,8 +87,9 @@ const InterviewComponent = () => {
     const saveVideo = async () => {
         try {
             stopRecording()
+            await axios.post('/interviewlist');
+
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
-            
             const formData = new FormData();
             formData.append('video', blob, 'recorded_video.webm');
 
