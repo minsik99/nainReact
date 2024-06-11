@@ -1,5 +1,5 @@
 import axios from "./axiosApi"
-import {authStore} from "../stores/authStore";
+import { authStore } from "../stores/authStore"
 
 const baseUrl = "/api/auth"
 export const singUp = (singUpData) => {
