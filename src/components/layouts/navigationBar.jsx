@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import {observer} from "mobx-react";
-import {authStore} from "../../stores/authStore";
-import {logout} from "../../api/user";
+import { authStore } from '../../stores/authStore';
+import { logout } from '../../api/user';
 
 const NavigationBar = observer(()=>{
 
@@ -29,7 +29,7 @@ const NavigationBar = observer(()=>{
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="/start" >시작하기</Nav.Link>
+                        <Nav.Link href="/search" >시작하기</Nav.Link>
                         <Nav.Link href={"/notice"}>공지사항</Nav.Link>
                         <Nav.Link>게시판</Nav.Link>
                     </Nav>

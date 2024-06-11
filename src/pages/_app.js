@@ -6,7 +6,6 @@ import {QueryClient, QueryClientProvider} from 'react-query'; // 리액트 쿼�
 import NavigationBar from "../components/layouts/navigationBar";
 import {Container, ThemeProvider} from "react-bootstrap";
 import {authStore} from "../stores/authStore";
-import WebcamComponent from '../component/WebcamComponent';
 import '../App.css'
 
 // QueryClient 인스턴스를 생성합니다. 이 인스턴스를 통해 쿼리의 설정과 상태를 관리할 수 있습니다.
@@ -28,7 +27,6 @@ const MyApp = ({ Component, pageProps }) => {
                 <Container fluid className="navigation-container">
                     <NavigationBar/>
                 </Container>
-                {/* <WebcamComponent /> */}
                 <Container fluid className="flex-container">
                     <Component {...pageProps} authStore={authStore} />
                 </Container>
