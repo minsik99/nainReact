@@ -87,10 +87,10 @@ const InterviewComponent = () => {
     const saveVideo = async () => {
         try {
             stopRecording()
-            const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
             
             const formData = new FormData();
-            formData.append('video', blob, 'recorded_video.mp4');
+            formData.append('video', blob, 'recorded_video.webm');
 
             const response = await axios.post('http://127.0.0.1:8080/save', formData, {
                 headers: {
