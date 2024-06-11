@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
+import axios from 'axios';
 
 const InterviewComponent = () => {
     const videoRef = useRef(null);
-    const canvasRef = useRef(null);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [stream, setStream] = useState(null);
     const [processedImage, setProcessedImage] = useState(null);
-
+    const [recordedChunks, setRecordedChunks] = useState([]); 
+    const [mediaRecorder, setMediaRecorder] = useState(null);
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -20,6 +21,19 @@ const InterviewComponent = () => {
         }
     };
 
+    const startRecording = () => {
+        if (stream) {
+            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            recorder.ondataavailable = event => {
+                if (event.data.size > 0) {
+                    setRecordedChunks(prev => [...prev, event.data]);
+                }
+            };
+            recorder.start();
+            setMediaRecorder(recorder);
+        }
+    };
+
     const stopCamera = () => {
         if (videoRef.current) {
             videoRef.current.srcObject = null;
@@ -30,17 +44,17 @@ const InterviewComponent = () => {
         setIsCameraOn(false);
     };
 
+
+    const stopRecording = () => {
+        if (mediaRecorder) {
+            mediaRecorder.stop();
+        }
+    };
+
     const sendFrameToServer = async (frame) => {
         try {
-            const response = await fetch('http://127.0.0.1:8080/start', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ frame }), ivtNo: 1
-            });
-            const data = await response.json();
-            setProcessedImage(`data:video/mp4;base64,${data.processedImage}`);
+            const response = await axios.post('http://127.0.0.1:8080/start', { frame });
+            setProcessedImage(`data:image/jpeg;base64,${response.data.processedImage}`);
         } catch (err) {
             console.error("Error sending frame to server: ", err);
         }
@@ -72,36 +86,39 @@ const InterviewComponent = () => {
 
     const saveVideo = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:8080/stop', {
-                method: 'GET'
+            stopRecording()
+            const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+            
+            const formData = new FormData();
+            formData.append('video', blob, 'recorded_video.mp4');
+
+            const response = await axios.post('http://127.0.0.1:8080/save', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-    
-            const data = await response.json();
-            console.log('Server response:', data);
+
+            console.log('Server response:', response.data);
         } catch (err) {
-            console.error("Error sending frame to server: ", err);
+            console.error("Error sending video to server: ", err);
         }
     };
+
     return (
         <>
-            <h1>Webcam 화면</h1>
             <div>
                 <button onClick={isCameraOn ? stopCamera : startCamera}>
                     {isCameraOn ? '카메라 끄기' : '카메라 켜기'}
                 </button>
-                <button onClick={saveVideo} disabled={processedImage}>
+                <button onClick={startRecording} disabled={!isCameraOn}>
+                    영상 녹화
+                </button>
+                <button onClick={saveVideo} disabled={!isCameraOn}>
                     영상저장
                 </button>
             </div>
             <div style={{ display: "flex" }}>
                 <video ref={videoRef} autoPlay playsInline />
-                <div>
-                    {processedImage && <img src={processedImage} alt="Processed" />}
-                </div>
             </div>
         </>
     );
