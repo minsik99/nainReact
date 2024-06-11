@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{"/main":[]},"app":{},"appUsingSizeAdjust":false,"pagesUsingSizeAdjust":false}';
