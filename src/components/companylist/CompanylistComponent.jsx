@@ -35,11 +35,10 @@ const CompanylistComponent = () => {
                     <ul>
                         {mutation.data.data.map((article, index) => (
                             <li key={index}>
+                                <h4>{article.company}</h4>
                                 <h4>{article.title}</h4>
                                 <p>{article.link}</p>
-                                <p>{article.content}</p>
-                                <p>{article.source}</p>
-                                <p>{article.company}</p>
+                                <p>{article.require}</p>
                                 <p>{article.time}</p>
                             </li>
                         ))}
