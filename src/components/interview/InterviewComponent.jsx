@@ -10,7 +10,7 @@ const InterviewComponent = () => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const startCamera = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
                 setStream(stream);
@@ -23,7 +23,7 @@ const InterviewComponent = () => {
 
     const startRecording = () => {
         if (stream) {
-            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp8,opus' });
             recorder.ondataavailable = event => {
                 if (event.data.size > 0) {
                     setRecordedChunks(prev => [...prev, event.data]);
@@ -91,7 +91,8 @@ const InterviewComponent = () => {
 
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const formData = new FormData();
-            formData.append('video', blob, 'recorded_video.webm');
+            formData.append('video', blob,  'videotest.webm');
+            // formData.append('video', blob,  ivtNo + '.webm');
             // formData.append('ivtNo', ivtNo);
 
             const response = await axios.post('http://127.0.0.1:8080/save', formData, {
