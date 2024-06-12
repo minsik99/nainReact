@@ -38,7 +38,7 @@ const NavigationBar = observer(() => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/resume" className="nav-link">
+            <Nav.Link href={"/resume"} className="nav-link">
               이력서 매니저
             </Nav.Link>
             <Nav.Link href={"/interview"} className="nav-link">

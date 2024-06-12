@@ -1,6 +1,7 @@
 // 필요한 모듈들을 불러옵니다.
 import 'bootstrap/dist/css/bootstrap.css';
 import "../styles/global.css";
+import "../styles/resume.css";
 import Head from "next/head";
 import {QueryClient, QueryClientProvider} from 'react-query'; // 리액트 쿼리에서 필요한 모듈을 추가로 불러옵니다.
 import NavigationBar from "../components/layouts/navigationBar";
