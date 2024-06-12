@@ -18,6 +18,7 @@ const NavigationBar = observer(() => {
       authStore.setLoggedIn(false);
     });
   };
+
   return (
     <Navbar
       collapseOnSelect
