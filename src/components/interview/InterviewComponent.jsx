@@ -87,12 +87,12 @@ const InterviewComponent = () => {
     const saveVideo = async () => {
         try {
             stopRecording()
-            const ivtNo = await axios.post('/interviewlist', {memberNo});
+            // const ivtNo = await axios.post('/interviewlist', {memberNo});
 
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const formData = new FormData();
             formData.append('video', blob, 'recorded_video.webm');
-            formData.append('ivtNo', ivtNo);
+            // formData.append('ivtNo', ivtNo);
 
             const response = await axios.post('http://127.0.0.1:8080/save', formData, {
                 headers: {
