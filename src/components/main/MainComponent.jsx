@@ -15,98 +15,100 @@ const MainComponent = () => {
 
   return (
     <>
-      <Slider {...settings}>
-        <div className="slider1">
-          <div className="slider1_left">
-            <h3
-              style={{
-                color: "#9DC3C1",
-                fontSize: "15pt",
-                fontWeight: "600",
-              }}
-            >
-              당신의 꿈을 이루기 위한 첫 걸음,
-            </h3>
-            <p
-              style={{
-                color: "#6E7783",
-                fontSize: "25pt",
-                fontWeight: "900",
-              }}
-            >
-              똑똑한 인재 관리 AI파트너 NAIN
-            </p>
+      <div className="slider">
+        <Slider {...settings}>
+          <div className="slider1">
+            <div className="slider1_left">
+              <h3
+                style={{
+                  color: "#9DC3C1",
+                  fontSize: "15pt",
+                  fontWeight: "600",
+                }}
+              >
+                당신의 꿈을 이루기 위한 첫 걸음,
+              </h3>
+              <p
+                style={{
+                  color: "#6E7783",
+                  fontSize: "25pt",
+                  fontWeight: "900",
+                }}
+              >
+                똑똑한 인재 관리 AI파트너 NAIN
+              </p>
+            </div>
+            <div className="slider1_right">
+              <img
+                className="AIrobot"
+                src="/image/AIrobot.png"
+                width={"250px"}
+                alt="AI Robot"
+              ></img>
+            </div>
           </div>
-          <div className="slider1_right">
-            <img
-              className="AIrobot"
-              src="/image/AIrobot.png"
-              width={"250px"}
-              alt="AI Robot"
-            ></img>
+          <div className="slider1">
+            <div className="slider1_left">
+              <h3
+                style={{
+                  color: "#9DC3C1",
+                  fontSize: "15pt",
+                  fontWeight: "600",
+                }}
+              >
+                당신의 꿈을 이루기 위한 첫 걸음,
+              </h3>
+              <p
+                style={{
+                  color: "#6E7783",
+                  fontSize: "25pt",
+                  fontWeight: "900",
+                }}
+              >
+                똑똑한 인재 관리 AI파트너 NAIN
+              </p>
+            </div>
+            <div className="slider1_right">
+              <img
+                className="AIrobot"
+                src="/image/AIrobot.png"
+                width={"250px"}
+                alt="AI Robot"
+              ></img>
+            </div>
           </div>
-        </div>
-        <div className="slider1">
-          <div className="slider1_left">
-            <h3
-              style={{
-                color: "#9DC3C1",
-                fontSize: "15pt",
-                fontWeight: "600",
-              }}
-            >
-              당신의 꿈을 이루기 위한 첫 걸음,
-            </h3>
-            <p
-              style={{
-                color: "#6E7783",
-                fontSize: "25pt",
-                fontWeight: "900",
-              }}
-            >
-              똑똑한 인재 관리 AI파트너 NAIN
-            </p>
+          <div className="slider1">
+            <div className="slider1_left">
+              <h3
+                style={{
+                  color: "#9DC3C1",
+                  fontSize: "15pt",
+                  fontWeight: "600",
+                }}
+              >
+                당신의 꿈을 이루기 위한 첫 걸음,
+              </h3>
+              <p
+                style={{
+                  color: "#6E7783",
+                  fontSize: "25pt",
+                  fontWeight: "900",
+                }}
+              >
+                똑똑한 인재 관리 AI파트너 NAIN
+              </p>
+            </div>
+            <div className="slider1_right">
+              <img
+                className="AIrobot"
+                src="/image/AIrobot.png"
+                width={"250px"}
+                alt="AI Robot"
+              ></img>
+            </div>
           </div>
-          <div className="slider1_right">
-            <img
-              className="AIrobot"
-              src="/image/AIrobot.png"
-              width={"250px"}
-              alt="AI Robot"
-            ></img>
-          </div>
-        </div>
-        <div className="slider1">
-          <div className="slider1_left">
-            <h3
-              style={{
-                color: "#9DC3C1",
-                fontSize: "15pt",
-                fontWeight: "600",
-              }}
-            >
-              당신의 꿈을 이루기 위한 첫 걸음,
-            </h3>
-            <p
-              style={{
-                color: "#6E7783",
-                fontSize: "25pt",
-                fontWeight: "900",
-              }}
-            >
-              똑똑한 인재 관리 AI파트너 NAIN
-            </p>
-          </div>
-          <div className="slider1_right">
-            <img
-              className="AIrobot"
-              src="/image/AIrobot.png"
-              width={"250px"}
-              alt="AI Robot"
-            ></img>
-          </div>
-        </div>
-      </Slider>
+        </Slider>
+      </div>
       <div className="middle_word">
         <h1
           style={{
@@ -129,12 +131,12 @@ const MainComponent = () => {
           개발자로 만들어드립니다.
         </h3>
       </div>
-      <div className="resume_banner">
+      <div className="banner">
         <div className="resume_image">
           <img
             className="ResumeImage"
             src="/image/ResumeImage.png"
-            width={"320px"}
+            width={"370px"}
             alt="ResumeImage"
           ></img>
         </div>
@@ -142,9 +144,9 @@ const MainComponent = () => {
           <h1
             style={{
               color: "#6E7783",
-              fontSize: "17pt",
+              fontSize: "23pt",
               fontWeight: "900",
-              margin: "30px, 0px;",
+              margin: "30px",
             }}
           >
             나만의 이력서 매니저
@@ -152,8 +154,9 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "14pt",
+              fontSize: "16pt",
               fontWeight: "600",
+              margin: "30px",
             }}
           >
             <li>이력서 작성</li>
@@ -161,6 +164,39 @@ const MainComponent = () => {
             <li>합격자 이력서 공유</li>
             <li>합격 키워드 분석</li>
           </ul>
+        </div>
+      </div>
+      <div className="banner">
+        <div className="interview_word">
+          <h1
+            style={{
+              color: "#6E7783",
+              fontSize: "23pt",
+              fontWeight: "900",
+              margin: "30px",
+            }}
+          >
+            맞춤형 AI 면접 솔루션
+          </h1>
+          <ul
+            style={{
+              color: "#6E7783",
+              fontSize: "16pt",
+              fontWeight: "600",
+              margin: "30px",
+            }}
+          >
+            <li>모의면접</li>
+            <li>면접 report</li>
+          </ul>
+        </div>
+        <div className="interview_image">
+          <img
+            className="InterviewImage"
+            src="/image/InterviewImage.png"
+            width={"370px"}
+            alt="InterviewImage"
+          ></img>
         </div>
       </div>
     </>
