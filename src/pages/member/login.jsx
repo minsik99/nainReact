@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { observer } from "mobx-react";
-import SearchComponent from "../../components/search/SearchComponent";
-import LoginForm from "../../components/login/loginForm";
+import LoginForm from "../../components/login/LoginForm";
 
-const testComponent = observer(()=>{
+
+
+const logintest = observer(() => {
     return (
-        <div className="map_div">
-            <LoginForm/>
+        <div>
+            <LoginForm />
         </div>
-    )
-})
+    );
+});
 
-export default testComponent;
+export default logintest;
