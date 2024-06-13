@@ -12,11 +12,11 @@ const MyResume = () => {
     { id: 6, title: '이력서 1: 백엔드', date: '2024.05.05', status: '작성 중' },
     { id: 7, title: '이력서 2: 프론트엔드', date: '2024.05.05', status: '작성 중' },
   ]);
-  const [selectedResume, setSelectedResume] = useState(null);
+  const [openResume, setOpenResume] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const handleMenuClick = (resume) => {
-    setSelectedResume(resume);
+  const handleMenuClick = (resumeId) => {
+    setOpenResume(prevOpenResume => prevOpenResume === resumeId ? null : resumeId);
   };
 
   const handleEditClick = () => {
@@ -29,10 +29,9 @@ const MyResume = () => {
   };
 
   const handleConfirmDelete = () => {
-    setResumes(resumes.filter((resume) => resume.id !== selectedResume.id)
-  );
+    setResumes(resumes.filter((resume) => resume.id !== openResume));
     setShowModal(false);
-    setSelectedResume(null);
+    setOpenResume(null);
   };
 
   const handleCancelDelete = () => {
@@ -42,58 +41,63 @@ const MyResume = () => {
   const handleAcceptedKeywordClick = () => {
     router.push('/resume/AcceptedKeyword');
   };
-  
+
   const handleNewResumeClick = () => {
     router.push('/resume/MyResumeInsert');
   };
 
   return (
-    <div className="app">
-      <h1>내 이력서 관리</h1>
-      <div className="resume-management">
-        <div className="resume-actions" onClick={handleAcceptedKeywordClick}> 
-          <button>합격 키워드 분석 →</button>
-        </div>
-        <div className="resume-list">
-          <div className="resume-card" onClick={handleNewResumeClick}>
-            <div className="resume-card-header">
-              <div className="new-resume-icon" >
-                <button>+</button>
-              </div>
-              <p style={{ color: 'black' }}>새 이력서 작성</p>
-            </div>
+    <>
+      <div className="app">
+        <h1>내 이력서 관리</h1>
+        <div className="resume-management">
+          <div className="resume-actions" onClick={handleAcceptedKeywordClick}>
+            <button>합격 키워드 분석 →</button>
           </div>
-          {resumes.map((resume) => (
-            <div className="resume-card" key={resume.id}>
-              <div className="resume-card-header">{resume.title}</div>
-              {resume.date && <div className="resume-card-date">{resume.date}</div>}
-              {resume.status && <div className="resume-card-status">{resume.status}</div>}
-              <div className="resume-card-menu" onClick={() => handleMenuClick(resume)}>⋮</div>
-              {selectedResume && selectedResume.id === resume.id && (
-                <div className="resume-card-options">
-                  <button onClick={handleEditClick}>수정하기</button>
-                  <button onClick={handleDeleteClick}>삭제하기</button>
+          <div className="resume-list">
+            <div className="resume-card" onClick={handleNewResumeClick}>
+              <div className="resume-card-header">
+                <div className="new-resume-icon">
+                  <button>+</button>
                 </div>
-              )}
+                <p style={{ color: 'black' }}>새 이력서 작성</p>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <p>정말 삭제하시겠습니까?<br />삭제하시면 복구가 불가능합니다.</p>
-            <div className="modal-buttons">
-              <button onClick={handleCancelDelete}>취소</button>
-              <button onClick={handleConfirmDelete}>삭제</button>
-            </div>
+            {resumes.map((resume) => (
+              <div className="resume-card" key={resume.id}>
+                <div className="resume-card-header">{resume.title}</div>
+                {resume.date && <div className="resume-card-date">{resume.date}</div>}
+                {resume.status && <div className="resume-card-status">{resume.status}</div>}
+                <div className="resume-card-menu" onClick={() => handleMenuClick(resume.id)}>⋮</div>
+                {openResume === resume.id && (
+                  <div className="resume-card-options">
+                    <button onClick={handleEditClick}>수정하기</button>
+                    <button onClick={handleDeleteClick}>삭제하기</button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
-      )}
-    </div>
+
+        {showModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <p>정말 삭제하시겠습니까?<br />삭제하시면 복구가 불가능합니다.</p>
+              <div className="modal-buttons">
+                <button onClick={handleCancelDelete}>취소</button>
+                <button onClick={handleConfirmDelete}>삭제</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
+
+export default MyResume;
+
 
 
 // const MyResume = () => {
@@ -102,7 +106,7 @@ const MyResume = () => {
 //     const [modalResumeDetail, setModalResumeDetail] = useState(false);
 //     const [selectTarget, setSelectTarget] = useState("")
 
-//     //메모리 관리 
+//     //메모리 관리
 //     const handleMyresumeone = useCallback((value)=>{
 //         setMyResumeone(value)
 //     },[myResumeOne])
@@ -169,5 +173,3 @@ const MyResume = () => {
 //         </div>
 //     )
 // }
-
-export default MyResume;

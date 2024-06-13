@@ -1,0 +1,43 @@
+.acceptedKeywordContainer {
+    padding: 20px;
+}
+
+.acceptedKeywordJobSelection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.acceptedKeywordJobSelection button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #999;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.acceptedKeywordJobSelection button.acceptedKeywordSelected {
+    background-color: #77AAAD;
+    border-color: #999;
+}
+
+.acceptedKeywordKeywords {
+    margin-bottom: 20px;
+}
+
+.acceptedKeywordKeywords ul {
+    list-style: none;
+    padding: 0;
+}
+
+.acceptedKeywordKeywords li {
+    padding: 5px 0;
+}
+
+.acceptedKeywordChart {
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 10px;
+}

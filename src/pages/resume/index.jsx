@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { observer } from "mobx-react";
-import MyResume from "./Myresume";
+import MyResume from "./MyResume";
 
 const testResumeComponent = observer(()=>{
     return (
