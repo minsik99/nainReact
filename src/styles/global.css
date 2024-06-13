@@ -2,6 +2,7 @@
 
 .flex-container {
   display: flex;
+  flex-grow: 1;
 }
 
 .navigation-container {
@@ -19,11 +20,11 @@
 }
 
 .me-auto {
-  margin-left: 100px;
+  margin-left: 0px;
 }
 
 .nav-link {
-  margin-right: 25px; /* 링크 간격 조정 */
+  width: 100px;
   font-weight: 600;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -41,12 +42,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 0px;
   background-color: black;
 }
 
 .navigation_bar img {
-  height: 5vw;
+  height: 3vw;
 }
 
 .navigation_bar ul {
@@ -67,18 +68,65 @@
   cursor: pointer;
 }
 
+.navigation-container {
+  background-color: #ffffff;
+  padding: 0px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  position: relative;
+  display: inline-block;
+  margin-right: 20px; /* 각 메뉴 간 간격 설정 */
+}
+
+a {
+  text-decoration: none;
+  font-weight: 900;
+  padding: 15px;
+  display: inline-block;
+  font-size: 16px;
+  color: #333;
+}
+
+.submenu {
+  position: absolute;
+  top: calc(100% + 10px); /* 메뉴 아래에 위치하도록 설정 */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  width: 200px;
+  height: 230px;
+  behavior: "smooth";
+  z-index: 1;
+}
+
+.subword {
+  color: #111111;
+}
+.navigation-container:hover .submenu {
+  max-height: 300px; /* navigation-container에 마우스를 올렸을 때 슬라이드 메뉴의 높이 설정 */
+}
+
+.subback {
+  background: red;
+  width: 10000px;
+}
+
+.navigation-container:hover {
+  max-height: 300px;
+}
+
 .map_div {
   margin-top: 100px;
   width: 100%;
-
   margin-left: auto;
   margin-right: auto;
-}
-
-.map_div::after {
-  display: block;
-  content: "";
-  padding-bottom: 100%;
 }
 
 .slider {
@@ -116,7 +164,7 @@
 }
 
 .banner {
-  width: 70%;
+  width: 1000px;
   height: 400px;
   margin: auto;
   margin-bottom: 30px;
@@ -137,7 +185,6 @@
   float: right;
   width: 50%;
   margin-top: 40px;
-  main-left: 30px;
 }
 
 .interview_image {
@@ -153,6 +200,30 @@
   width: 50%;
   padding-left: 80px;
   padding-top: 50px;
+}
+
+.banner_botton {
+  margin-left: 50px;
+}
+
+.subscribe_banner {
+  text-align: center;
+  background: #77aaad;
+  height: 220px;
+  padding: 40px;
+  margin-top: 60px;
+}
+
+.subscribe_button {
+  margin: 40px;
+  font-size: 50x;
+}
+
+.footer {
+  width: 1400px;
+  height: 120px;
+  margin: auto;
+  margin-top: 50px;
 }
 
 .square {

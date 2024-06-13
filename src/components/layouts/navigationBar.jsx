@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { observer } from "mobx-react";
 import { authStore } from "../../stores/authStore";
 import { logout } from "../../api/user";
@@ -29,15 +29,62 @@ const NavigationBar = observer(() => {
     >
       <Container>
         <Navbar.Brand href="/">
-          <img
-            src="/image/A_P_logo.webp"
-            alt="Logo"
-            style={{ width: "100%" }}
-          />
+          <img src="/image/Logo.png" alt="Logo" style={{ width: "110px" }} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
+          <nav className="navigation-container">
+            <ul>
+              <li>
+                <a href="/resume">이력서 매니저</a>
+                <div className="submenu">
+                  <a className="subword" href="/resume/MyResumeInsert">
+                    이력서 작성
+                  </a>
+                  <br />
+                  <a className="subword" href="/resume/MyResume">
+                    이력서 관리
+                  </a>
+                  <br />
+                  <a className="subword" href="/resume/MyResume">
+                    합격자 이력서 공유
+                  </a>
+                  <br />
+                  <a className="subword" href="/resume/MyResume">
+                    합격자 키워드 분석
+                  </a>
+                  <br />
+                </div>
+              </li>
+              <li>
+                <a href="/interview">AI 면접</a>
+                <div className="submenu">
+                  <a className="subword" href="/InterviewComponent">
+                    모의면접
+                  </a>
+                  <br />
+                  <a className="subword" href="/InterviewComponent">
+                    면접 report
+                  </a>
+                  <br />
+                </div>
+              </li>
+              <li>
+                <a href="/search">AI 트랜드서칭</a>
+              </li>
+              <li>
+                <a href="/companylist">기업공고</a>
+              </li>
+              <li>
+                <a href="/community">커뮤니티</a>
+              </li>
+              <li>
+                <a href="/notice">공지사항</a>
+              </li>
+            </ul>
+          </nav>
+
+          {/* <Nav className="me-auto">
             <Nav.Link href={"/resume"} className="nav-link">
               이력서 매니저
             </Nav.Link>
@@ -56,7 +103,7 @@ const NavigationBar = observer(() => {
             <Nav.Link href={"/notice"} className="nav-link">
               공지사항
             </Nav.Link>
-          </Nav>
+          </Nav> */}
           {loggedIn ? (
             <Nav>
               <Nav.Link onClick={handleLogout}>로그아웃</Nav.Link>
