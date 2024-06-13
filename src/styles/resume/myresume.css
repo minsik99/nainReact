@@ -56,7 +56,8 @@
   margin: 0 auto;
 }
 
-.resume-card-date, .resume-card-status {
+.resume-card-date,
+.resume-card-status {
   font-size: 14px;
   color: #777;
   margin-bottom: 5px;
@@ -139,7 +140,7 @@
   margin-bottom: 20px;
 }
 
-.resume-container form > div {
+.resume-container form>div {
   margin-bottom: 15px;
 }
 
@@ -149,7 +150,8 @@
   margin-bottom: 5px;
 }
 
-.resume-container input, .resume-container textarea {
+.resume-container input,
+.resume-container textarea {
   width: calc(100% - 20px);
   padding: 10px;
   margin-bottom: 10px;
@@ -190,14 +192,17 @@ button.add-button:hover {
   background-color: #77AAAD;
 }
 
-.experience, .education, .award {
+.experience,
+.education,
+.award {
   position: relative;
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
 }
 
-.experience input, .experience textarea {
+.experience input,
+.experience textarea {
   width: calc(100% - 20px);
   padding: 5px;
   margin-bottom: 5px;
@@ -231,6 +236,8 @@ input.checkbox {
   top: 9px;
   width: 20px;
 }
+
+
 
 /* div {
     box-sizing: border-box;
