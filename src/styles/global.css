@@ -70,7 +70,6 @@
 .map_div {
   margin-top: 100px;
   width: 100%;
-
   margin-left: auto;
   margin-right: auto;
 }
@@ -116,7 +115,7 @@
 }
 
 .banner {
-  width: 70%;
+  width: 1000px;
   height: 400px;
   margin: auto;
   margin-bottom: 30px;
@@ -153,6 +152,23 @@
   width: 50%;
   padding-left: 80px;
   padding-top: 50px;
+}
+
+.banner_botton {
+  margin-left: 50px;
+}
+
+.subscribe_banner {
+  text-align: center;
+  background: #77aaad;
+  height: 220px;
+  padding: 40px;
+  margin-top: 60px;
+}
+
+.subscribe_button {
+  margin: 40px;
+  font-size: 30px;
 }
 
 .square {

@@ -29,11 +29,7 @@ const NavigationBar = observer(() => {
     >
       <Container>
         <Navbar.Brand href="/">
-          <img
-            src="/image/A_P_logo.webp"
-            alt="Logo"
-            style={{ width: "100%" }}
-          />
+          <img src="/image/Logo.png" alt="Logo" style={{ width: "110px" }} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
