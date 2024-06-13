@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { observer } from "mobx-react";
-import SearchComponent from "../../components/search/SearchComponent";
+import ArticleComponent from "../../components/search/ArticleComponent";
 
-const testComponent = observer(()=>{
+const searchComponent = observer(()=>{
     return (
-        <div className="map_div">
-            <SearchComponent/>
+        <div>
+            <ArticleComponent />
         </div>
     )
 })
 
-export default testComponent;
+export default searchComponent;
