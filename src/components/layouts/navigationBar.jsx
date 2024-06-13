@@ -47,7 +47,7 @@ const NavigationBar = observer(() => {
             <Nav.Link href={"/search"} className="nav-link">
               AI 트랜드 서칭
             </Nav.Link>
-            <Nav.Link href={"/"} className="nav-link">
+            <Nav.Link href={"/companylist"} className="nav-link">
               기업공고
             </Nav.Link>
             <Nav.Link href={"/community"} className="nav-link">
@@ -64,8 +64,8 @@ const NavigationBar = observer(() => {
             </Nav>
           ) : (
             <Nav>
-              <Nav.Link href={"/user/login"}>로그인</Nav.Link>
-              <Nav.Link href={"/user"}>회원가입</Nav.Link>
+              <Nav.Link href={"/member/login"}>로그인</Nav.Link>
+              <Nav.Link href={"/member"}>회원가입</Nav.Link>
             </Nav>
           )}
         </Navbar.Collapse>
