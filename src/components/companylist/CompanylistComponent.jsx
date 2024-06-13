@@ -9,7 +9,7 @@ const CompanylistComponent = () => {
     const mutation = useMutation(newKeyword => {
         return axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword });
     });
-
+    
     const handleSubmit = (event) => {
         event.preventDefault();
         mutation.mutate(keyword);
