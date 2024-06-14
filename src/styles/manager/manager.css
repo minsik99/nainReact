@@ -28,7 +28,9 @@ body,
   width: 20%;
 }
 
-.dashboard {
+.dashboard,
+.userManagement,
+.adminManagement {
   float: right;
   width: 80%;
   margin-right: 30px;
@@ -60,9 +62,24 @@ body,
   justify-content: center;
 }
 
-.title h3 {
+.selectbutton {
+  margin: 15px 0px 30px 70px;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.selectUserManager {
+  text-decoration: none;
+  padding: 7px 20px;
   color: #9dc3c1;
-  font-weight: 500;
-  text-align: left;
-  font-size: 1.5em;
+  width: 80px;
+  align-items: center;
+}
+
+.selectAdminManager {
+  text-decoration: none;
+  padding: 7px 20px;
+  color: #9dc3c1;
+  width: 80px;
+  align-items: center;
 }

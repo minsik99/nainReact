@@ -92,7 +92,7 @@ const NavigationBar = observer(() => {
                     회원리스트
                   </a>
                   <br />
-                  <a className="subword" href="/manager/UserManagement">
+                  <a className="subword" href="/manager/AdminManagement">
                     관리자리스트
                   </a>
                   <br />
