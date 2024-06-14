@@ -3,7 +3,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "../styles/global.css";
 import "../styles/resume/myresume.css";
 import "../styles/resume/AcceptedKeyword.module.css";
-import Head from "next/head";
+import "../styles/manager/manager.css";
+
 import { QueryClient, QueryClientProvider } from "react-query"; // 리액트 쿼리에서 필요한 모듈을 추가로 불러옵니다.
 import NavigationBar from "../components/layouts/navigationBar";
 import { Container, ThemeProvider } from "react-bootstrap";
@@ -22,10 +23,6 @@ const MyApp = ({ Component, pageProps }) => {
         breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
         minBreakpoint="sm"
       >
-        <Head>
-          <link rel="icon" href="/image/favicon_black_square.png" />
-          <title>Apocaly_Path</title>
-        </Head>
         <Container fluid className="navigation-container">
           <NavigationBar />
         </Container>

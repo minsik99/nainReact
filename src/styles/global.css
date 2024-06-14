@@ -25,7 +25,7 @@
 
 .nav-link {
   width: 100px;
-  font-weight: 600;
+  font-weight: 900;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -42,7 +42,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0px;
   background-color: black;
 }
 
@@ -73,24 +72,22 @@
   padding: 0px;
 }
 
-ul {
+.navigation-container ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
 }
 
-li {
+.navigation-container li {
   position: relative;
   display: inline-block;
-  margin-right: 20px; /* 각 메뉴 간 간격 설정 */
+  margin-right: 15px; /* 각 메뉴 간 간격 설정 */
 }
 
-a {
+.navigation-container a {
   text-decoration: none;
   font-weight: 900;
   padding: 15px;
   display: inline-block;
-  font-size: 16px;
+  font-size: 18px;
   color: #333;
 }
 
@@ -171,6 +168,10 @@ a {
   background: #d8e6e7;
   border-radius: 10px;
   align-items: center;
+}
+
+.banner li {
+  margin-bottom: 10px;
 }
 
 .resume_image {

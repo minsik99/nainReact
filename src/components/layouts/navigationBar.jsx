@@ -34,7 +34,7 @@ const NavigationBar = observer(() => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <nav className="navigation-container">
-            <ul>
+            <ul style={{ marginBottom: "0px" }}>
               <li>
                 <a href="/resume">이력서 매니저</a>
                 <div className="submenu">
@@ -80,6 +80,27 @@ const NavigationBar = observer(() => {
               </li>
               <li>
                 <a href="/notice">공지사항</a>
+              </li>
+              <li>
+                <a href="/manager">관리자</a>
+                <div className="submenu">
+                  <a className="subword" href="/manager/Dashboard">
+                    대시보드
+                  </a>
+                  <br />
+                  <a className="subword" href="/manager/UserManagement">
+                    회원리스트
+                  </a>
+                  <br />
+                  <a className="subword" href="/manager/UserManagement">
+                    관리자리스트
+                  </a>
+                  <br />
+                  <a className="subword" href="/manager/ReportList">
+                    신고리스트
+                  </a>
+                  <br />
+                </div>
               </li>
             </ul>
           </nav>
