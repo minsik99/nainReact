@@ -158,7 +158,7 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "16pt",
+              fontSize: "14pt",
               fontWeight: "600",
               margin: "30px",
             }}
@@ -173,6 +173,7 @@ const MainComponent = () => {
               padding="12px 35px"
               color="#9dc3c1"
               text="자세히 보기"
+              borderRadius="30px"
               onClick={() => router.push("/resume")}
             />
           </div>
@@ -193,7 +194,7 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "16pt",
+              fontSize: "14pt",
               fontWeight: "600",
               margin: "30px",
             }}
@@ -206,6 +207,7 @@ const MainComponent = () => {
               padding="12px 35px"
               color="#9dc3c1"
               text="자세히 보기"
+              borderRadius="30px"
               onClick={() => router.push("/interview")}
             />
           </div>
@@ -229,6 +231,7 @@ const MainComponent = () => {
             fontSize="20px"
             color="#9dc3c1"
             text="결제하기"
+            borderRadius="30px"
             onClick={() => router.push("/subscribe")}
           />
         </div>
