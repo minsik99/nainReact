@@ -6,7 +6,7 @@ import Paging from "../../components/board/Paging";
 import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 
-const CommunityList = observer(()=>{
+const CommunityList = observer((props)=>{
     const [boards, setBoards] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
@@ -15,6 +15,7 @@ const CommunityList = observer(()=>{
     const router = useRouter();
     
     useEffect(() => {
+      console.log(":::::::::::",currentPage)
         CommunityAxios.getCommunityList(currentPage, limit, sort).then(res => {
           console.log(res.data.list);
           setBoards(res.data.list);
@@ -24,6 +25,13 @@ const CommunityList = observer(()=>{
         });
     }, [currentPage, limit, sort]);
       
+    // const communityList = (page, limit, sort) => {
+    //   CommunityAxios.getCommunityList(page, limit, sort).then((res) => {
+    //     setCommunities(res.data.list);
+    //     setCurrentPage(res.data.pg.currentPage);
+    //     setPaging(res.data.pg);
+    //   });
+    // };
 
       const createBoard = () => {
         router.push('/community/new');
@@ -46,17 +54,19 @@ const CommunityList = observer(()=>{
             title={"커뮤니티 게시판"} first={"글 번호"} second={"제목"} third={"작성자"} fourth={"조회수"}/>
             <table className="table table-striped table-bordered">
                 <tbody>
-                {boards.map(board => (
-                    <tr key={board.communityNo}>
-                    <td>{board.communityNo}</td>
-                    <td><a href="#" onClick={()=>detailBoard(board.communityNo)}>{board.title} </a></td>
-                    <td>{board.writer}</td>
-                    <td>{board.readCount}</td>
-                    </tr>
-                ))}
+                  {boards.map(board => (
+                      <tr key={board.communityNo}>
+                      <td>{board.communityNo}</td>
+                      <td><a href="#" onClick={()=>detailBoard(board.communityNo)}>{board.title} </a></td>
+                      <td>{board.writer}</td>
+                      <td>{board.readCount}</td>
+                      </tr>
+                  ))}
                 </tbody>
             </table>
-            <Paging paging={paging}/>
+            <Paging paging={paging} sort={sort}
+            setPage={setCurrentPage}
+            />
         </div>
     );
 })
