@@ -82,24 +82,27 @@ background: url(1714977561189-8a473c6d-009b-4125-bdea-fc4ee6377835_1.jpg); */
 
 /* 메인 > AI history > AI 면접 */
 .ai-path {
-position: absolute;
-left: 0.47%;
-right: 83.54%;
-top: 11.52%;
-bottom: 84.57%;
-
-font-family: 'Acme';
-font-style: normal;
-font-weight: 400;
-font-size: 22px;
-line-height: 22px;
-/* or 100% */
-display: flex;
-align-items: center;
-text-align: center;
-
-color: #000000;
-}
+    position: absolute;
+    left: 0.47%;
+    right: 83.54%;
+    top: 11.52%;
+    bottom: 84.57%;
+  
+    font-family: 'Acme', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 22px;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-transform: lowercase;
+  
+    color: #000000;
+  }
+  
 
 
 /* 영상화면 */
@@ -363,7 +366,7 @@ align-items: center;
 text-align: center; */
 
 /* Color/Neutral/6 - White */
-/* color: #FFFFFF; */ */
+/* color: #FFFFFF; */ 
 
 
 
@@ -426,7 +429,7 @@ font-weight: 700;
 font-size: 18px;
 line-height: 16px;
 /* or 89% */
-display: flex;
+/* display: flex;
 align-items: center;
 text-transform: lowercase;
 
