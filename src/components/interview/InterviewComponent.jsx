@@ -1,13 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../../api/authContext';
+import { useContext } from 'react';
+import instance from '../../api/axiosApi';
 
 const InterviewComponent = () => {
     const videoRef = useRef(null);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [stream, setStream] = useState(null);
-    const [processedImage, setProcessedImage] = useState(null);
     const [recordedChunks, setRecordedChunks] = useState([]); 
     const [mediaRecorder, setMediaRecorder] = useState(null);
+    const { member, loading } = useContext(AuthContext);
+                                                                                               
     const startCamera = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -19,6 +23,7 @@ const InterviewComponent = () => {
         } catch (err) {
             console.error("Error accessing webcam: ", err);
         }
+        startRecording
     };
 
     const startRecording = () => {
@@ -51,30 +56,15 @@ const InterviewComponent = () => {
         }
     };
 
-    const sendFrameToServer = async (frame) => {
-        try {
-            const response = await axios.post('http://127.0.0.1:8080/start', { frame });
-            setProcessedImage(`data:image/jpeg;base64,${response.data.processedImage}`);
-        } catch (err) {
-            console.error("Error sending frame to server: ", err);
-        }
-    };
 
-    useEffect(() => {
-        if (isCameraOn && videoRef.current) {
-            const interval = setInterval(() => {
-                const canvas = document.createElement('canvas');
-                canvas.width = videoRef.current.videoWidth;
-                canvas.height = videoRef.current.videoHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-                const frame = canvas.toDataURL('image/jpeg');
-                sendFrameToServer(frame);
-            }, 1000); // 1초마다 프레임 전송
-
-            return () => clearInterval(interval);
-        }
-    }, [isCameraOn]);
+    // const sendFrameToServer = async (frame) => {
+    //     try {
+    //         const response = await axios.post('http://127.0.0.1:8080/start', { frame });
+    //         setProcessedImage(`data:image/jpeg;base64,${response.data.processedImage}`);
+    //     } catch (err) {
+    //         console.error("Error sending frame to server: ", err);
+    //     }
+    // };
 
     useEffect(() => {
         return () => {
@@ -87,8 +77,8 @@ const InterviewComponent = () => {
     const saveVideo = async () => {
         try {
             stopRecording()
-            // const ivtNo = await axios.post('/interviewlist', {memberNo});
-
+            //페이지내 member null로 들어감>> 로그인문제인거같음
+            // const ivtNo = await instance.post('/interviewlist', {member});
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const formData = new FormData();
             formData.append('video', blob,  'videotest.webm');
@@ -111,13 +101,10 @@ const InterviewComponent = () => {
         <>
             <div>
                 <button onClick={isCameraOn ? stopCamera : startCamera}>
-                    {isCameraOn ? '카메라 끄기' : '카메라 켜기'}
-                </button>
-                <button onClick={startRecording} disabled={!isCameraOn}>
-                    영상 녹화
+                    {isCameraOn ? '중단' : '실시간 면접 테스트'}
                 </button>
                 <button onClick={saveVideo} disabled={!isCameraOn}>
-                    영상저장
+                    영상다운로드
                 </button>
             </div>
             <div style={{ display: "flex" }}>

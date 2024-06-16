@@ -1,0 +1,220 @@
+.company-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 전체 화면 높이 가운데 정렬을 위해 */
+}
+
+.search-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    width: 70vw; /* 검색창 너비 */
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+
+
+.search-button:hover {
+    background-color: #0056b3; /* 버튼 호버 색상 */
+}
+
+
+
+
+
+/* 기업 공고 리스트 */
+.title {
+position: absolute;
+width: 885px;
+height: 115px;
+left: 2rem;
+top: 10rem;
+
+font-style: normal;
+font-weight: 800;
+font-size: 48px;
+line-height: 20px;
+/* or 42% */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #6E7783;
+}
+
+
+/* 커뮤니티 게시판 */
+.results-container {
+position: absolute;
+width: 1071px;
+height: 616px;
+left: 347px;
+top: 72px;
+}
+
+
+/* Table */
+
+.results-table {position: absolute;
+width: 1071px;
+height: 554.72px;
+left: 347px;
+top: 133.28px;
+}
+
+
+/* Table Header */
+
+/* Auto layout */
+.results-header {
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 65px;
+
+position: absolute;
+width: 1071px;
+height: 50.47px;
+left: 347px;
+top: 133.28px;
+
+background: #D8E6E7;
+
+}
+.results-header th {
+    flex: 1;
+    text-align: left;
+    padding: 12px 15px;
+}
+
+.results-table th, .results-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.result-row:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.result-title {
+    color: #77AAAD;
+    text-decoration: underline;
+}
+
+/* 글 번호 */
+.col-number {
+    width: 70px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    text-align: center;
+    color: #828282;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+/* 공고 명 */
+.col-title {
+    width: 522px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    text-align: center;
+    color: #000000;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+/* 기업명 */
+.col-company {
+    width: 142px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    text-align: right;
+    color: #000000;
+    flex: none;
+    order: 2;
+    flex-grow: 1;
+}
+
+/* 등록일 */
+.col-date {
+    width: 142px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+    text-align: center;
+    color: #000000;
+}
+
+/* Task */
+.result.row {
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 80px;
+
+position: absolute;
+width: 1062.07px;
+height: 50.47px;
+left: 355.93px;
+top: 183.75px;
+
+border-top: 1px solid #E1CECE;
+}
+
+.col {
+width: 70px;
+height: 24px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 150%;
+/* identical to box height, or 24px */
+
+color: #828282;
+}
+
+
