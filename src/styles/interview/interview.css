@@ -67,18 +67,30 @@ transform: matrix(-1, 0, 0, 1, 0, 0);
 }
 
 
+.results-container {
+    margin-top: 20px;
+}
 
+.results-list {
+    list-style-type: none;
+    padding: 0;
+}
 
-/* 1714977561189-8a473c6d-009b-4125-bdea-fc4ee6377835_1 2 */
-/* 
-position: absolute;
-left: 0%;
-right: 0%;
-top: 0%;
-bottom: 0%;
+.result-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
 
-background: url(1714977561189-8a473c6d-009b-4125-bdea-fc4ee6377835_1.jpg); */
+.result-title {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
 
+.result-company, .result-require, .result-time {
+    margin: 5px 0;
+}
 
 /* 메인 > AI history > AI 면접 */
 .ai-path {
