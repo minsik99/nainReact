@@ -1,0 +1,21 @@
+.custom-checkbox-cell {
+  padding-left: 50px !important; /* 필요에 따라 패딩 값을 조정하세요 */
+  padding-right: 50px !important;
+}
+
+.ag-theme-balham .ag-checkbox-input-wrapper {
+  margin: 1000px !important; /* 필요에 따라 마진 값을 조정하세요 */
+}
+
+.RadiusButton {
+}
+
+.customCheckboxCell {
+  padding-left: 10px !important; /* 필요에 따라 패딩 값을 조정하세요 */
+  padding-right: 2px !important;
+}
+
+.customHeader {
+  color: #9dc3c1; /* 예시: 글자색 설정 */
+  font-weight: bold; /* 예시: 글자 두께 설정 */
+}

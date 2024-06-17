@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-
+import { getMonthlyPayAmount } from "../../../api/statisticalAxios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,20 +20,45 @@ ChartJS.register(
   Legend
 );
 
-const MonthPayment = () => {
-  // 샘플 데이터
-  const data = {
-    labels: ["2월", "3월", "4월", "5월", "6월"],
+const MonthPayAmount = () => {
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "monthly sales (원)",
-        data: [810000, 552000, 901200, 887000, 1000000],
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        label: "Monthly Pay Amount",
+        data: [],
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMonthlyPayAmount();
+        const labels = data.map((item) => item.month + "월");
+        const amounts = data.map((item) => item.amount);
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: "Monthly Pay Amount",
+              data: amounts,
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching and setting chart data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const options = {
     responsive: true,
@@ -43,17 +68,41 @@ const MonthPayment = () => {
       },
       title: {
         display: true,
-        text: "월 매출",
+        text: "Subscription Status",
       },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || "";
+            const value = context.raw || 0;
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${label}: ${value} (${percentage}%)`;
+          },
+        },
       },
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div>
+      <Bar
+        data={chartData}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            title: {
+              display: true,
+              text: "월 매출 통계",
+            },
+          },
+        }}
+      />
+    </div>
+  );
 };
 
-export default MonthPayment;
+export default MonthPayAmount;

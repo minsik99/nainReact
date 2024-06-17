@@ -1,20 +1,29 @@
 // components/Sidebar.jsx
 import React from "react";
+import Link from "next/link";
 import styles from "./Sidebar.module.css";
 
 const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
-      <h2>관리자페이지</h2>
+      <Link href="/manager" legacyBehavior>
+        <a className="managertitle">관리자페이지</a>
+      </Link>
       <ul>
         <li>
-          <a href="/manager/Dashboard">대시보드</a>
+          <Link href="/manager/Dashboard" legacyBehavior>
+            대시보드
+          </Link>
         </li>
         <li>
-          <a href="/manager/UserManagement">회원관리</a>
+          <Link href="/manager/UserManagement" legacyBehavior>
+            회원관리
+          </Link>
         </li>
         <li>
-          <a href="/manager/ReporList">신고리스트</a>
+          <Link href="/manager/ReportList" legacyBehavior>
+            신고리스트
+          </Link>
         </li>
       </ul>
     </div>

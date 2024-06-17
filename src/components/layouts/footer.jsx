@@ -17,7 +17,7 @@ const Footer = observer(() => {
           421-88-00471
           <br />
           통신판매업신고번호 2017-서울중구-1784호 문의전화 070-5008-0247 (운영
-          시간:평일 11:00~18:00)이메일 pAionner@gpAionner.ai @pAionner,Inc
+          시간:평일 11:00~18:00)이메일 pAioneer@gpAioneer.ai @pAioneer,Inc
         </p>
       </div>
     </>
