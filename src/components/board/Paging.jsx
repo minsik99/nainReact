@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import {communityList} from "../../pages/community/index";
-import { useRouter } from 'next/router';
 
 const Paging = ({paging,sort,setPage}) => {
     const limit = paging.limit;

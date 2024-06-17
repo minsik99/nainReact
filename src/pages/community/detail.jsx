@@ -5,7 +5,7 @@ import CommunityAxios from "../../api/CommunityAxios";
 const BoardDetail = (props) => {
     const { id } = useParams(); // 게시글 ID
     const [board, setBoard] = useState({
-        communityNo: '',
+        communityNo: props.communityNo,
         title: '',
         writer: '',
         date: '',
@@ -15,7 +15,7 @@ const BoardDetail = (props) => {
 
     useEffect(() => {
         // 게시글 데이터 조회
-        CommunityAxios.getCommunityDetail(props.boardNo)
+        CommunityAxios.getCommunityDetail(props.communityNo)
             .then(res => {
                 const data = res.data;
                 setBoard({

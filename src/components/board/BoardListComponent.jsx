@@ -1,24 +1,26 @@
 import React from "react";
-import styles from "../../styles/board/board.module.css";
 
 const BoardList = (props) => {
+  const {first, second, third, fourth, boardList, styles } = props; 
 
   return (
-      <div>
-        <h2>{props.title}</h2>
+    <div>
         <div>
-          <table className={styles["thead"]}>
-            <thead>
-              <tr>
-                <th>{props.first}</th>
-                <th>{props.second}</th>
-                <th>{props.third}</th>
-                <th>{props.fourth}</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
+            <table className={styles.tableContainer}>
+              <thead className={styles.tableHeader}>
+                <tr>
+                  <th>{first}</th>
+                  <th>{second}</th>
+                  <th>{third}</th>
+                  <th>{fourth}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {boardList}
+              </tbody>
+            </table>
+          </div>
+    </div>
   );
 }
 export default BoardList;
