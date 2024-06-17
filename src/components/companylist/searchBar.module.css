@@ -1,0 +1,23 @@
+.searchBar {
+    display:flex;
+    flex-direction: row;
+    margin-left: 49rem;
+}
+.search {
+    margin: 0.5rem;
+}
+.searchForm {
+    margin: 0.2rem;
+}
+
+
+
+.searchForm {
+    margin-left: 1rem;
+}
+
+.searchInput {
+    padding: 0.5rem;
+    font-size: 14px;
+    margin-right: 0.5rem;
+}
