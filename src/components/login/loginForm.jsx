@@ -8,8 +8,8 @@ import KakaoLogin from '../member/KakaoLogin';
 const LoginForm = () => {
     const router = useRouter();
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
+        memberEmail: '',
+        memberPwd: '',
     });
 
     const loginMutation = useMutation(loginData => login(loginData), {
@@ -44,8 +44,8 @@ const LoginForm = () => {
                     <input
                         type="email"
                         id="email"
-                        name="email"
-                        value={formData.email}
+                        name="memberEmail"
+                        value={formData.memberEmail}
                         onChange={handleInputChange}
                         required
                     />
@@ -55,8 +55,8 @@ const LoginForm = () => {
                     <input
                         type="password"
                         id="password"
-                        name="password"
-                        value={formData.password}
+                        name="memberPwd"
+                        value={formData.memberPwd}
                         onChange={handleInputChange}
                         required
                     />
