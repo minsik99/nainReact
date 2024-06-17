@@ -29,7 +29,7 @@ const Paging = ({paging,sort,setPage}) => {
       };
     
       const nextGroup = () => {
-        if(paging.listCount > paging.endPage){
+        if(paging.maxPage > paging.endPage){
           return(
               <li className="page-item">
                 <a className="page-link" onClick={() => listBoard(paging.startPage + 10)}>다음</a>
@@ -56,10 +56,10 @@ const Paging = ({paging,sort,setPage}) => {
       };
       
       const lastPage = () => {
-        if(paging.currentPage != paging.maxPage){
+        if(paging.currentPage < paging.maxPage){
           return(
             <li className="page-item">
-              <a className="page-link" oncClick={() => communityList(paging.maxPage)}>끝 페이지</a>
+              <a className="page-link" onClick={() => listBoard(paging.maxPage)}>끝 페이지</a>
             </li>
           )};
       };
