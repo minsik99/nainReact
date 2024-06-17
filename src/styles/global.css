@@ -85,9 +85,9 @@
 .navigation-container a {
   text-decoration: none;
   font-weight: 900;
-  padding: 15px;
+  padding: 9px 18px 9px 18px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 15px;
   color: #333;
 }
 
@@ -98,13 +98,15 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
   width: 200px;
-  height: 230px;
+  height: 180px;
   behavior: "smooth";
-  z-index: 1;
+  z-index: 3;
+  background: #ffffff;
+  margin-top: 13px;
 }
 
 .subword {
-  color: #111111;
+  color: #ffffff;
 }
 .navigation-container:hover .submenu {
   max-height: 300px; /* navigation-container에 마우스를 올렸을 때 슬라이드 메뉴의 높이 설정 */
@@ -210,13 +212,13 @@
 .subscribe_banner {
   text-align: center;
   background: #77aaad;
-  height: 220px;
-  padding: 40px;
+  height: 150px;
+  padding: 20px;
   margin-top: 60px;
 }
 
 .subscribe_button {
-  margin: 40px;
+  margin: 20px;
   font-size: 50x;
 }
 

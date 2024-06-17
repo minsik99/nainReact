@@ -2,10 +2,10 @@ import React from "react";
 import Sidebar from "../../components/manager/Sidebar";
 import YearPayment from "../../components/manager/statistical/YearPayAmount";
 import MonthPayment from "../../components/manager/statistical/MonthPayAmount";
-import NewSubscribeCount from "../../components/manager/statistical/NewSubscribeCount";
-import SignupCount from "../../components/manager/statistical/SignupCount";
-import VisitorCount from "../../components/manager/statistical/VisitorCount";
-import WithdrawalCount from "../../components/manager/statistical/WithdrawalCount";
+import SubscriptionRatio from "../../components/manager/statistical/SubscriptionRatio";
+import NewMember from "../../components/manager/statistical/NewMember";
+import NewSubscribe from "../../components/manager/statistical/NewSubscribe";
+import WithdrawalAccumulation from "../../components/manager/statistical/WithdrawalAccumulation";
 
 const Dashboard = () => {
   return (
@@ -14,11 +14,6 @@ const Dashboard = () => {
         <Sidebar />
       </div>
       <div className="dashboard">
-        <div className="payment">
-          <div className="title">
-            <h3>매출통계</h3>
-          </div>
-        </div>
         <div className="payment">
           <div className="yearPayment"></div>
           <div style={{ width: "45%", margin: "10px" }}>
@@ -30,26 +25,21 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="user">
-          <div className="title">
-            <h3>이용자 통계</h3>
-          </div>
-        </div>
-        <div className="user">
-          <div className="NewSubscribeCount"></div>
+          <div className="SubscriptionRatio"></div>
           <div style={{ width: "45%", margin: "10px" }}>
-            <NewSubscribeCount />
+            <SubscriptionRatio />
           </div>
-          <div className="mothlyPayment"></div>
+          <div className="NewSubscribe"></div>
           <div style={{ width: "45%", margin: "10px" }}>
-            <VisitorCount />
+            <NewSubscribe />
           </div>
-          <div className="mothlyPayment"></div>
+          <div className="NewMember"></div>
           <div style={{ width: "45%", margin: "10px" }}>
-            <SignupCount />
+            <NewMember />
           </div>
-          <div className="mothlyPayment"></div>
+          <div className="WithdrawalAccumulation"></div>
           <div style={{ width: "45%", margin: "10px" }}>
-            <WithdrawalCount />
+            <WithdrawalAccumulation />
           </div>
         </div>
       </div>

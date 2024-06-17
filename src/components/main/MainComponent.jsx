@@ -222,12 +222,12 @@ const MainComponent = () => {
         </div>
       </div>
       <div className="subscribe_banner">
-        <h1 style={{ color: "#FFFFFF", fontSize: "25pt", fontWeight: "900" }}>
+        <h1 style={{ color: "#FFFFFF", fontSize: "22pt", fontWeight: "900" }}>
           맞춤형 AI 솔루션으로 시작하세요
         </h1>
         <div className="subscribe_button">
           <RadiusButton
-            padding="12px 40px"
+            padding="10px 30px"
             fontSize="20px"
             color="#9dc3c1"
             text="결제하기"

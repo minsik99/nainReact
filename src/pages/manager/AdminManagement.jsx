@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/manager/Sidebar";
-import MemberGrid from "../../components/manager/MemberGrid";
+import AdminGrid from "../../components/manager/AdminGrid";
 
 const AdminManagement = () => {
   return (
@@ -25,7 +25,7 @@ const AdminManagement = () => {
           </a>
         </div>
         <div style={{ width: "93%", marginLeft: "50px" }}>
-          <MemberGrid />
+          <AdminGrid />
         </div>
       </div>
     </>
