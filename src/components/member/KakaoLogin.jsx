@@ -9,6 +9,14 @@ const KakaoLogin = () => {
         window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodedRedirectUri}&through_account=true`;
     };
 
+    const handleLogout = () => {
+        if(typeof Kakao !== 'undefined' && Kakao.Auth){
+            Kakao.Auth.logout(function() {
+                console.log('Logged out from Kakao')
+            });
+        }
+    }
+
     return (
         <div className="button-container">
             <button onClick={handleLogin}>카카오 로그인</button>

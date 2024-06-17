@@ -1,12 +1,14 @@
 import axios from "./axiosApi"
 import { authStore } from "../stores/authStore"
 
-const baseUrl = "/api/auth"
-export const singUp = (singUpData) => {
-    return axios.post(baseUrl + "/user",singUpData).then(res =>{
+const baseUrl = "/api/auth";
+export const signUp = (signUpData) => {
+    return axios.post(baseUrl + "/member",signUpData).then(res =>{
+        console.log(signUpData)
         return res;
     })
-}
+};
+
 
 export const login = (loginData) => {
     return axios.post("/login", loginData)
@@ -20,6 +22,7 @@ export const login = (loginData) => {
                 window.localStorage.setItem("refresh", response.data.refresh)
                 authStore.setIsAdmin(response.data.isAdmin)
                 authStore.checkLoggedIn()
+                
             }
             return response;
         })
