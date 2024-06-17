@@ -6,15 +6,18 @@ import Paging from "../../components/board/Paging";
 import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 
-const CommunityList = observer(()=>{
+import styles from "../../styles/board/board.module.css";
+
+const CommunityList = observer((props)=>{
     const [boards, setBoards] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
-    const [sort, setSort] = useState("communityDate");
+    const [sort, setSort] = useState();
     const [paging, setPaging] = useState({});
     const router = useRouter();
     
     useEffect(() => {
+      console.log(":::::::::::",currentPage)
         CommunityAxios.getCommunityList(currentPage, limit, sort).then(res => {
           console.log(res.data.list);
           setBoards(res.data.list);
@@ -24,10 +27,9 @@ const CommunityList = observer(()=>{
         });
     }, [currentPage, limit, sort]);
       
-
-      const createBoard = () => {
-        router.push('/community/new');
-      };
+    const createBoard = () => {
+      router.push("/community/new");
+    };
 
       const detailBoard = (communityNo) => {
         router.push({
@@ -38,25 +40,23 @@ const CommunityList = observer(()=>{
 
 
     return (
-        <div>
-            <div className="row">
-                <RadiusButton className="btn btn-primary" text="글 작성" onClick={createBoard}/>
-            </div>
-            <BoardListComponent
-            title={"커뮤니티 게시판"} first={"글 번호"} second={"제목"} third={"작성자"} fourth={"조회수"}/>
-            <table className="table table-striped table-bordered">
-                <tbody>
-                {boards.map(board => (
-                    <tr key={board.communityNo}>
-                    <td>{board.communityNo}</td>
-                    <td><a href="#" onClick={()=>detailBoard(board.communityNo)}>{board.title} </a></td>
-                    <td>{board.writer}</td>
-                    <td>{board.readCount}</td>
-                    </tr>
-                ))}
+        <div className={styles["table-wrapper"]}>
+            <BoardListComponent title={"커뮤니티 게시판"} first={"글 번호"} second={"제목"} third={"작성자"} fourth={"조회수"}/>
+            <table className={styles["table-container"]}>
+                <tbody className={styles["custom-table"]}>
+                  {boards.map(board => (
+                      <tr key={board.communityNo}>
+                      <td className={styles["table-cell"]}>{board.communityNo}</td>
+                      <td className={styles["table-cell"]}><a href="#" onClick={()=>detailBoard(board.communityNo)}>{board.title} </a></td>
+                      <td className={styles["table-cell"]}>{board.writer}</td>
+                      <td className={styles["table-cell"]}>{board.readCount}</td>
+                      </tr>
+                  ))}
                 </tbody>
             </table>
-            <Paging paging={paging}/>
+            <Paging paging={paging} sort={sort}
+            setPage={setCurrentPage}/>
+            <RadiusButton className="btn btn-primary" text="글 작성" onClick={createBoard}/>
         </div>
     );
 })

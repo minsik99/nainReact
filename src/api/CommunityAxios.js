@@ -44,9 +44,7 @@ const CommunityAxios = {
     //새 게시글 등록
     createCommunity(community) {
         //return axios.post(`${COMMUNITY_URL}`, community);
-        return instance.post(COMMUNITY_URL, {
-            params : {community: community}
-        });
+        return instance.post(COMMUNITY_URL, community);
     },
 
     //게시글 수정
