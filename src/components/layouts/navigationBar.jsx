@@ -72,11 +72,11 @@ const NavigationBar = observer(() => {
                   <a>AI 면접</a>
                 </Link>
                 <div className="submenu">
-                  <Link href="/InterviewComponent" legacyBehavior>
+                  <Link href="/interview/test" legacyBehavior>
                     <a className="subword">모의면접</a>
                   </Link>
                   <br />
-                  <Link href="/InterviewComponent" legacyBehavior>
+                  <Link href="/Interview/list" legacyBehavior>
                     <a className="subword">면접 report</a>
                   </Link>
                   <br />
