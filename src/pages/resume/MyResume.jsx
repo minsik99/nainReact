@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import instance from '../../api/axiosApi';
+import { Mutation } from 'react-query';
 
 const MyResume = () => {
   const router = useRouter();
-  const [resumes, setResumes] = useState([
-    { id: 1, title: '이력서 7: 풀스택 개발자', date: '2024.05.05', status: '작성 중' },
-    { id: 2, title: '이력서 6: AI 프롬프트', date: '2024.05.05', status: '작성 중' },
-    { id: 3, title: '이력서 5: 클라우드', date: '2024.05.05', status: '작성 중' },
-    { id: 4, title: '이력서 4: AI 엔지니어', date: '2024.05.05', status: '작성 중' },
-    { id: 5, title: '이력서 3: 데이터 엔지니어', date: '2024.05.05', status: '작성 중' },
-    { id: 6, title: '이력서 1: 백엔드', date: '2024.05.05', status: '작성 중' },
-    { id: 7, title: '이력서 2: 프론트엔드', date: '2024.05.05', status: '작성 중' },
-  ]);
+  const [resumes, setResumes] = useState([]); // SpringBoot Data
   const [openResume, setOpenResume] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const handleMenuClick = (resumeId) => {
-    setOpenResume(prevOpenResume => prevOpenResume === resumeId ? null : resumeId);
+  //SpringBoot Data Get
+  useEffect(() => {
+    const memberNo = 1; // 임시로 memberNo 값을 1로 설정
+
+    instance.get(`/resume/member/${memberNo}`).then(response => {
+      console.log(response.data);
+      setResumes(response.data);  
+    })
+    .catch(error => {
+      console.error('Error fetching resumes:', error);
+    });
+  }, []);
+
+
+  const handleMenuClick = (resumeNo) => {
+    setOpenResume(prevOpenResume => prevOpenResume === resumeNo ? null : resumeNo);
   };
 
   const handleEditClick = () => {
@@ -29,7 +38,7 @@ const MyResume = () => {
   };
 
   const handleConfirmDelete = () => {
-    setResumes(resumes.filter((resume) => resume.id !== openResume));
+    setResumes(resumes.filter((resume) => resume.resumeNo !== openResume));
     setShowModal(false);
     setOpenResume(null);
   };
@@ -64,12 +73,12 @@ const MyResume = () => {
               </div>
             </div>
             {resumes.map((resume) => (
-              <div className="resume-card" key={resume.id}>
+              <div className="resume-card" key={resume.resumeNo}>
                 <div className="resume-card-header">{resume.title}</div>
-                {resume.date && <div className="resume-card-date">{resume.date}</div>}
-                {resume.status && <div className="resume-card-status">{resume.status}</div>}
-                <div className="resume-card-menu" onClick={() => handleMenuClick(resume.id)}>⋮</div>
-                {openResume === resume.id && (
+                {resume.modificationDate && <div className="resume-card-date">{resume.modificationDate}</div>}
+                {resume.jobCategory && <div className="resume-card-status">{resume.jobCategory}</div>}
+                <div className="resume-card-menu" onClick={() => handleMenuClick(resume.resumeNo)}>⋮</div>
+                {openResume === resume.resumeNo && (
                   <div className="resume-card-options">
                     <button onClick={handleEditClick}>수정하기</button>
                     <button onClick={handleDeleteClick}>삭제하기</button>
