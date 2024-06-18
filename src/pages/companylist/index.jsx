@@ -5,7 +5,7 @@ import CompanylistComponent from "../../components/companylist/CompanylistCompon
 
 const companyComponent = observer(()=>{
     return (
-        <div className="map_div">
+        <div className="map_div" style={{padding: '10px', margin: '0 auto'}}>
             <CompanylistComponent/>
         </div>
     )

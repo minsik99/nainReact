@@ -1,0 +1,60 @@
+.tableBox {
+  display: flex;
+  justify-content: center;
+  width: 90%; 
+}
+
+.tableContainer {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+.tableHeader th:nth-child(2),
+.tableRow td:nth-child(2) {
+  width: 4rem; /* 원하는 너비로 설정 */
+}
+.tableHeader th:nth-child(3),
+.tableRow td:nth-child(3) {
+  width: 1.2rem; /* 원하는 너비로 설정 */
+}
+.tableHeader th:nth-child(4),
+.tableRow td:nth-child(4) {
+  width: 4rem; /* 원하는 너비로 설정 */
+}
+
+.tableHeader {
+background-color: #77AAAD;
+width: 0.6rem;
+color: #fff;
+}
+
+.tableHeader th {
+border-bottom: 2px solid #ddd;
+padding: 8px;
+text-align: left;
+text-align: center;
+}
+
+.tableRow td {
+border-bottom: 1px solid #ddd;
+padding: 8px;
+text-align: center;
+}
+
+
+.linkBox a {
+  display:block;
+}
+
+.noDecoration {
+  text-decoration: none;
+  color: inherit;
+}
+
+.tableRow:hover {
+  background-color:#f4f4f4;
+  color: black;
+}
+
+
