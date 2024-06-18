@@ -24,10 +24,9 @@
 }
 
 .nav-link {
-  width: 100px;
+  width: 110px;
   font-weight: 900;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: auto;
 }
 
 .nav .nav-link:last-child {
@@ -84,10 +83,10 @@
 
 .navigation-container a {
   text-decoration: none;
-  font-weight: 900;
-  padding: 9px 18px 9px 18px;
+  font-weight: 1000;
+  padding: 0px 12px 0px 18px;
   display: inline-block;
-  font-size: 15px;
+  font-size: 16px;
   color: #333;
 }
 
@@ -98,11 +97,15 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
   width: 200px;
-  height: 180px;
+  height: 200px;
   behavior: "smooth";
   z-index: 3;
   background: #ffffff;
   margin-top: 13px;
+}
+
+.submenu a {
+  padding: 15px 0px 10px 18px;
 }
 
 .subword {
@@ -159,7 +162,7 @@
 
 .middle_word {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .banner {
@@ -202,7 +205,7 @@
   float: left;
   width: 50%;
   padding-left: 80px;
-  padding-top: 50px;
+  padding-top: 65px;
 }
 
 .banner_botton {
@@ -212,7 +215,7 @@
 .subscribe_banner {
   text-align: center;
   background: #77aaad;
-  height: 150px;
+  height: 140px;
   padding: 20px;
   margin-top: 60px;
 }

@@ -46,7 +46,7 @@ const NavigationBar = observer(() => {
             <ul style={{ marginBottom: "0px" }}>
               <li>
                 <Link href="/resume" legacyBehavior>
-                  <a>이력서 매니저</a>
+                  <a style={{ marginRight: "10px" }}>이력서 매니저</a>
                 </Link>
                 <div className="submenu">
                   <Link href="/resume/MyResumeInsert" legacyBehavior>
@@ -133,18 +133,18 @@ const NavigationBar = observer(() => {
               <Nav.Link onClick={handleLogout}>로그아웃</Nav.Link>
               <Nav.Link>
                 <Link href="/" legacyBehavior>
-                  <a>내 정보</a>
+                  내 정보
                 </Link>
               </Nav.Link>
             </Nav>
           ) : (
             <Nav>
-              <Link href="/member/login" legacyBehavior>
-                <a>로그인</a>
-              </Link>
-              <Link href="/member" legacyBehavior>
-                <a>회원가입</a>
-              </Link>
+              <Nav.Link href="/member/login" legacyBehavior>
+                로그인
+              </Nav.Link>
+              <Nav.Link href="/member" legacyBehavior>
+                회원가입
+              </Nav.Link>
             </Nav>
           )}
         </Navbar.Collapse>

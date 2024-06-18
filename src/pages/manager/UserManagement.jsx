@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/manager/Sidebar";
-import MemberGrid from "../../components/manager/MemberGrid";
+import UserGrid from "../../components/manager/UserGrid";
 
 const UserManagement = () => {
   return (
@@ -25,7 +25,7 @@ const UserManagement = () => {
           </a>
         </div>
         <div style={{ width: "93%", marginLeft: "50px" }}>
-          <MemberGrid />
+          <UserGrid />
         </div>
       </div>
     </>
