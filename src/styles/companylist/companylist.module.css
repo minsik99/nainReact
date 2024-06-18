@@ -56,7 +56,8 @@
     line-height: 3rem; /* 줄 높이 조정 */
     display: flex;
     align-items: center;
-    justify-content: center; /* 수평 중앙 정렬 */
+    justify-content: flex-start; /* 수평 왼쪽 정렬 */
+
     color: #6E7783;
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 

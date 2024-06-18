@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {useRef ,useEffect, useState, useMemo } from 'react';
 import { useMutation } from "react-query";
-import styles from './companylist.module.css';
+import styles from '../../styles/companylist/companylist.module.css';
 import Table from "../common/Table";
 import SearchBar from "../common/SearchBar";
 import Loading from "../designTool/Loading";
@@ -42,9 +42,6 @@ const CompanylistComponent = () => {
         }
       }, [sortKey, selectHeader]);
     
-
-    
-
     const mutation = useMutation(
         (newKeyword) => axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword }),
         {
