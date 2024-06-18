@@ -4,6 +4,11 @@ import "ag-grid-community/styles/ag-grid.css"; // 기본 CSS
 import "ag-grid-community/styles/ag-theme-balham.css"; // Balham 테마
 import styles from "./AdminGrid.module.css"; // 커스텀 CSS
 import RadiusButton from "../designTool/radiusButton";
+import {
+  getAdminList,
+  updateAdminStatus,
+  removeAdminStatus,
+} from "../../api/adminManager";
 
 const AdminGrid = () => {
   const [rowData, setRowData] = useState([]);
@@ -16,73 +21,91 @@ const AdminGrid = () => {
       headerCheckboxSelection: true,
       checkboxSelection: true,
       headerName: "",
-      minWidth: 30,
+      width: 60,
+      minWidth: 60,
+      maxWidth: 60,
+      colId: "", // 이 열에 대한 고유 식별자 설정
       floatingFilter: false,
-      cellClass: styles.customCheckboxCell, // 체크박스 셀에 커스텀 클래스 추가
-      width: 40,
+      headerClass: styles.customHeader,
+      cellClass: styles.customCell,
     },
     {
       headerName: "이메일",
-      field: "email",
+      field: "memberEmail",
       sortable: true,
       filter: "agTextColumnFilter",
       floatingFilter: true,
-      suppressMenu: false, // 필터 아이콘 제거
       headerClass: styles.customHeader,
+      cellClass: styles.customCell,
+      floatingFilterComponentParams: {
+        suppressFilterButton: true,
+      },
     },
     {
       headerName: "이름",
-      field: "name",
+      field: "memberName",
       sortable: true,
       filter: "agTextColumnFilter",
       floatingFilter: true,
-      suppressMenu: true, // 필터 아이콘 제거
       headerClass: styles.customHeader,
+      cellClass: styles.customCell,
     },
     {
       headerName: "닉네임",
-      field: "nickname",
+      field: "memberNickname",
       sortable: true,
       filter: "agTextColumnFilter",
       floatingFilter: true,
-      suppressMenu: true, // 필터 아이콘 제거
       headerClass: styles.customHeader,
+      cellClass: styles.customCell,
     },
   ];
 
   useEffect(() => {
-    setRowData([
-      {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        nickname: "johnny",
-      },
-      {
-        id: 2,
-        name: "Jane Smith",
-        email: "jane@example.com",
-        nickname: "janes",
-      },
-      // 나머지 데이터 추가...
-    ]);
+    const fetchAdminList = async () => {
+      try {
+        const data = await getAdminList();
+        setRowData(data);
+      } catch (error) {
+        alert("관리자 리스트를 가져오지 못했습니다.");
+        console.error("관리자 리스트를 가져오지 못했습니다.", error);
+      }
+    };
+
+    fetchAdminList();
   }, []);
 
   const onGridReady = (params) => {
     gridApi.current = params.api;
     gridColumnApi.current = params.columnApi;
+    params.api.sizeColumnsToFit(); // 그리드 초기화 시 열 크기 조정
   };
 
-  const deleteSelectedRows = () => {
+  const deleteAdmin = async () => {
     const selectedRows = gridApi.current.getSelectedRows();
-    const remainingRows = rowData.filter((row) => !selectedRows.includes(row));
-    setRowData(remainingRows);
+    const emails = selectedRows.map((row) => row.memberEmail);
+    try {
+      await removeAdminStatus(emails); // 서버에 관리자 상태 제거 요청
+      const updatedRows = rowData.filter(
+        (row) => !emails.includes(row.memberEmail)
+      );
+      setRowData(updatedRows); // 필터링된 상태로 rowData 업데이트
+    } catch (error) {
+      alert("관리자 삭제에 실패했습니다.");
+      console.error("관리자 삭제에 실패했습니다.", error);
+    }
   };
 
-  const addRow = () => {
-    const newRowData = [...rowData, { ...newRow, id: rowData.length + 1 }];
-    setRowData(newRowData);
-    setNewRow({ email: "", name: "", nickname: "" });
+  const addAdmin = async () => {
+    try {
+      const updatedMember = await updateAdminStatus(newRow.email); // 서버에 관리자 상태 업데이트 요청
+      const newRowData = [...rowData, updatedMember];
+      setRowData(newRowData);
+      setNewRow({ email: "", name: "", nickname: "" });
+    } catch (error) {
+      alert("관리자 추가에 실패했습니다.");
+      console.error("관리자 추가에 실패했습니다.", error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -99,11 +122,10 @@ const AdminGrid = () => {
           value={newRow.email}
           placeholder="abc123@nain.io"
           onChange={handleInputChange}
-          style={{ borderRadius: "5px", marginRight: "10px" }}
+          style={{ borderRadius: "5px", marginRight: "20px" }}
         />
         <RadiusButton
-          className="RadiusButton"
-          onClick={addRow}
+          onClick={addAdmin}
           padding="5px 18px"
           color="#9dc3c1"
           text="관리자 추가"
@@ -111,7 +133,7 @@ const AdminGrid = () => {
       </div>
       <div className="RadiusButton">
         <RadiusButton
-          onClick={deleteSelectedRows}
+          onClick={deleteAdmin}
           padding="5px 18px"
           color="#9dc3c1"
           text="관리자 삭제"
@@ -125,19 +147,24 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={columnDefs}
           defaultColDef={{
-            minWidth: 440,
-            filter: false,
-            sortable: false,
-            floatingFilter: false,
-            suppressMenu: false, // 필터 아이콘 제거
+            flex: 1,
+            minWidth: 100,
+            filter: true,
+            sortable: true,
+            floatingFilter: true,
+            floatingFilterComponentParams: {
+              suppressFilterButton: true,
+            },
+            headerClass: "customHeader",
+            floatingFilterComponent: "customFloatingFilter",
           }}
           onGridReady={onGridReady}
           rowSelection="multiple"
           pagination={true}
           paginationPageSize={10}
-          rowHeight={40} // 행 높이 설정
-          headerHeight={40} // 타이틀 행 높이 설정
-          floatingFiltersHeight={40} // 검색 행 높이 설정
+          rowHeight={50} // 행 높이 설정
+          headerHeight={50} // 타이틀 행 높이 설정
+          floatingFiltersHeight={50} // 검색 행 높이 설정
         />
       </div>
     </div>
