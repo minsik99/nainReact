@@ -1,23 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RadiusButton from '../designTool/RadiusButton';
-import styles from './searchBar.module.css';
-import CustomDropdown from './CustomDropdown';
+import styles from '../../styles/common/searchBar.module.css';
+const SearchBar = ({handleSubmit, keyword, setKeyword, searchOn}) => {
+    const handleInputChange = (e) => {
+        setKeyword(e.target.value);
+    };
 
-const SearchBar = ({ columns, sortKey, setSortKey, handleSubmit, keyword, setKeyword, searchOn, visible}) => {
-    
-    const handleSortKeyChange = (value) => {
-        setSortKey(value);
-    }
-
-    
     return (
-        <div className={styles.searchBar}>
             <div className={styles.search}>
                 <form onSubmit={handleSubmit} className={styles.searchForm}>
                     <input
                         type="text"
                         value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
+                        onChange={handleInputChange}
                         ref={searchOn}
                         placeholder="검색어를 입력하세요"
                         className={styles.searchInput}
@@ -31,10 +26,7 @@ const SearchBar = ({ columns, sortKey, setSortKey, handleSubmit, keyword, setKey
                     />
                 </form>
             </div>
-            {/* <div className={styles.dropdownBox}> */}
-            <CustomDropdown columns={columns} visible={visible} value={sortKey} onChange={handleSortKeyChange} />
-            {/* </div> */}
-        </div>
     );
 };
+
 export default SearchBar;

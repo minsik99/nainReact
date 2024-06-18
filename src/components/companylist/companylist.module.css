@@ -1,14 +1,32 @@
 .companyContainer {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
+    width: 100%; /* 부모 컨테이너의 전체 너비 사용 */
+    margin: 0 auto;
 }
 
 .searchContainer {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
     height: 100vh; /* 전체 화면 높이 가운데 정렬을 위해 */
-    width: 80vw;
+    width: 100%;
+    position: relative; 
+}
+
+.searchBar {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 끝으로 배치 */
+    align-items: center; /* 수직 정렬 */
+    gap: 10px;
+    /* position: absolute; */
+    flex-direction: row;
+    padding-left: 20%;
+    width: 90%;
+    z-index: 1;
+    background-color: white; /* 배경색을 흰색으로 설정 */
+    padding: 0.5rem;
 }
 
 .searchList {
@@ -19,29 +37,30 @@
 .resultsContainer{
     display: flex;
     justify-content: center;
+    width: 100%;
+    
 }
 
-
-
+.tableContainer{
+    margin-top: 0;
+}
 
 /* 기업 공고 리스트 */
 .title {
-position: absolute;
-width: 40%;
-height: 10%;
-left: 2rem;
-top: 9rem;
+    margin: 20px 0; /* 상하단 여백 설정 */
+    font-style: normal;
+    font-weight: 800;
+    font-size: 2.5rem;
+    text-align: center;
+    width: 40%;
+    line-height: 3rem; /* 줄 높이 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 수평 중앙 정렬 */
+    color: #6E7783;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 
-font-style: normal;
-font-weight: 800;
-font-size: 2.5rem;
-line-height: 20px;
-/* or 42% */
-display: flex;
-align-items: center;
-text-align: center;
-
-color: #6E7783;
 }
+
 
 
