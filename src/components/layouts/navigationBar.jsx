@@ -63,8 +63,8 @@ const NavigationBar = observer(() => {
                     <a className="subword">이력서 관리</a>
                   </Link>
                   <br />
-                  <Link href="/resume/MyResume" legacyBehavior>
-                    <a className="subword">합격자 이력서 공유</a>
+                  <Link href="/chat/ChatList" legacyBehavior>
+                    <a className="subword">채팅방</a>
                   </Link>
                   <br />
                   <Link href="/resume/MyResume" legacyBehavior>
