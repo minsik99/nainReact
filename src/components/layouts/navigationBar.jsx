@@ -143,7 +143,6 @@ const NavigationBar = observer(() => {
                   내 정보
                 </Link>
               </Nav.Link>
-
             </Nav>
           ) : (
             <Nav>
