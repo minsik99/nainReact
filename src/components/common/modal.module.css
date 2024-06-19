@@ -38,33 +38,21 @@ display: flex;
 justify-content: center;
 align-items: center;
 }
-  .modalFooter {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .buttonBox {
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 1rem;
-  }
-  
-  .modalButton{
-    border-radius: 8px;
-  
-    background: none;
-    border: none;
-    width: 20%;
-    height: 52px;
-    font-weight: bold;
-    background-color: aquamarine;
-    }
-  .modalButton:hover {
-      opacity: 50%;
-      transition: 0.5s;
-  }
-  
-  .modalBorder{
-    border-right: 1px solid #cbcbcb;
-  }
+.modalFooter {
+display: flex;
+flex-direction: row;
+}
+
+.buttonBox {
+display:flex;
+flex-direction: row;
+justify-content: space-between;
+margin: 1rem;
+gap: 6rem;
+}
+
+
+
+.modalBorder{
+border-right: 1px solid #cbcbcb;
+}
