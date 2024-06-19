@@ -1,17 +1,22 @@
 import React from 'react';
-import styles from './modal.module.css';
+import styles from '../../styles/common/modal.module.css';
 import RadiusButton from '../designTool/RadiusButton';
 import useClickOutside from '../hook/useClickOutside';
 import { useState, useEffect } from 'react';
 import CustomDropdown from '../designTool/CustomDropdown';
+import NotButtonModal from '../interview/NotButtonModal';
 
 
 const DefaultModal = ({ data, closeModal, onConfirm }) => {
   //처리할 기본키값 보내는 용도
-  const handleConfirmClick = () => {
-    if (data) {
-      onConfirm(data);
-    }
+    const handleConfirmClick  = () => {
+      if (data && data.columns) {
+        onConfirm(data.columns);
+        console.log(data.columns);
+      } else {
+        console.error('Data or columns are missing');
+      }
+  
   };
   return (
     <div>
@@ -64,10 +69,14 @@ const Modal = ({ isOpened, type, closeModal, data }) => {
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modalBody} ref={wrapperRef}>
-        {type === 'custom' ? (
+          {type === 'custom' ? (
           <CustomModal onConfirm={data.onConfirm} closeModal={closeModal} data={data} />
+        ) : type === 'default' ? (
+          <DefaultModal onConfirm={data.onConfirm} data={data} closeModal={closeModal} />
         ) : (
-          <DefaultModal onConfirm={data.onConfirm} data={data} closeModal={closeModal}  />
+          <div className={styles.notStyle}>
+          <NotButtonModal data={data} closeModal={closeModal}/>
+          </div>
         )}
       </div>
     </div>
