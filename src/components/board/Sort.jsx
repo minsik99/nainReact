@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import styles from "../../styles/board/search.module.css";
 
 const Sort = ({options, onSort}) => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -10,10 +11,9 @@ const Sort = ({options, onSort}) => {
       };
 
   return (
-    <div>
-        <select
+    <div className={styles.selectContainer}>
+        <select className={styles.selectBox}
             value={selectedOption} onChange={handleOptionChange}>
-            <option value="">정렬 기준</option>
             {options.map((option, index) => (
                 <option key={index} value={option.value}>{option.label}</option>
             ))}

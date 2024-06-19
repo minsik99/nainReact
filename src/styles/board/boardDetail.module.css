@@ -1,0 +1,113 @@
+/* BoardDetail.module.css */
+.base {
+    margin: 0 auto;
+}
+
+.base h2{
+    margin-top: 50px;
+    margin-bottom: 40px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.container {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.header h3 {
+    width: 100%;
+    font-size: 100%;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    padding: 15px; /* 내부 여백 */
+    border-radius: 8px; /* 둥근 테두리 반경 */
+    background-color: white; /* 배경색 */
+}
+
+.header p{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #888; /* 회색으로 설정 */
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.content {
+    min-height: 400px;
+    margin: 20px 0;
+    line-height: 1.8;
+    color: #444;
+    padding: 15px; /* 내부 여백 */
+    border-radius: 8px; /* 둥근 테두리 반경 */
+    background-color: white; /* 배경색 */
+}
+
+.fileName {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #888; /* 회색으로 설정 */
+}
+
+.file {
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 1000px;
+    gap: 10px;
+    margin: 20px;
+}
+
+.buttons img {
+    margin-right: 10px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.base h4{
+    margin: 25px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.commentEnroll{
+    display: flex;
+    justify-content: space-between;
+    width: 1000px;
+    gap: 10px;
+    margin: 20px;
+    margin-top: 20px;
+}
+
+.commentBox {
+    margin-left: 1rem;
+    text-align: left;
+    width: 85%;
+    min-height: 150px;
+    padding: 15px; /* 내부 여백 */
+    border-radius: 8px; /* 둥근 테두리 반경 */
+}

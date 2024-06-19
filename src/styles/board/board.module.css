@@ -1,45 +1,41 @@
 .tableContainer {
     width: 100%;
     border-collapse: collapse;
+  }
+
+.tableBox {
+  display: flex;
+    justify-content: center;
+    width: 100%; 
 }
   
 .tableHeader {
-    background-color: #77AAAD;
-    color: #fff;
+background-color: #77AAAD;
+color: #fff;
 }
 
 .tableHeader th {
-    border-bottom: 2px solid #ddd;
-    padding: 8px;
-    text-align: left;
+border-bottom: 2px solid #ddd;
+padding: 8px;
+text-align: center;
 }
+
 
 .tableRow td {
-    border-bottom: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* 각 셀에 가로선 추가 */
 }
 
-.linkBox a {
-    display: block;
+.tableRow tr:hover {
+  background-color:#f4f4f4;
+  color: black;
 }
 
-.noDecoration {
+.tableRow td a{
+    color: black;
     text-decoration: none;
-    color: inherit;
 }
 
-.tableRow:hover {
-    background-color: #77AAAD;
-    color: white;
-}
-
-.tableBox {
-    display: flex;
-    flex-direction: column; /* 세로 방향으로 요소 배치 */
-    justify-content: center; /* 요소를 세로 가운데 정렬 */
-    align-items: center; /* 요소를 가로 가운데 정렬 */
-    height: 100vh; /* 화면 전체 높이 */
-}
 
 .tableContainer th:nth-child(1),
 .tableContainer td:nth-child(1) {
@@ -61,32 +57,39 @@
     width: 100px;
 }
 
+.tableContainer td:nth-child(4){
+    text-align: right;
+}
+
 .actionBar {
     display: flex;
-    justify-content: center; /* 요소를 가운데 정렬 */
-    align-items: center; /* 요소를 세로 가운데 정렬 */
-    gap: 10px; /* 요소 간의 간격 추가 */
-    margin-top: 20px; /* 위쪽에 간격 추가 (필요한 경우) */
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
 }
-
 
 .container {
-    --bs-gutter-x: 1.5rem;
-    --bs-gutter-y: 0;
-    display: flex;
-    margin-top: calc(-1* var(--bs-gutter-y));
-    margin-right: calc(30* var(--bs-gutter-x));
-    margin-left: calc(30* var(--bs-gutter-x));
-    flex-wrap: wrap;
+    margin: 0 auto;
 }
+
+.container h2 {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    width: 100%;
+    font-weight: bold;
+}
+
 .controls {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    gap: 15px;
   }
   
-  .controlItem {
+.controlItem {
+    display: flex;
+    justify-content: space-between;
     flex: 1;
-  }
+    margin-right: 15px;
+}
