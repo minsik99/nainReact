@@ -38,7 +38,7 @@ const YearPayAmount = () => {
     const fetchData = async () => {
       try {
         const data = await getYearlyPayAmount();
-        const labels = data.map((item) => item.year + "년");
+        const labels = data.map((item) => item.year + "년").reverse();
         const amounts = data.map((item) => item.amount);
         setChartData({
           labels,
