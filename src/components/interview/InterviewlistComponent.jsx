@@ -34,23 +34,19 @@ const InterviewlistComponent = () => {
 
     return (
         <>
-        <div>
-            <div>
-
-            </div>
+        <div className={styles.interviewContainer}>
             
 
         </div>
+            
+        </>
+    );
+}
 
-            {/* <div onClick={()=>{handleOpen(true)}}>
+{/* <div onClick={()=>{handleOpen(true)}}>
                 // 핸들러 혹은 함수에 파라메터를 전해줘야 할때 
             </div>
             <div onClick={handleOpen}>
                 // onClick={e =>{handleOpen(e)}}
                 // 핸들러 혹은 함수에 event 값이 자동으로 전달될때 
             </div> */}
-        </>
-    );
-
-
-}
