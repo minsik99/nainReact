@@ -15,7 +15,7 @@ const BoardList = (props) => {
                   <th>{fourth}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className={styles.tableRow}>
                 {boardList}
               </tbody>
             </table>

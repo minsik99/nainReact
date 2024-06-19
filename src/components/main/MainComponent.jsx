@@ -117,7 +117,7 @@ const MainComponent = () => {
         <h1
           style={{
             color: "#6E7783",
-            fontSize: "25pt",
+            fontSize: "23pt",
             fontWeight: "900",
           }}
         >
@@ -128,7 +128,7 @@ const MainComponent = () => {
             color: "#6E7783",
             fontSize: "14pt",
             fontWeight: "600",
-            margin: "30px",
+            margin: "20px",
           }}
         >
           내 역량을 잘 표현할 수 있도록 이력서부터 면접까지 관리하여 돋보이는
@@ -148,7 +148,7 @@ const MainComponent = () => {
           <h1
             style={{
               color: "#6E7783",
-              fontSize: "23pt",
+              fontSize: "20pt",
               fontWeight: "900",
               margin: "30px",
             }}
@@ -158,7 +158,7 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "14pt",
+              fontSize: "13pt",
               fontWeight: "600",
               margin: "30px",
             }}
@@ -170,10 +170,11 @@ const MainComponent = () => {
           </ul>
           <div className="banner_botton">
             <RadiusButton
-              padding="12px 35px"
+              padding="10px 30px"
               color="#9dc3c1"
               text="자세히 보기"
               borderRadius="30px"
+              fontSize="18px"
               onClick={() => router.push("/resume")}
             />
           </div>
@@ -184,7 +185,7 @@ const MainComponent = () => {
           <h1
             style={{
               color: "#6E7783",
-              fontSize: "23pt",
+              fontSize: "20pt",
               fontWeight: "900",
               margin: "30px",
             }}
@@ -194,20 +195,21 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "14pt",
+              fontSize: "13pt",
               fontWeight: "600",
               margin: "30px",
             }}
           >
-            <li>모의면접</li>
+            <li style={{ marginBottom: "20px" }}>모의면접</li>
             <li>면접 report</li>
           </ul>
           <div className="banner_botton">
             <RadiusButton
-              padding="12px 35px"
+              padding="10px 30px"
               color="#9dc3c1"
               text="자세히 보기"
               borderRadius="30px"
+              fontSize="18px"
               onClick={() => router.push("/interview")}
             />
           </div>
@@ -222,13 +224,13 @@ const MainComponent = () => {
         </div>
       </div>
       <div className="subscribe_banner">
-        <h1 style={{ color: "#FFFFFF", fontSize: "22pt", fontWeight: "900" }}>
+        <h1 style={{ color: "#FFFFFF", fontSize: "20pt", fontWeight: "900" }}>
           맞춤형 AI 솔루션으로 시작하세요
         </h1>
         <div className="subscribe_button">
           <RadiusButton
-            padding="10px 30px"
-            fontSize="20px"
+            padding="8px 30px"
+            fontSize="18px"
             color="#9dc3c1"
             text="결제하기"
             borderRadius="30px"

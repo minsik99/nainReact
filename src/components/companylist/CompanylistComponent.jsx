@@ -1,15 +1,72 @@
 import axios from "axios";
-import React, {useRef ,useEffect, useState } from 'react';
+import React, {useRef ,useEffect, useState, useMemo } from 'react';
 import { useMutation } from "react-query";
-import styles from './companylist.module.css';
-import Table from "./Table";
-import SearchBar from "./SearchBar";
+import styles from '../../styles/companylist/companylist.module.css';
+import Table from "../common/Table";
+import SearchBar from "../common/SearchBar";
+import Loading from "../designTool/Loading";
+import CustomDropdown from '../designTool/CustomDropdown';
+import SortComponent from "../common/SortComponent";
 
 const CompanylistComponent = () => {
+    const columns = useMemo(() =>[{ Header: 'No', accessor: 'index' },
+        { Header: '공고명', accessor: 'title' },
+        { Header: '회사명', accessor: 'company' },
+        { Header:'조건', accessor:'require'},
+        { Header: '마감일', accessor: 'time' }
+        ], []);
+
+    const sort = [
+        { Header: '공고명', accessor: 'title' },
+        { Header: '마감일', accessor: 'time' }
+    ];
+
+    const [originalData, setOriginalData] = useState([]);
+    const [dataSet, setDataSet] = useState([]);
+    const [sortKey, setSortKey] = useState('');
     const [keyword, setKeyword] = useState('');
-    const [sortKey, setSortKey] = useState('title');
+    const [isSearchOn, setIsSearchOn] = useState(false);
     const inputRef = useRef(null);
-    const [issearchOn, setIsSearchOn] = useState(false);
+
+    const comparisonValue = '상시채용';
+    const selectHeader = columns[1].Header;
+    const selectAccesor = columns[4].accessor;
+    const canIndex = true;
+    const handleSelect = (item) => {
+        setSortKey(item ? item.Header : null);
+    };
+
+    useEffect(() => {
+        if (!sortKey) {
+          setSortKey(selectHeader);
+        }
+      }, [sortKey, selectHeader]);
+    
+    const mutation = useMutation(
+        (newKeyword) => axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword }),
+        {
+            onSuccess: (response) => {
+                setDataSet(response.data);
+                setOriginalData(response.data);
+            },
+            onError: (error) => {
+                console.error('Error fetching data:', error);
+            }
+        }
+    );
+
+    const handleSubmit = (event) => {
+        if (event) event.preventDefault();
+        if(keyword || isSearchOn)  {
+            mutation.mutate(keyword);
+        } else {
+            alert('검색어를 입력해주세요');
+        }
+        setIsSearchOn(false);
+        setKeyword('');
+    };
+
+    const data = useMemo(()=> dataSet, [dataSet]);
 
     useEffect(() => {
         const init = 'ai';
@@ -18,64 +75,38 @@ const CompanylistComponent = () => {
       },[]);
 
     useEffect(() => {
-    if (keyword) {
-        handleSubmit();
-        setKeyword('');
-    }
-    }, [keyword]);
-
-    const mutation = useMutation(newKeyword => {
-        return axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword });
-    });
-
-    const handleSubmit = (event) => {
-        if (event) event.preventDefault();
-        if(keyword)  {
-            mutation.mutate(keyword);
-        } else {
-            alert('검색어를 입력해주세요');
+        if (isSearchOn) {
+            handleSubmit();
         }
-        //검색어 없음 띄우기
-    };
-    const visible = [1, 2];
-
-    const columns = [{ header: '글번호', accessor: 'index' },
-        { header: '공고명', accessor: 'title' },
-        { header: '회사명', accessor: 'company' },
-        { header: '등록일', accessor: 'time' }
-        ];
-
-    const handleArticleClick = (link) => {
-        window.open(link, '_blank');
-    };
+    }, [isSearchOn]);
 
     return (
-        <div className={styles.companyContainer}>
-            <h2 className={styles.title}>기업 공고 리스트</h2>
-                { issearchOn && (
-                <SearchBar
-                    columns={columns}
-                    sortKey={sortKey}
-                    setSortKey={setSortKey}
-                    handleSubmit={handleSubmit}
-                    keyword={keyword}
-                    visible={visible}
-                    setKeyword={setKeyword}
-                    searchOn={inputRef}
-                />)}
-            
-            {mutation.isLoading && <p>Loading...</p>}
+    <div className={styles.companyContainer}>
+        <h2 className={styles.title}>기업 공고 리스트</h2>
+            <div className={styles.searchBar}>
+                    { !isSearchOn && (
+                    <SearchBar
+                        columns={columns}
+                        handleSubmit={handleSubmit}
+                        keyword={keyword}
+                        setKeyword={setKeyword}
+                        searchOn={inputRef}
+                    />)}
+                    <CustomDropdown columns={sort} onSelect={handleSelect} header={sort.header} />
+                    <SortComponent sortKey={sortKey} originalData={originalData} setDataSet={setDataSet}
+                     selectHeader={selectHeader} comparisonValue={comparisonValue} canIndex={canIndex}
+                        selectAccesor={selectAccesor}/>
+                </div>
+            {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
             {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
             {mutation.isSuccess && mutation.data && mutation.data.data && (
-                <Table
+              <div className={styles.tableContainer}>
+              <Table
                     columns={columns}
-                    sortKey={sortKey}
-                    setSortKey={setSortKey}
-                    handleSubmit={handleSubmit}
-                    keyword={keyword}
-                    setKeyword={setKeyword}
-                    data={mutation.data.data}
+                    data={dataSet}
                 />
+               </div>
+
         )}
     </div>
 );

@@ -2,6 +2,7 @@ import axios from "./axiosApi"
 import { authStore } from "../stores/authStore"
 
 const baseUrl = "/api/auth";
+
 export const signUp = (signUpData) => {
     return axios.post(baseUrl + "/member",signUpData).then(res =>{
         console.log(signUpData)
@@ -30,6 +31,18 @@ export const login = (loginData) => {
 
 export const logout = () =>{
     return axios.post("/logout").then(res =>{
-        return res
+        // 로컬 스토리지 데이터 삭제
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("isAdmin");
+        window.localStorage.removeItem("refresh");
+        // authStore 상태 초기화
+        authStore.setIsAdmin(false);
+        authStore.checkLoggedIn();
+        return res;
     })
-}
+    .catch(error => {
+        console.error("로그아웃 오류:", error.response ? error.response.data : error.message);
+        // 에러 메시지나 상세 정보를 반환하거나 추가 처리
+        throw error;
+    });
+};

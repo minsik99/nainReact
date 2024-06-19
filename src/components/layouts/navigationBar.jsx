@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+
+import React, { useEffect, useState } from "react";
+import { Navbar, Nav, Container, NavDropdown, Button, Modal } from "react-bootstrap";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { authStore } from "../../stores/authStore";
 import { logout } from "../../api/user";
 
+
 const NavigationBar = observer(() => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const loggedIn = authStore.loggedIn;
 
   useEffect(() => {
@@ -17,10 +20,13 @@ const NavigationBar = observer(() => {
     logout().then((res) => {
       localStorage.clear();
       authStore.setLoggedIn(false);
+      setShowLogoutModal(false); //모달달기
+      window.location.href="/"; //로그아웃 후 메인 페이지로 이동
     });
   };
 
   return (
+    <>
     <Navbar
       collapseOnSelect
       expand="lg"
@@ -46,7 +52,7 @@ const NavigationBar = observer(() => {
             <ul style={{ marginBottom: "0px" }}>
               <li>
                 <Link href="/resume" legacyBehavior>
-                  <a>이력서 매니저</a>
+                  <a style={{ marginRight: "10px" }}>이력서 매니저</a>
                 </Link>
                 <div className="submenu">
                   <Link href="/resume/MyResumeInsert" legacyBehavior>
@@ -72,11 +78,11 @@ const NavigationBar = observer(() => {
                   <a>AI 면접</a>
                 </Link>
                 <div className="submenu">
-                  <Link href="/InterviewComponent" legacyBehavior>
+                  <Link href="/interview/test" legacyBehavior>
                     <a className="subword">모의면접</a>
                   </Link>
                   <br />
-                  <Link href="/InterviewComponent" legacyBehavior>
+                  <Link href="/Interview/list" legacyBehavior>
                     <a className="subword">면접 report</a>
                   </Link>
                   <br />
@@ -130,26 +136,35 @@ const NavigationBar = observer(() => {
 
           {loggedIn ? (
             <Nav>
-              <Nav.Link onClick={handleLogout}>로그아웃</Nav.Link>
-              <Nav.Link>
-                <Link href="/" legacyBehavior>
-                  <a>내 정보</a>
-                </Link>
-              </Nav.Link>
-            </Nav>
-          ) : (
-            <Nav>
-              <Link href="/member/login" legacyBehavior>
-                <a>로그인</a>
-              </Link>
-              <Link href="/member" legacyBehavior>
-                <a>회원가입</a>
-              </Link>
-            </Nav>
-          )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            <Nav.Link onClick={() => setShowLogoutModal(true)}>로그아웃</Nav.Link>
+            <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
+          </Nav>
+        ) : (
+          <Nav>
+            <Nav.Link href={"/member/login"}>로그인</Nav.Link>
+            <Nav.Link href={"/member"}>회원가입</Nav.Link>
+          </Nav>
+        )}
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
+
+  {/* 모달 확인 */}
+  <Modal className="custom-modal" show={showLogoutModal} onHide={() => setShowLogoutModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>로그아웃 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>정말 로그아웃 하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
+            취소
+          </Button>
+          <Button variant="primary" onClick={handleLogout}>
+            로그아웃
+          </Button>
+        </Modal.Footer>
+  </Modal>
+    </>
   );
 });
 

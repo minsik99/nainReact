@@ -38,7 +38,7 @@ const NewMember = () => {
     const fetchData = async () => {
       try {
         const data = await getDailyNewMember();
-        const labels = data.map((item) => item.date);
+        const labels = data.map((item) => item.date).reverse();
         const amounts = data.map((item) => item.member);
         setChartData({
           labels,
