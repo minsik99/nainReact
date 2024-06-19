@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Button, Modal } from "react-bootstrap";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { authStore } from "../../stores/authStore";
@@ -136,43 +136,34 @@ const NavigationBar = observer(() => {
 
           {loggedIn ? (
             <Nav>
+            <Nav.Link onClick={() => setShowLogoutModal(true)}>로그아웃</Nav.Link>
+            <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
+          </Nav>
+        ) : (
+          <Nav>
+            <Nav.Link href={"/member/login"}>로그인</Nav.Link>
+            <Nav.Link href={"/member"}>회원가입</Nav.Link>
+          </Nav>
+        )}
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
 
-              <Nav.Link onClick={handleLogout}>로그아웃</Nav.Link>
-              <Nav.Link>
-                <Link href="/" legacyBehavior>
-                  내 정보
-                </Link>
-              </Nav.Link>
-            </Nav>
-          ) : (
-            <Nav>
-              <Nav.Link href="/member/login" legacyBehavior>
-                로그인
-              </Nav.Link>
-              <Nav.Link href="/member" legacyBehavior>
-                회원가입
-              </Nav.Link>
-            </Nav>
-          )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-
-    {/* 모달 확인 */}
-    <Modal className="custom-modal" show={showLogoutModal} onHide={() => setShowLogoutModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>로그아웃 확인</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>정말 로그아웃 하시겠습니까?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
-              취소
-            </Button>
-            <Button variant="primary" onClick={handleLogout}>
-              로그아웃
-            </Button>
-          </Modal.Footer>
-    </Modal>
+  {/* 모달 확인 */}
+  <Modal className="custom-modal" show={showLogoutModal} onHide={() => setShowLogoutModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>로그아웃 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>정말 로그아웃 하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
+            취소
+          </Button>
+          <Button variant="primary" onClick={handleLogout}>
+            로그아웃
+          </Button>
+        </Modal.Footer>
+  </Modal>
     </>
   );
 });
