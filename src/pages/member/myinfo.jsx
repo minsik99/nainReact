@@ -1,6 +1,5 @@
-import React, {useState} from "react";
-import { observer } from "mobx-react";
-import { mutation, useMutation } from 'react-query';
+import React, {useEffect, useState} from "react";
+import { useMutation } from 'react-query';
 import { useRouter } from "next/router";
 import axios from "axios";
 
@@ -14,6 +13,28 @@ const myinfo = () => {
         memberNickName: '',
         subscribe: 'true'
     });
+
+    useEffect(() => {
+        //서버에서 사용자 정보 가져오기
+        const fetchMemberInfo = async () => {
+        try {
+            const res = await axios.get('/api/auth/member', {
+                headers:{ 
+                     Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setFormData({
+                memberEmail: res.data.email,
+                memberName: res.data.name,
+                memberNickName: res.data.nickName,
+                subscribe: res.data.subscribe.toString()
+            });
+        } catch(error) {
+            console.error('Error fetching member info:', error);
+        }
+    };
+    fetchMemberInfo();
+}, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -34,9 +55,15 @@ const myinfo = () => {
 
     const updateMyinfoMutation = useMutation(
         async(myinfoData) => {
-            const res = await axios.put('/api/myinfo', myinfoData);
+            const res = await axios.put('/api/auth/updatemember', myinfoData,{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             return res.data;
         },
+
+
         {
             onSuccess: () => {
                 alert("정보가 성공적으로 업데이트되었습니다.");
