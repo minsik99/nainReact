@@ -1,26 +1,25 @@
-import React, { useEffect } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+
+import React, { useEffect, useState } from "react";
+import { Navbar, Nav, Container, NavDropdown, Button, Modal } from "react-bootstrap";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { authStore } from "../../stores/authStore";
-import { logout } from "../../api/user";
+import useLogoutHandler from "../login/logoutHandler";
+
 
 const NavigationBar = observer(() => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const loggedIn = authStore.loggedIn;
+  const { isOpened, modalData, closeModal, handleLogoutClick } = useLogoutHandler();
 
   useEffect(() => {
     authStore.checkLoggedIn();
   }, []);
 
-  // 로그아웃 핸들러
-  const handleLogout = () => {
-    logout().then((res) => {
-      localStorage.clear();
-      authStore.setLoggedIn(false);
-    });
-  };
+  
 
   return (
+    <>
     <Navbar
       collapseOnSelect
       expand="lg"
@@ -57,8 +56,10 @@ const NavigationBar = observer(() => {
                     <a className="subword">이력서 관리</a>
                   </Link>
                   <br />
-                  <Link href="/resume/MyResume" passHref legacyBehavior>
-                    <a className="subword">합격자 이력서 공유</a>
+
+                  <Link href="/chat/ChatList" legacyBehavior>
+                    <a className="subword">채팅방</a>
+
                   </Link>
                   <br />
                   <Link href="/resume/MyResume" passHref legacyBehavior>
@@ -72,11 +73,12 @@ const NavigationBar = observer(() => {
                   <a>AI 면접</a>
                 </Link>
                 <div className="submenu">
-                  <Link href="/InterviewComponent" passHref legacyBehavior>
+                  <Link href="/interview/test" legacyBehavior>
                     <a className="subword">모의면접</a>
                   </Link>
                   <br />
-                  <Link href="/InterviewComponent" passHref legacyBehavior>
+                  <Link href="/interview" legacyBehavior>
+
                     <a className="subword">면접 report</a>
                   </Link>
                   <br />
@@ -134,26 +136,21 @@ const NavigationBar = observer(() => {
 
           {loggedIn ? (
             <Nav>
-              <Nav.Link onClick={handleLogout}>로그아웃</Nav.Link>
-              <Nav.Link>
-                <Link href="/" passHref legacyBehavior>
-                  <a>내 정보</a>
-                </Link>
-              </Nav.Link>
-            </Nav>
-          ) : (
-            <Nav>
-              <Link href="/member/login" passHref legacyBehavior>
-                <Nav.Link as="a">로그인</Nav.Link>
-              </Link>
-              <Link href="/member" passHref legacyBehavior>
-                <Nav.Link as="a">회원가입</Nav.Link>
-              </Link>
-            </Nav>
-          )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
+            <Modal  isOpened={isOpened} data={modalData} closeModal={closeModal} />
+            <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
+          </Nav>
+        ) : (
+          <Nav>
+            <Nav.Link href={"/member/login"}>로그인</Nav.Link>
+            <Nav.Link href={"/member"}>회원가입</Nav.Link>
+          </Nav>
+        )}
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
+
+    </>
   );
 });
 

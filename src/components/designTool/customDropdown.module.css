@@ -19,14 +19,19 @@
     align-items: center;
     margin: 0.1rem;
 }
+.customWidth {
+    width: var(--dropdown-width);
+}
 
 .dropdownHeader::after {
-    margin-left: 0.5rem;
     content: '▼';
-    float: right;
+    right: 0.5rem;
+    position: absolute;
+
 }
 
 .dropdownList {
+
     list-style-type: none;
     position: absolute;
     top: 100%; /* 드롭다운 헤더 아래에 위치하도록 조정 */

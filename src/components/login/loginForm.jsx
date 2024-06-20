@@ -15,6 +15,7 @@ const LoginForm = () => {
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
             // 로그인 성공 후의 동작을 정의합니다.
+            console.log('로그인 성공', data);
             router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
         },
         onError: (error) => {
@@ -30,7 +31,7 @@ const LoginForm = () => {
             [name]: value,
         });
     };
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         loginMutation.mutate(formData); // mutate 함수로 로그인 요청을 보냅니다.

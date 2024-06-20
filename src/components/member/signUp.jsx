@@ -11,6 +11,7 @@ const SignUpForm = () => {
         memberPwd: '',
         confirmPassword: '',
         memberName: '',
+        termsAgreed: false, // 약관 동의 추가
     });
 
     const handleInputChange = (e) => {

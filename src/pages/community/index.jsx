@@ -12,7 +12,7 @@ import Sort from '../../components/board/Sort';
 const CommunityList = observer((props)=>{
     const [boards, setBoards] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [limit, setLimit] = useState(20);
+    const [limit, setLimit] = useState(15);
     const [sort, setSort] = useState();
     const [paging, setPaging] = useState({});
     const router = useRouter();
@@ -26,7 +26,7 @@ const CommunityList = observer((props)=>{
           setLimit(res.data.pg.limit);
           setPaging(res.data.pg);
         });
-    }, [currentPage, limit, sort]);
+    }, [currentPage, sort]);
     
     const myBoard = () => {
       CommunityAxios.getMyCommunity(currentPage, limit, sort).then(res => {
@@ -35,7 +35,7 @@ const CommunityList = observer((props)=>{
         setLimit(res.data.pg.limit);
         setPaging(res.data.pg);
       });
-    }
+    };
     
     const searchOptions = [
       { value: 'title', label: '제목' },
@@ -72,28 +72,31 @@ const CommunityList = observer((props)=>{
         </tr>
     ));
     
-    
+    const reload =() => {
+      window.location.reload();
+    };
       
     const createBoard = () => {
       router.push("/community/new");
     };
     
-      const detailBoard = (communityNo) => {
-        router.push({
-            pathname:'/community/detail',
-            query:{boardNo: communityNo},
-        });
-      };
+    const detailBoard = (communityNo) => {
+      router.push({
+          pathname:'/community/detail',
+          query:{communityNo:communityNo},
+      });
+    };
     
     return (
-      <div class="container">
+      <div className={styles.container}>
         <h2>커뮤니티 게시판</h2>
         <div className={styles.controls}>
-          <div>
-            <RadiusButton className="btn btn-primary" text="내 글" onClick={myBoard}/>
+          <div className={styles.controlItem}>
+            <RadiusButton color="#77AAAD"  text="전체 목록" onClick={reload}/>
+            <RadiusButton color="#77AAAD" text="내 글" onClick={myBoard}/>
           </div>
           <div className={styles.controlItem}>
-            <Search options={searchOptions} onSearch={handleSearch}/>
+            <Search options={searchOptions} onSearch={handleSearch} setBoards={setBoards} sortOption={sort} setPaging={setPaging}/>
           </div>
           <div className={styles.controlItem}>
             <Sort options={sortOptions} onSort={handleSort} />
@@ -104,10 +107,11 @@ const CommunityList = observer((props)=>{
             first={"글 번호"} second={"제목"} third={"작성자"} fourth={"조회수"}
             boardList={boardList} styles={styles} />
         </div>
-        <div  className={styles.actionBar}>
-        <Paging paging={paging} sort={sort}
-        setPage={setCurrentPage}/>
-        <RadiusButton className="btn btn-primary" text="글 작성" onClick={createBoard}/>
+        <div className={styles.actionBar}>
+          <div/>
+          <Paging className={styles.page} paging={paging} sort={sort}
+          setCurrentPage={setCurrentPage}/>
+          <RadiusButton color="#77AAAD" text="글쓰기" onClick={createBoard}/>
         </div>
       </div>
     );

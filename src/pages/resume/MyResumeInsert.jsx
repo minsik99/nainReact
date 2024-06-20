@@ -11,52 +11,15 @@ const MyResumeInsert = () => {
         phone: '',
         introduction: '',
         jobCategory: '',
-        experiences: [{ id: Date.now(), company: '', department: '', exPosition: '', startDate: '', endDate: '', responsibilities: '', current: false, exDuration: '' }],
-        education: [{ id: Date.now(), school: '', major: '', degree: '', score: '', startDate: '', endDate: '', current: false }],
-        skills: [],
-        activitys: [{ id: Date.now(), activityName: '', organizer: '', activityDescription: '', startDate: '', endDate: '' }]
+        experience: [{ id: Date.now(), company: '', department: '', exPosition: '', startDate: '', endDate: '', responsibilities: '', current: false, exDuration: '' }],
+        education: [{ id: Date.now(), schoolName: '', major: '', degree: '', score: '', startDate: '', endDate: '', current: false }],
+        activity: [{ id: Date.now(), activityName: '', organizer: '', activityDescription: '', startDate: '', endDate: '' }]
     });
-    const [availableSkills, setAvailableSkills] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-
-    useEffect(() => {
-        axios.get('http://localhost:9999/resume/skills')
-            .then(response => {
-                setAvailableSkills(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching skills:', error);
-            });
-    }, []);
 
     const handleChange = (e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
         setResume({ ...resume, [name]: valueToUse });
-    };
-
-    const handleSkillSelect = (skill) => {
-        setResume((prevState) => ({
-            ...prevState,
-            skills: [...prevState.skills, skill]
-        }));
-        setAvailableSkills((prevState) => prevState.filter((s) => s.skillId !== skill.skillId));
-    };
-
-    const handleSkillRemove = (skill) => {
-        setResume((prevState) => ({
-            ...prevState,
-            skills: prevState.skills.filter((s) => s.skillId !== skill.skillId)
-        }));
-        setAvailableSkills((prevState) => [...prevState, skill]);
-    };
-
-    const filteredSkills = availableSkills.filter((skill) =>
-        skill.skillName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
     };
 
     // 근무 기간 계산
@@ -69,7 +32,7 @@ const MyResumeInsert = () => {
 
     const handleExperienceChange = (id, e) => {
         const { name, value } = e.target;
-        const newExperiences = resume.experiences.map(exp => {
+        const newExperience = resume.experience.map(exp => {
             if (exp.id === id) {
                 const updatedExp = { ...exp, [name]: value };
                 if (name === 'startDate' || name === 'endDate') {
@@ -79,19 +42,19 @@ const MyResumeInsert = () => {
             }
             return exp;
         });
-        setResume({ ...resume, experiences: newExperiences });
+        setResume({ ...resume, experience: newExperience });
     };
 
     const addExperience = () => {
         setResume({
             ...resume,
-            experiences: [...resume.experiences, { id: Date.now(), company: '', department: '', exPosition: '', startDate: '', endDate: '', responsibilities: '', current: false, exDuration: '' }]
+            experience: [...resume.experience, { id: Date.now(), company: '', department: '', exPosition: '', startDate: '', endDate: '', responsibilities: '', current: false, exDuration: '' }]
         });
     };
 
     const removeExperience = (id) => {
-        const newExperiences = resume.experiences.filter(exp => exp.id !== id);
-        setResume({ ...resume, experiences: newExperiences });
+        const newExperience = resume.experience.filter(exp => exp.id !== id);
+        setResume({ ...resume, experience: newExperience });
     };
 
     const handleEducationChange = (id, e) => {
@@ -106,7 +69,7 @@ const MyResumeInsert = () => {
     const addEducation = () => {
         setResume({
             ...resume,
-            education: [...resume.education, { id: Date.now(), school: '', major: '', degree: '', score: '', startDate: '', endDate: '', current: false }]
+            education: [...resume.education, { id: Date.now(), schoolName: '', major: '', degree: '', score: '', startDate: '', endDate: '', current: false }]
         });
     };
 
@@ -117,22 +80,22 @@ const MyResumeInsert = () => {
 
     const handleactChange = (id, e) => {
         const { name, value } = e.target;
-        const newActivitys = resume.activitys.map(act =>
+        const newActivity = resume.activity.map(act =>
             act.id === id ? { ...act, [name]: value } : act
         );
-        setResume({ ...resume, activitys: newActivitys });
+        setResume({ ...resume, activity: newActivity });
     };
 
     const addActivity = () => {
         setResume({
             ...resume,
-            activitys: [...resume.activitys, { id: Date.now(), activityName: '', organizer: '', activityDescription: '', startDate: '', endDate: '' }]
+            activity: [...resume.activity, { id: Date.now(), activityName: '', organizer: '', activityDescription: '', startDate: '', endDate: '' }]
         });
     };
 
-    const removeact = (id) => {
-        const newActivitys = resume.activitys.filter(act => act.id !== id);
-        setResume({ ...resume, activitys: newActivitys });
+    const removeActivity = (id) => {
+        const newActivity = resume.activity.filter(act => act.id !== id);
+        setResume({ ...resume, activity: newActivity });
     };
 
     // resume 저장
@@ -140,7 +103,7 @@ const MyResumeInsert = () => {
         // resume 객체 복사
         const modifiedResume = {
             ...resume,
-            experiences: resume.experiences.map(exp => ({
+            experience: resume.experience.map(exp => ({
                 ...exp,
                 current: exp.current ? 'Y' : 'N'
             })),
@@ -148,7 +111,7 @@ const MyResumeInsert = () => {
                 ...edu,
                 current: edu.current ? 'Y' : 'N'
             })),
-            activitys: resume.activitys.map(act => ({
+            activity: resume.activity.map(act => ({
                 ...act
             }))
         };
@@ -160,7 +123,7 @@ const MyResumeInsert = () => {
                 const resumeNo = response.data.resumeNo;
 
                 // 응답 받은 resumeNo로, 경력 저장 요청
-                const experiencePromises = modifiedResume.experiences.map(exp => {
+                const experiencePromises = modifiedResume.experience.map(exp => {
                     return axios.post(`http://localhost:9999/experience/resume/${resumeNo}/create`, exp);
                 });
 
@@ -170,14 +133,14 @@ const MyResumeInsert = () => {
                 });
 
                 // 응답 받은 resumeNo로, 활동 저장 요청
-                const activitysPromises = modifiedResume.activitys.map(act => {
+                const activityPromises = modifiedResume.activity.map(act => {
                     return axios.post(`http://localhost:9999/activity/resume/${resumeNo}/create`, act);
-                })
+                });
 
                 // 모든 저장 요청이 완료될 때 까지 대기
-                return Promise.all([...experiencePromises, ...educationPromises, ...activitysPromises]);
+                return Promise.all([...experiencePromises, ...educationPromises, ...activityPromises]);
             })
-            // 저장 버큰 클릭하여 모든 요청 완료 후 목록 페이지로 이동
+            // 저장 버튼 클릭하여 모든 요청 완료 후 목록 페이지로 이동
             .then(() => {
                 if (!isTemporary) {
                     router.push('/resume/MyResume');
@@ -211,41 +174,6 @@ const MyResumeInsert = () => {
                 </div>
                 &nbsp;
 
-                <div>
-                    <label>스킬</label>
-                    <input
-                        type="text"
-                        placeholder="보유 스킬을 검색해 주세요."
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                    />
-                    <div className="skill-list">
-                        {filteredSkills.map((skill) => (
-                            <span
-                                key={skill.skillId}
-                                className="skill-item"
-                                onClick={() => handleSkillSelect(skill)}
-                            >
-                                {skill.skillName} +
-                            </span>
-                        ))}
-                    </div>
-                    &nbsp;
-
-                    <div className="selected-skills">
-                        {resume.skills.map((skill) => (
-                            <span
-                                key={skill.skillId}
-                                className="selected-skill-item"
-                                onClick={() => handleSkillRemove(skill)}
-                            >
-                                {skill.skillName} X
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                &nbsp;
-
                 <label>기본 정보</label>
                 <div>
                     이름 <input type="text" name="resumeName" value={resume.resumeName} onChange={handleChange} />
@@ -263,7 +191,7 @@ const MyResumeInsert = () => {
                 <div>
                     <label>경력</label>
                     <button type="button" className="add-button" onClick={addExperience}>추가</button>
-                    {resume.experiences.map(exp => (
+                    {resume.experience.map(exp => (
                         <div key={exp.id} className="experience">
                             <button type="button" className="remove-button" onClick={() => removeExperience(exp.id)}>x</button>
                             <p>경력 세부사항</p>
@@ -288,7 +216,7 @@ const MyResumeInsert = () => {
                             <button type="button" className="remove-button" onClick={() => removeEducation(edu.id)}>x</button>
                             <p>학력 세부사항</p>
                             현재 재학중 <input type="checkbox" className="checkbox" checked={edu.current} onChange={(e) => handleEducationChange(edu.id, e)} />
-                            <input type="text" name="school" placeholder="학교명" value={edu.school} onChange={(e) => handleEducationChange(edu.id, e)} />
+                            <input type="text" name="schoolName" placeholder="학교명" value={edu.schoolName} onChange={(e) => handleEducationChange(edu.id, e)} />
                             <input type="text" name="major" placeholder="전공" value={edu.major} onChange={(e) => handleEducationChange(edu.id, e)} />
                             <input type="text" name="degree" placeholder="학위 (학사/석사/박사)" value={edu.degree} onChange={(e) => handleEducationChange(edu.id, e)} />
                             <input type="number" step="0.01" name="score" placeholder="학점 (4.5 만점 기준)" value={edu.score} onChange={(e) => handleEducationChange(edu.id, e)} />
@@ -302,9 +230,9 @@ const MyResumeInsert = () => {
                 <div>
                     <label>활동 및 기타</label>
                     <button type="button" className="add-button" onClick={addActivity}>추가</button>
-                    {resume.activitys.map(act => (
-                        <div key={act.id} className="act">
-                            <button type="button" className="remove-button" onClick={() => removeact(act.id)}>x</button>
+                    {resume.activity.map(act => (
+                        <div key={act.id} className="activity">
+                            <button type="button" className="remove-button" onClick={() => removeActivity(act.id)}>x</button>
                             <p>활동 및 기타 세부사항</p>
                             <input type="text" name="activityName" placeholder="활동명 및 기타명" value={act.activityName} onChange={(e) => handleactChange(act.id, e)} />
                             <input type="text" name="organizer" placeholder="주최기관" value={act.organizer} onChange={(e) => handleactChange(act.id, e)} />

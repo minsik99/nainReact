@@ -1,15 +1,12 @@
 import React, {useState} from "react";
+import styles from '../../styles/board/paging.module.css';
 
-const Paging = ({paging,sort,setPage}) => {
+const Paging = ({paging, sort,setCurrentPage}) => {
     const limit = paging.limit;
     // const router = useRouter();
 
     const listBoard = (page) => {
-        setPage(page)
-        // router.push({
-        //     pathname: '/community',
-        //     query: {page: page}
-        // })
+      setCurrentPage(page)
     }
 
     const nowPage = () => {
@@ -21,25 +18,35 @@ const Paging = ({paging,sort,setPage}) => {
     
         return (pageNums.map((page) =>
             <li className="page-item" key={page.toString()} >
-              <a className="page-link" onClick = {() => listBoard(page)}>{page}</a>
+              <a className="page-link" onClick = {() => listBoard(page)}>
+                <div className={styles.pages}>{page}</div>
+              </a>
             </li>
         ));
       };
     
       const nextGroup = () => {
-        if(paging.maxPage > paging.endPage){
+        if(paging.maxPage > 10){
           return(
               <li className="page-item">
-                <a className="page-link" onClick={() => listBoard(paging.startPage + 10)}>다음</a>
+                <a className="page-link" onClick={() => listBoard(paging.startPage + 10)}>
+                  <div className={styles.arrow}>
+                  〉
+                  </div>
+                </a>
               </li>
           )};
       };
     
       const prevGroup = () => {
-        if(paging.startPage > 10){
+        if(paging.currentPage > 10){
           return(
             <li className="page-item">
-              <a className="page-link" onClick={() => listBoard(paging.startPage - 10)}>이전</a>
+              <a className="page-link" onClick={() => listBoard(paging.startPage - 10)}>
+                <div className={styles.arrow}>
+                  〈
+                </div>
+              </a>
             </li>
           )};
       };
@@ -48,7 +55,11 @@ const Paging = ({paging,sort,setPage}) => {
         if(paging.currentPage > 1){
           return(
             <li className="page-item">
-              <a className="page-link" onClick={() => listBoard(1)}>첫 페이지</a>
+              <a className="page-link" onClick={() => listBoard(1)}>
+                <div className={styles.arrow}>
+                  《
+                </div>
+              </a>
             </li>
           )};
       };
@@ -57,7 +68,11 @@ const Paging = ({paging,sort,setPage}) => {
         if(paging.currentPage < paging.maxPage){
           return(
             <li className="page-item">
-              <a className="page-link" onClick={() => listBoard(paging.maxPage)}>끝 페이지</a>
+              <a className="page-link" onClick={() => listBoard(paging.maxPage)}>
+                <div className={styles.arrow}>
+                  》
+                </div>
+              </a>
             </li>
           )};
       };
