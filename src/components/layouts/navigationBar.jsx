@@ -4,26 +4,19 @@ import { Navbar, Nav, Container, NavDropdown, Button, Modal } from "react-bootst
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { authStore } from "../../stores/authStore";
-import { logout } from "../../api/user";
+import useLogoutHandler from "../login/logoutHandler";
 
 
 const NavigationBar = observer(() => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const loggedIn = authStore.loggedIn;
+  const { isOpened, modalData, closeModal, handleLogoutClick } = useLogoutHandler();
 
   useEffect(() => {
     authStore.checkLoggedIn();
   }, []);
 
-  // 로그아웃 핸들러
-  const handleLogout = () => {
-    logout().then((res) => {
-      localStorage.clear();
-      authStore.setLoggedIn(false);
-      setShowLogoutModal(false); //모달달기
-      window.location.href="/"; //로그아웃 후 메인 페이지로 이동
-    });
-  };
+  
 
   return (
     <>
@@ -136,7 +129,8 @@ const NavigationBar = observer(() => {
 
           {loggedIn ? (
             <Nav>
-            <Nav.Link onClick={() => setShowLogoutModal(true)}>로그아웃</Nav.Link>
+            <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
+            <Modal  isOpened={isOpened} data={modalData} closeModal={closeModal} />
             <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
           </Nav>
         ) : (
@@ -149,21 +143,6 @@ const NavigationBar = observer(() => {
     </Container>
   </Navbar>
 
-  {/* 모달 확인 */}
-  <Modal className="custom-modal" show={showLogoutModal} onHide={() => setShowLogoutModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>로그아웃 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>정말 로그아웃 하시겠습니까?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
-            취소
-          </Button>
-          <Button variant="primary" onClick={handleLogout}>
-            로그아웃
-          </Button>
-        </Modal.Footer>
-  </Modal>
     </>
   );
 });
