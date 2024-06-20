@@ -11,8 +11,8 @@ const CommunityAxios = {
     //게시글 -----------------------------------------------------------------------------------------------------------------
     //커뮤니티 전체목록 조회
     getCommunityList(page, limit, sort) {
-        // return axios.get(`${COMMUNITY_URL}/list?page=${page}&limit=${limit}&sort=${sort}`);
-        return instance.get(COMMUNITY_URL, {
+        // return axios.get(`http://localhost:9999${COMMUNITY_URL}/list?page=${page}&limit=${limit}&sort=${sort}`);
+        return instance.get(COMMUNITY_URL + "/list", {
             params : {page: page, limit: limit, sort: sort}
         });
     },
@@ -44,9 +44,7 @@ const CommunityAxios = {
     //새 게시글 등록
     createCommunity(community) {
         //return axios.post(`${COMMUNITY_URL}`, community);
-        return instance.post(COMMUNITY_URL, {
-            params : {community: community}
-        });
+        return instance.post(COMMUNITY_URL, community);
     },
 
     //게시글 수정

@@ -1,0 +1,90 @@
+.dropdownContainer {
+    position: relative;
+    width: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* 밑바닥에 붙이기 */
+    padding-bottom: 0;
+}
+
+.dropdownHeader {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    width: 5.9rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.1rem;
+}
+.customWidth {
+    width: var(--dropdown-width);
+}
+
+.dropdownHeader::after {
+    content: '▼';
+    right: 0.5rem;
+    position: absolute;
+
+}
+
+.dropdownList {
+
+    list-style-type: none;
+    position: absolute;
+    top: 100%; /* 드롭다운 헤더 아래에 위치하도록 조정 */
+    left: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    margin: 0.1rem 0; /* 위아래 간격만 추가 */
+    width: 100%; /* 드롭다운 헤더와 동일한 너비로 설정 */
+    padding: 0;
+}
+
+.dropdownList.open {
+    display: block;
+}
+
+.dropdownItem {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdownItem:hover {
+    background-color: #f0f0f0;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.menu li {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.menu li:hover {
+    background-color: #f1f1f1;
+}
+
+.menu.active {
+    display: block;
+}

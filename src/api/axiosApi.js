@@ -45,11 +45,18 @@ const refreshToken = async () => {
     }
 };
 
-const logout = () => {
+const logout = async () => {
+    try {
+        //서버에 로그아웃 요청
+        await instance.post('/logout');
+    } catch(error){
+        console.error('Logout error:', error);
+    } finally {
     // 로컬 스토리지의 모든 항목을 비웁니다.
     localStorage.clear();
     // 로그인 페이지로 리다이렉트
-    window.location.href = '/user/login';
+    window.location.href = '/member/login';
+    }
 };
 
 
@@ -71,6 +78,12 @@ instance.interceptors.response.use(
 
             // 원래 요청을 다시 수행
             return instance(originalRequest);
+        }
+
+        //추가적인 에러 처리 (예: 500 오류)
+        if (error.response.status === 500){
+            console.error('Internal Server Error:', error.response.data);
+            alert('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
         }
         return Promise.reject(error);
     }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {singUp} from "../../api/user";
+import {signUp} from "../../api/user";
 import {useRouter} from "next/dist/client/router"
 import {handleAxiosError} from "../../api/errorAxiosHandle";
 import KakaoSignup from "./KakaoSignup";
@@ -7,9 +7,11 @@ import KakaoSignup from "./KakaoSignup";
 const SignUpForm = () => {
     const router = useRouter();
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
+        memberEmail: '',
+        memberPwd: '',
         confirmPassword: '',
+        memberName: '',
+        termsAgreed: false, // 약관 동의 추가
     });
 
     const handleInputChange = (e) => {
@@ -22,16 +24,20 @@ const SignUpForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { email, password, confirmPassword } = formData;
-        if (password !== confirmPassword) {
+        console.log(formData)
+        const { memberEmail, memberPwd, confirmPassword, memberName } = formData;
+        if (memberPwd !== confirmPassword) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-        const singUpData = {
-            email:email,
-            password:password,
+        const signUpData = {
+            memberEmail: memberEmail,
+            memberPwd: memberPwd,
+            memberName: memberName,
         }
-        singUp(singUpData).then(res =>{
+        console.log(signUpData)
+        signUp(signUpData).then(res =>{
+            console.log(formData.memberEmail)
             router.push("/member/login")
         }).catch(handleAxiosError)
     };
@@ -41,15 +47,19 @@ const SignUpForm = () => {
             <form className="form" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="email">이메일:</label>
-                    <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
+                    <input type="email" id="email" name="memberEmail" value={formData.memberEmail} onChange={handleInputChange} required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">비밀번호:</label>
-                    <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} required />
+                    <input type="password" id="password" name="memberPwd" value={formData.memberPwd} onChange={handleInputChange} required />
                 </div>
                 <div className="form-group">
                     <label htmlFor="confirmPassword">확인:</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} required />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="name">이름:</label>
+                    <input type="text" id="name" name="memberName" value={formData.memberName} onChange={handleInputChange} required />
                 </div>
                 <div className="button-container">
                     <button type="submit">회원가입</button>

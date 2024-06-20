@@ -1,0 +1,56 @@
+
+
+.modalContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.modalBody{
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  max-height: 600px;
+  min-width: 300px;
+  min-height: 11rem;
+  background-color: #ffffff;
+  border: 1px solid #cbcbcb;
+  border-radius: 10px;
+}
+
+.modalTitle {
+  padding: 1rem;
+  font-weight: bold;
+  font-size: large;
+}
+.dropDown{
+    width: 200px;
+}
+.modalContent{
+padding: 1.2rem;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.modalFooter {
+display: flex;
+flex-direction: row;
+}
+
+.buttonBox {
+display:flex;
+flex-direction: row;
+justify-content: space-between;
+margin: 1rem;
+gap: 6rem;
+}
+
+.modalBorder{
+border-right: 1px solid #cbcbcb;
+}

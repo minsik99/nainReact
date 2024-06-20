@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/manager/Sidebar";
-import MemberGrid from "../../components/manager/MemberGrid";
+import UserGrid from "../../components/manager/UserGrid";
 
 const UserManagement = () => {
   return (
@@ -8,9 +8,25 @@ const UserManagement = () => {
       <div className="sidebar">
         <Sidebar />
       </div>
-      <div style={{ width: "80%", margin: "20px" }}>
-        <h1>회원관리</h1>
-        <MemberGrid />
+
+      <div className="userManagement">
+        <div className="selectbutton">
+          <a
+            style={{
+              borderBottom: "4px solid #9dc3c1",
+            }}
+            className="selectUserManager"
+            href="/manager/UserManagement"
+          >
+            회원
+          </a>
+          <a className="selectAdminManager" href="/manager/AdminManagement">
+            관리자
+          </a>
+        </div>
+        <div style={{ width: "93%", marginLeft: "50px" }}>
+          <UserGrid />
+        </div>
       </div>
     </>
   );

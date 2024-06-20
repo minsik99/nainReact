@@ -24,10 +24,9 @@
 }
 
 .nav-link {
-  width: 100px;
+  width: 110px;
   font-weight: 900;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: auto;
 }
 
 .nav .nav-link:last-child {
@@ -84,10 +83,10 @@
 
 .navigation-container a {
   text-decoration: none;
-  font-weight: 900;
-  padding: 15px;
+  font-weight: 1000;
+  padding: 0px 12px 0px 18px;
   display: inline-block;
-  font-size: 18px;
+  font-size: 16px;
   color: #333;
 }
 
@@ -98,13 +97,19 @@
   overflow: hidden;
   transition: max-height 0.3s ease;
   width: 200px;
-  height: 230px;
+  height: 200px;
   behavior: "smooth";
-  z-index: 1;
+  z-index: 3;
+  background: #ffffff;
+  margin-top: 13px;
+}
+
+.submenu a {
+  padding: 15px 0px 10px 18px;
 }
 
 .subword {
-  color: #111111;
+  color: #ffffff;
 }
 .navigation-container:hover .submenu {
   max-height: 300px; /* navigation-container에 마우스를 올렸을 때 슬라이드 메뉴의 높이 설정 */
@@ -157,7 +162,7 @@
 
 .middle_word {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .banner {
@@ -200,7 +205,7 @@
   float: left;
   width: 50%;
   padding-left: 80px;
-  padding-top: 50px;
+  padding-top: 65px;
 }
 
 .banner_botton {
@@ -210,13 +215,13 @@
 .subscribe_banner {
   text-align: center;
   background: #77aaad;
-  height: 220px;
-  padding: 40px;
+  height: 140px;
+  padding: 20px;
   margin-top: 60px;
 }
 
 .subscribe_button {
-  margin: 40px;
+  margin: 20px;
   font-size: 50x;
 }
 

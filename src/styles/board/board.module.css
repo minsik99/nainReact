@@ -1,0 +1,95 @@
+.tableContainer {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+.tableBox {
+  display: flex;
+    justify-content: center;
+    width: 100%; 
+}
+  
+.tableHeader {
+background-color: #77AAAD;
+color: #fff;
+}
+
+.tableHeader th {
+border-bottom: 2px solid #ddd;
+padding: 8px;
+text-align: center;
+}
+
+
+.tableRow td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* 각 셀에 가로선 추가 */
+}
+
+.tableRow tr:hover {
+  background-color:#f4f4f4;
+  color: black;
+}
+
+.tableRow td a{
+    color: black;
+    text-decoration: none;
+}
+
+
+.tableContainer th:nth-child(1),
+.tableContainer td:nth-child(1) {
+    width: 100px;
+}
+
+.tableContainer th:nth-child(2),
+.tableContainer td:nth-child(2) {
+    width: 700px;
+}
+
+.tableContainer th:nth-child(3),
+.tableContainer td:nth-child(3) {
+    width: 100px;
+}
+
+.tableContainer th:nth-child(4),
+.tableContainer td:nth-child(4) {
+    width: 100px;
+}
+
+.tableContainer td:nth-child(4){
+    text-align: right;
+}
+
+.actionBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+.container h2 {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 15px;
+  }
+  
+.controlItem {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    margin-right: 15px;
+}

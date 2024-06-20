@@ -1,52 +1,115 @@
 import axios from "axios";
-import React, { useRef, useEffect, useState } from 'react';
+import React, {useRef ,useEffect, useState, useMemo } from 'react';
 import { useMutation } from "react-query";
+import styles from '../../styles/companylist/companylist.module.css';
+import Table from "../common/Table";
+import SearchBar from "../common/SearchBar";
+import Loading from "../designTool/Loading";
+import CustomDropdown from '../designTool/CustomDropdown';
+import SortComponent from "../common/SortComponent";
 
 const CompanylistComponent = () => {
-    const [keyword, setKeyword] = useState('');
-    const searchOn = useRef(null);
+    const columns = useMemo(() =>[{ Header: 'No', accessor: 'index' },
+        { Header: '공고명', accessor: 'title' },
+        { Header: '회사명', accessor: 'company' },
+        { Header:'조건', accessor:'require'},
+        { Header: '마감일', accessor: 'time' }
+        ], []);
 
-    const mutation = useMutation(newKeyword => {
-        return axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword });
-    });
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        mutation.mutate(keyword);
+    const sort = [
+        { Header: '공고명', accessor: 'title' },
+        { Header: '마감일', accessor: 'time' }
+    ];
+
+    const [originalData, setOriginalData] = useState([]);
+    const [dataSet, setDataSet] = useState([]);
+    const [sortKey, setSortKey] = useState('');
+    const [keyword, setKeyword] = useState('');
+    const [isSearchOn, setIsSearchOn] = useState(false);
+    const inputRef = useRef(null);
+
+    const comparisonValue = '상시채용';
+    const selectHeader = columns[1].Header;
+    const selectAccesor = columns[4].accessor;
+    const canIndex = true;
+    const handleSelect = (item) => {
+        setSortKey(item ? item.Header : null);
     };
 
+    useEffect(() => {
+        if (!sortKey) {
+          setSortKey(selectHeader);
+        }
+      }, [sortKey, selectHeader]);
+    
+    const mutation = useMutation(
+        (newKeyword) => axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword }),
+        {
+            onSuccess: (response) => {
+                setDataSet(response.data);
+                setOriginalData(response.data);
+            },
+            onError: (error) => {
+                console.error('Error fetching data:', error);
+            }
+        }
+    );
+
+    const handleSubmit = (event) => {
+        if (event) event.preventDefault();
+        if(keyword || isSearchOn)  {
+            mutation.mutate(keyword);
+        } else {
+            alert('검색어를 입력해주세요');
+        }
+        setIsSearchOn(false);
+        setKeyword('');
+    };
+
+    const data = useMemo(()=> dataSet, [dataSet]);
+
+    useEffect(() => {
+        const init = 'ai';
+        setKeyword(init);
+        setIsSearchOn(true);
+      },[]);
+
+    useEffect(() => {
+        if (isSearchOn) {
+            handleSubmit();
+        }
+    }, [isSearchOn]);
+
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input 
-                    type="text" 
-                    value={keyword} 
-                    onChange={(e) => setKeyword(e.target.value)} 
-                    ref={searchOn} 
-                />
-                <button type="submit">Search</button>
-            </form>
-            
-            {mutation.isLoading && <p>Loading...</p>}
+    <div className={styles.companyContainer}>
+        <h2 className={styles.title}>기업 공고 리스트</h2>
+            <div className={styles.searchBar}>
+                    { !isSearchOn && (
+                    <SearchBar
+                        columns={columns}
+                        handleSubmit={handleSubmit}
+                        keyword={keyword}
+                        setKeyword={setKeyword}
+                        searchOn={inputRef}
+                    />)}
+                    <CustomDropdown columns={sort} onSelect={handleSelect} header={sort.header} />
+                    <SortComponent sortKey={sortKey} originalData={originalData} setDataSet={setDataSet}
+                     selectHeader={selectHeader} comparisonValue={comparisonValue} canIndex={canIndex}
+                        selectAccesor={selectAccesor}/>
+                </div>
+            {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
             {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
             {mutation.isSuccess && mutation.data && mutation.data.data && (
-                <div>
-                    <h3>Results:</h3>
-                    <ul>
-                        {mutation.data.data.map((article, index) => (
-                            <li key={index}>
-                                <h4>{article.company}</h4>
-                                <h4>{article.title}</h4>
-                                <p>{article.link}</p>
-                                <p>{article.require}</p>
-                                <p>{article.time}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-        </div>
-    );
+              <div className={styles.tableContainer}>
+              <Table
+                    columns={columns}
+                    data={dataSet}
+                />
+               </div>
+
+        )}
+    </div>
+);
 };
 
 export default CompanylistComponent;

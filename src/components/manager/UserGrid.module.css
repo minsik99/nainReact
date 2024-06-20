@@ -1,0 +1,11 @@
+.customHeader {
+  color: #77aaad; /* 글자색 설정 */
+  font-weight: bold; /* 글자 두께 설정 */
+  background-color: #d8e6e7; /* 배경색 설정 */
+  font-size: 16px;
+}
+
+.customCell {
+  font-size: 16px;
+  margin-top: 8px;
+}

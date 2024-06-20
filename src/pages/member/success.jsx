@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import {authStore} from "../../stores/authStore";
+import { AuthContext } from '../../api/authContext';
+
 
 const LoginSuccess = () => {
     const router = useRouter();
-
+    const member = useContext(AuthContext);
     useEffect(() => {
         const { access, refresh, isAdmin } = router.query;
 

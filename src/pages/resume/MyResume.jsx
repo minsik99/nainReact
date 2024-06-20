@@ -1,37 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import instance from '../../api/axiosApi';
 
 const MyResume = () => {
   const router = useRouter();
-  const [resumes, setResumes] = useState([
-    { id: 1, title: '이력서 7: 풀스택 개발자', date: '2024.05.05', status: '작성 중' },
-    { id: 2, title: '이력서 6: AI 프롬프트', date: '2024.05.05', status: '작성 중' },
-    { id: 3, title: '이력서 5: 클라우드', date: '2024.05.05', status: '작성 중' },
-    { id: 4, title: '이력서 4: AI 엔지니어', date: '2024.05.05', status: '작성 중' },
-    { id: 5, title: '이력서 3: 데이터 엔지니어', date: '2024.05.05', status: '작성 중' },
-    { id: 6, title: '이력서 1: 백엔드', date: '2024.05.05', status: '작성 중' },
-    { id: 7, title: '이력서 2: 프론트엔드', date: '2024.05.05', status: '작성 중' },
-  ]);
+  const [resumes, setResumes] = useState([]);
   const [openResume, setOpenResume] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const handleMenuClick = (resumeId) => {
-    setOpenResume(prevOpenResume => prevOpenResume === resumeId ? null : resumeId);
+  useEffect(() => {
+    const memberNo = 1;
+
+    instance.get(`/resume/member/${memberNo}`).then(response => {
+      setResumes(response.data);
+    })
+    .catch(error => {
+      console.error('Error fetching resumes:', error);
+    });
+  }, []);
+
+  const handleMenuClick = (resumeNo) => {
+    setOpenResume(prevOpenResume => prevOpenResume === resumeNo ? null : resumeNo);
   };
 
-  const handleEditClick = () => {
-    // 여기에서 수정 페이지로 이동하는 로직을 구현합니다.
-    console.log('수정하기 페이지로 이동');
+  const handleEditClick = (resumeNo) => {
+    router.push(`/resume/MyResumeUpdate?resumeNo=${resumeNo}`);
   };
 
   const handleDeleteClick = () => {
     setShowModal(true);
   };
 
+  // resume 삭제 : experience, education, activity 삭제 후 resume 삭제
   const handleConfirmDelete = () => {
-    setResumes(resumes.filter((resume) => resume.id !== openResume));
-    setShowModal(false);
-    setOpenResume(null);
+    axios.all([
+      axios.delete(`http://localhost:9999/experience/resume/${openResume}`),
+      axios.delete(`http://localhost:9999/education/resume/${openResume}`),
+      axios.delete(`http://localhost:9999/activity/resume/${openResume}`)
+    ])
+    .then(() => {
+      return axios.delete(`http://localhost:9999/resume/${openResume}`);
+    })
+    .then(() => {
+      setResumes(resumes.filter((resume) => resume.resumeNo !== openResume));
+      setShowModal(false);
+      setOpenResume(null);
+    })
+    .catch(error => {
+      console.error('Error deleting resume or related data:', error);
+      setShowModal(false);
+    });
   };
 
   const handleCancelDelete = () => {
@@ -46,6 +65,15 @@ const MyResume = () => {
     router.push('/resume/MyResumeInsert');
   };
 
+  const handleResumeClick = (resumeNo) => {
+    router.push(`/resume/MyResumeUpdate?resumeNo=${resumeNo}`);
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString('ko-KR', options);
+  };
+
   return (
     <>
       <div className="app">
@@ -55,7 +83,7 @@ const MyResume = () => {
             <button>합격 키워드 분석 →</button>
           </div>
           <div className="resume-list">
-            <div className="resume-card" onClick={handleNewResumeClick}>
+            <div className="resume-card" onClick={handleNewResumeClick} style={{ cursor: 'pointer' }}>
               <div className="resume-card-header">
                 <div className="new-resume-icon">
                   <button>+</button>
@@ -64,15 +92,17 @@ const MyResume = () => {
               </div>
             </div>
             {resumes.map((resume) => (
-              <div className="resume-card" key={resume.id}>
+              <div className="resume-card" key={resume.resumeNo} onClick={() => handleResumeClick(resume.resumeNo)} style={{ cursor: 'pointer' }}> {/* 이력서 상세보기 / 수정페이지 이동 */}
                 <div className="resume-card-header">{resume.title}</div>
-                {resume.date && <div className="resume-card-date">{resume.date}</div>}
-                {resume.status && <div className="resume-card-status">{resume.status}</div>}
-                <div className="resume-card-menu" onClick={() => handleMenuClick(resume.id)}>⋮</div>
-                {openResume === resume.id && (
+                {resume.jobCategory && <div className="resume-card-status">직무 : {resume.jobCategory}</div>}
+                <div className="resume-card-date">
+                  {resume.modificationDate != null ? formatDate(resume.modificationDate) : formatDate(resume.createDate)}
+                </div>
+                <div className="resume-card-menu" onClick={(e) => {e.stopPropagation(); handleMenuClick(resume.resumeNo)}}>⋮</div> {/* 메뉴 클릭 이벤트 전파 방지 */}
+                {openResume === resume.resumeNo && (
                   <div className="resume-card-options">
-                    <button onClick={handleEditClick}>수정하기</button>
-                    <button onClick={handleDeleteClick}>삭제하기</button>
+                    <button onClick={(e) => {e.stopPropagation(); handleEditClick(resume.resumeNo)}}>수정하기</button> {/* 수정 버튼 클릭 이벤트 전파 방지 */}
+                    <button onClick={(e) => {e.stopPropagation(); handleDeleteClick()}}>삭제하기</button> {/* 삭제 버튼 클릭 이벤트 전파 방지 */}
                   </div>
                 )}
               </div>
@@ -97,79 +127,3 @@ const MyResume = () => {
 };
 
 export default MyResume;
-
-
-
-// const MyResume = () => {
-//     const [myResumeOne, setMyResumeone] = useState(['이력서1', '이력서2', '이력서7', '이력서3']);
-//     const [writeStatus, setWriteStatus] = useState(['']);
-//     const [modalResumeDetail, setModalResumeDetail] = useState(false);
-//     const [selectTarget, setSelectTarget] = useState("")
-
-//     //메모리 관리
-//     const handleMyresumeone = useCallback((value)=>{
-//         setMyResumeone(value)
-//     },[myResumeOne])
-
-//     const handleSelectTarget = useCallback((value)=>{
-//         setSelectTarget(value)
-//     },[])
-
-//     return (
-//         <>
-//             <div className="myresumehead">
-//                 <h1>내 이력서 관리</h1>
-//                 <h3> 작성 내역 </h3>
-
-//                 <button onClick={() => {
-//                     let copy = [...myResumeOne];
-//                     copy.sort();
-//                     handleMyresumeone(copy)
-//                 }}> 정렬버튼 </button>
-//             </div>
-
-//             {
-//                 myResumeOne.map(function (a, i) {
-//                     return (
-//                         <div className="myresumebody" key={i}>
-//                             <h4>{a}</h4>
-
-//                             <button onClick={() => {
-//                                 let copy = [...writeStatus];
-//                                 copy[i] = copy[i] === '작성중' ? '작성완료' : '작성중';
-//                                 setWriteStatus(copy);
-//                             }}>작성상태변경</button>
-//                             {writeStatus[i]}
-//                             <p />
-
-//                             <button id={i} onClick={(e) => {
-//                                 handleSelectTarget(i)
-//                                 if(e.target.id == i)
-//                                 setModalResumeDetail(!modalResumeDetail);
-//                             }}>
-//                                 이력서상세보기버튼
-//                             </button>
-//                             {
-//                                 selectTarget === i &&
-//                                 modalResumeDetail === true ? <Myresumedetail myResumeOne={myResumeOne} selectTarget={selectTarget}/> : null
-//                             }
-//                         </div>
-//                     )
-//                 })
-//             }
-//         </>
-//     );
-// };
-
-// //Component, 모달창
-// function Myresumedetail(props) {
-//     return (
-//         <div className="modalmyresumedetail">
-//             <h4>{props.myResumeOne[props.selectTarget]}_제목</h4>
-//             <p>경력내용</p>
-//             <p>학력내용</p>
-//             <p>활동내용</p>
-//             <p>스킬내용</p>
-//         </div>
-//     )
-// }
