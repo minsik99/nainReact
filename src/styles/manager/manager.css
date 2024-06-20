@@ -1,0 +1,68 @@
+html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.sidebar-container {
+  width: 200px;
+  background-color: #f8f9fa;
+  padding: 0;
+}
+
+.content-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.sidebar {
+  float: left;
+  width: 20%;
+}
+
+.dashboard {
+  float: right;
+  width: 80%;
+  margin-right: 30px;
+  background: #eee;
+  height: auto;
+}
+
+.payment {
+  width: 94%;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin: 3%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.user {
+  width: 94%;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin: 3%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.title h3 {
+  color: #9dc3c1;
+  font-weight: 500;
+  text-align: left;
+  font-size: 1.5em;
+}

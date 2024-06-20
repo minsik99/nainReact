@@ -2,11 +2,15 @@ import React, { useRef, useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import RadiusButton from "../designTool/radiusButton";
+import { useRouter } from "next/router";
 
 import ChatbotModal from "../../components/common/ChatbotModal"
 import { observer } from 'mobx-react-lite';
 
 const MainComponent = () => {
+  const router = useRouter();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -170,7 +174,7 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "16pt",
+              fontSize: "14pt",
               fontWeight: "600",
               margin: "30px",
             }}
@@ -180,6 +184,15 @@ const MainComponent = () => {
             <li>합격자 이력서 공유</li>
             <li>합격 키워드 분석</li>
           </ul>
+          <div className="banner_botton">
+            <RadiusButton
+              padding="12px 35px"
+              color="#9dc3c1"
+              text="자세히 보기"
+              borderRadius="30px"
+              onClick={() => router.push("/resume")}
+            />
+          </div>
         </div>
       </div>
       <div className="banner">
@@ -197,7 +210,7 @@ const MainComponent = () => {
           <ul
             style={{
               color: "#6E7783",
-              fontSize: "16pt",
+              fontSize: "14pt",
               fontWeight: "600",
               margin: "30px",
             }}
@@ -205,6 +218,15 @@ const MainComponent = () => {
             <li>모의면접</li>
             <li>면접 report</li>
           </ul>
+          <div className="banner_botton">
+            <RadiusButton
+              padding="12px 35px"
+              color="#9dc3c1"
+              text="자세히 보기"
+              borderRadius="30px"
+              onClick={() => router.push("/interview")}
+            />
+          </div>
         </div>
         <div className="interview_image">
           <img
@@ -215,6 +237,7 @@ const MainComponent = () => {
           ></img>
         </div>
       </div>
+            
       <img
             className="AIrobot fixed-bottom"
                 src="/image/chatbot.png"
@@ -224,6 +247,22 @@ const MainComponent = () => {
               ></img>
                 <ChatbotModal show={isModalOpen} onClose={handleCloseModal} title="Chat with GPT"/>
   </>
+      <div className="subscribe_banner">
+        <h1 style={{ color: "#FFFFFF", fontSize: "25pt", fontWeight: "900" }}>
+          맞춤형 AI 솔루션으로 시작하세요
+        </h1>
+        <div className="subscribe_button">
+          <RadiusButton
+            padding="12px 40px"
+            fontSize="20px"
+            color="#9dc3c1"
+            text="결제하기"
+            borderRadius="30px"
+            onClick={() => router.push("/subscribe")}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 
