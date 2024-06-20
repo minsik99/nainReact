@@ -75,7 +75,7 @@ const NavigationBar = observer(() => {
                     <a className="subword">모의면접</a>
                   </Link>
                   <br />
-                  <Link href="/Interview/list" legacyBehavior>
+                  <Link href="/interview" legacyBehavior>
                     <a className="subword">면접 report</a>
                   </Link>
                   <br />

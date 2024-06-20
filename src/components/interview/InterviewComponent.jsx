@@ -65,6 +65,7 @@ const InterviewComponent = ({ivtNo}) => {
                     onClick={() => saveVideo({ivtNo})} disabled={!isCameraOn} text="영상다운로드" />
                 </div>
             </div>
+            <h2>테스트중</h2>
             <div style={{ display: "flex" }}>
                 <video ref={videoRef} autoPlay playsInline />
             </div>
