@@ -23,7 +23,7 @@ const MainComponent = () => {
   //맨처음 모달창이 보이지 않도록 state 초기값 설정함 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  //AIrobot 이미지 클릭시 state 값 바꾸어 모달창 보이게 안보이게 함
+  //Chatbot 이미지 클릭시 state 값 바꾸어 모달창 보이게 안보이게 함
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -63,7 +63,7 @@ const MainComponent = () => {
                 src="/image/AIrobot.png"
                 width={"250px"}
                 alt="AI Robot"
-              ></img>              
+              ></img>
             </div>
           </div>
           <div className="slider1">
@@ -93,7 +93,7 @@ const MainComponent = () => {
                 src="/image/AIrobot.png"
                 width={"250px"}
                 alt="AI Robot"
-              ></img>              
+              ></img>
             </div>
           </div>
           <div className="slider1">
@@ -122,12 +122,11 @@ const MainComponent = () => {
                 className="AIrobot"
                 src="/image/AIrobot.png"
                 width={"250px"}
-                alt="AI Robot"                          
-              ></img>              
+                alt="AI Robot"
+              ></img>
             </div>
           </div>
         </Slider>
-        
       </div>
       <div className="middle_word">
         <h1
@@ -237,16 +236,19 @@ const MainComponent = () => {
           ></img>
         </div>
       </div>
-            
-      <img
-            className="AIrobot fixed-bottom"
+
+      <img className="Chatbot fixed-bottom"
                 src="/image/chatbot.png"
                 width={"100px"}
                 alt="AI Robot" 
                 onClick={handleOpenModal}                             
               ></img>
-                <ChatbotModal show={isModalOpen} onClose={handleCloseModal} title="Chat with GPT"/>
-  </>
+      <button className="chatbot-button" onClick={handleOpenModal}>
+        챗봇 실행
+      </button>
+      <ChatbotModal show={isModalOpen} onClose={handleCloseModal} title="Chatbot"/>
+
+
       <div className="subscribe_banner">
         <h1 style={{ color: "#FFFFFF", fontSize: "25pt", fontWeight: "900" }}>
           맞춤형 AI 솔루션으로 시작하세요

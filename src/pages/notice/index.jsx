@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import MainComponent from "../../components/main/MainComponent";
+import noticeAxios from "../../api/noticeAxios";
 
-const NoticeComponent = observer(() => {
+const noticeList = observer(() => {
   const [searchTitle, setSearchTitle] = React.useState("");
   const [searchInput, setSearchInput] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [size, setSize] = React.useState(10);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const queryClient = useQueryClient();
   const [isAdmin, setIsAdmin] = React.useState(false);
 
   const { data, isLoading } = useQuery(['noticeList', { page, size, searchTitle }], () => getNoticeList({
@@ -43,7 +41,7 @@ const NoticeComponent = observer(() => {
               <tr>
                   <th style={{width:"5vw", textAlign:"center"}}>말머리</th>
                   <th style={{textAlign:"center"}}>제목</th>
-                  <th style={{width:"10vw", textAlign:"center"}}>글쓴이</th>
+                  <th style={{width:"10vw", textAlign:"center"}}>작성자</th>
                   <th style={{width:"7vw", textAlign:"center"}}>작성일</th>
                   <th style={{width:"4vw", textAlign:"center"}}>조회</th>
                   <th style={{width:"4vw", textAlign:"center"}}>추천</th>
@@ -67,5 +65,5 @@ const NoticeComponent = observer(() => {
   );
 });
 
-export default NoticeComponent;
+export default noticeList;
 

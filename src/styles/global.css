@@ -337,9 +337,22 @@
   margin-top: 10px;
 }
 
-.AIrobot.fixed-bottom {
+/* 챗봇 아이콘 스크롤 고정 */
+.Chatbot.fixed-bottom {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 45px;
+  margin-left: 20px;
   z-index: 1000;
+}
+
+/* 챗봇 버튼 */
+.chatbot-button {
+  position: fixed;
+  bottom: 10px;
+  border-radius: 100px;
+  margin-left: 20px;
+  z-index: 1000;
+  background-color: #9DC3C1;
+  color: #ffffff;
+  border: 2px solid #9DC3C1;
 }
