@@ -30,7 +30,8 @@ body,
 
 .dashboard,
 .userManagement,
-.adminManagement {
+.adminManagement,
+.reportList {
   float: right;
   width: 80%;
   margin-right: 30px;
@@ -68,7 +69,8 @@ body,
   font-size: 18px;
 }
 
-.selectUserManager {
+.selectUserManager,
+.selectCommunityReport {
   text-decoration: none;
   padding: 7px 20px;
   color: #9dc3c1;
@@ -76,7 +78,8 @@ body,
   align-items: center;
 }
 
-.selectAdminManager {
+.selectAdminManager,
+.selectCommentReports {
   text-decoration: none;
   padding: 7px 20px;
   color: #9dc3c1;
