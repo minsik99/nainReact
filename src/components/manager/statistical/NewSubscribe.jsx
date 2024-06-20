@@ -39,7 +39,7 @@ const NewSubscribe = () => {
       try {
         const data = await getDailyNewSubscriber();
         const labels = data.map((item) => item.date).reverse();
-        const amounts = data.map((item) => item.subscriber);
+        const amounts = data.map((item) => item.subscriber).reverse();
         setChartData({
           labels,
           datasets: [

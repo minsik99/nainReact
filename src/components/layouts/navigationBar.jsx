@@ -30,7 +30,7 @@ const NavigationBar = observer(() => {
     >
       <Container>
         <Navbar.Brand>
-          <Link href="/main" legacyBehavior>
+          <Link href="/main" passHref legacyBehavior>
             <a>
               <img
                 src="/image/Logo.png"
@@ -45,81 +45,85 @@ const NavigationBar = observer(() => {
           <nav className="navigation-container">
             <ul style={{ marginBottom: "0px" }}>
               <li>
-                <Link href="/resume" legacyBehavior>
+                <Link href="/resume" passHref legacyBehavior>
                   <a style={{ marginRight: "10px" }}>이력서 매니저</a>
                 </Link>
                 <div className="submenu">
-                  <Link href="/resume/MyResumeInsert" legacyBehavior>
+                  <Link href="/resume/MyResumeInsert" passHref legacyBehavior>
                     <a className="subword">이력서 작성</a>
                   </Link>
                   <br />
-                  <Link href="/resume/MyResume" legacyBehavior>
+                  <Link href="/resume/MyResume" passHref legacyBehavior>
                     <a className="subword">이력서 관리</a>
                   </Link>
                   <br />
-                  <Link href="/resume/MyResume" legacyBehavior>
+                  <Link href="/resume/MyResume" passHref legacyBehavior>
                     <a className="subword">합격자 이력서 공유</a>
                   </Link>
                   <br />
-                  <Link href="/resume/MyResume" legacyBehavior>
+                  <Link href="/resume/MyResume" passHref legacyBehavior>
                     <a className="subword">합격자 키워드 분석</a>
                   </Link>
                   <br />
                 </div>
               </li>
               <li>
-                <Link href="/interview" legacyBehavior>
+                <Link href="/interview" passHref legacyBehavior>
                   <a>AI 면접</a>
                 </Link>
                 <div className="submenu">
-                  <Link href="/InterviewComponent" legacyBehavior>
+                  <Link href="/InterviewComponent" passHref legacyBehavior>
                     <a className="subword">모의면접</a>
                   </Link>
                   <br />
-                  <Link href="/InterviewComponent" legacyBehavior>
+                  <Link href="/InterviewComponent" passHref legacyBehavior>
                     <a className="subword">면접 report</a>
                   </Link>
                   <br />
                 </div>
               </li>
               <li>
-                <Link href="/search" legacyBehavior>
+                <Link href="/search" passHref legacyBehavior>
                   <a>AI 트랜드서칭</a>
                 </Link>
               </li>
               <li>
-                <Link href="/companylist" legacyBehavior>
+                <Link href="/companylist" passHref legacyBehavior>
                   <a>기업공고</a>
                 </Link>
               </li>
               <li>
-                <Link href="/community" legacyBehavior>
+                <Link href="/community" passHref legacyBehavior>
                   <a>커뮤니티</a>
                 </Link>
               </li>
               <li>
-                <Link href="/notice" legacyBehavior>
+                <Link href="/notice" passHref legacyBehavior>
                   <a>공지사항</a>
                 </Link>
               </li>
               <li>
-                <Link href="/manager" legacyBehavior>
+                <Link href="/manager/Dashboard" passHref legacyBehavior>
                   <a>관리자</a>
                 </Link>
                 <div className="submenu">
-                  <Link href="/manager/Dashboard" legacyBehavior>
+                  <Link href="/manager/Dashboard" passHref legacyBehavior>
                     <a className="subword">대시보드</a>
                   </Link>
                   <br />
-                  <Link href="/manager/UserManagement" legacyBehavior>
+                  <Link href="/manager/UserManagement" passHref legacyBehavior>
                     <a className="subword">회원리스트</a>
                   </Link>
                   <br />
-                  <Link href="/manager/AdminManagement" legacyBehavior>
+                  <Link href="/manager/AdminManagement" passHref legacyBehavior>
                     <a className="subword">관리자리스트</a>
                   </Link>
                   <br />
-                  <Link href="/manager/ReportList" legacyBehavior>
+                  <Link
+                    href="/manager/CommunityReportListPage"
+                    passHref
+                    legacyBehavior
+                  >
                     <a className="subword">신고리스트</a>
                   </Link>
                   <br />
@@ -132,19 +136,19 @@ const NavigationBar = observer(() => {
             <Nav>
               <Nav.Link onClick={handleLogout}>로그아웃</Nav.Link>
               <Nav.Link>
-                <Link href="/" legacyBehavior>
-                  내 정보
+                <Link href="/" passHref legacyBehavior>
+                  <a>내 정보</a>
                 </Link>
               </Nav.Link>
             </Nav>
           ) : (
             <Nav>
-              <Nav.Link href="/member/login" legacyBehavior>
-                로그인
-              </Nav.Link>
-              <Nav.Link href="/member" legacyBehavior>
-                회원가입
-              </Nav.Link>
+              <Link href="/member/login" passHref legacyBehavior>
+                <Nav.Link as="a">로그인</Nav.Link>
+              </Link>
+              <Link href="/member" passHref legacyBehavior>
+                <Nav.Link as="a">회원가입</Nav.Link>
+              </Link>
             </Nav>
           )}
         </Navbar.Collapse>

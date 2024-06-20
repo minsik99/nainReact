@@ -39,7 +39,7 @@ const NewMember = () => {
       try {
         const data = await getDailyNewMember();
         const labels = data.map((item) => item.date).reverse();
-        const amounts = data.map((item) => item.member);
+        const amounts = data.map((item) => item.member).reverse();
         setChartData({
           labels,
           datasets: [
