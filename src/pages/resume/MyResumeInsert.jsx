@@ -101,7 +101,7 @@ const MyResumeInsert = () => {
     };
 
     // resume 저장
-    const saveResume = (isTemporary) => {
+    const saveResume = () => {
         // resume 객체 복사
         const modifiedResume = {
             ...resume,
@@ -144,9 +144,7 @@ const MyResumeInsert = () => {
             })
             // 저장 버튼 클릭하여 모든 요청 완료 후 목록 페이지로 이동
             .then(() => {
-                if (!isTemporary) {
-                    router.push('/resume/MyResume');
-                }
+                router.push('/resume');
             })
             .catch(error => {
                 console.error('Error saving resume:', error);
@@ -174,15 +172,21 @@ const MyResumeInsert = () => {
                     <input type="text" name="title" value={resume.title} onChange={handleChange} />
                 </div>
 
-
-
                 <label>기본 정보</label>
                 <div className={styles.resumebasic}>
-                    <p>이름</p> <input type="text" name="resumeName" value={resume.resumeName} onChange={handleChange} />
-                    <p>이메일</p> <input type="email" name="email" value={resume.email} onChange={handleChange} />
-                    <p>전화번호</p> <input type="tel" name="phone" value={resume.phone} onChange={handleChange} />
+                    <div className={styles.inputGroup}>
+                        <p>이름</p>
+                        <input type="text" name="resumeName" value={resume.resumeName} onChange={handleChange} />
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <p>이메일</p>
+                        <input type="email" name="email" value={resume.email} onChange={handleChange} />
+                    </div>
+                    <div className={styles.inputGroup}>
+                        <p>전화번호</p>
+                        <input type="tel" name="phone" value={resume.phone} onChange={handleChange} />
+                    </div>
                 </div>
-
 
                 <div>
                     <label>자기 소개서</label>
@@ -195,18 +199,14 @@ const MyResumeInsert = () => {
                     <button type="button" className={styles.addButton} onClick={addExperience}>추가</button>
                     {resume.experience.map(exp => (
                         <div key={exp.id} className={styles.experience}>
-                            <p className={styles.span}>경력 세부사항                           
-                            <div>
-                            <RadiusButton background="#9DC3C1" padding="10px" onClick={() => removeExperience(exp.id)} text="X" />
+                            <div className={styles.header}>
+                                <span>경력 세부사항</span>
+                                <RadiusButton background="#9DC3C1" padding="10px" onClick={() => removeExperience(exp.id)} text="X" />
                             </div>
-                            </p>
-
                             <div className={styles.checkbox}>
                                 <span>현재 근무중</span>
                                 <input type="checkbox" checked={exp.current} onChange={(e) => handleExperienceChange(exp.id, e)} />
-                                </div>
-
-                            
+                            </div>
                             <input type="text" name="company" placeholder="회사명" value={exp.company} onChange={(e) => handleExperienceChange(exp.id, e)} />
                             <input type="text" name="department" placeholder="부서명" value={exp.department} onChange={(e) => handleExperienceChange(exp.id, e)} />
                             <input type="text" name="exPosition" placeholder="직책" value={exp.exPosition} onChange={(e) => handleExperienceChange(exp.id, e)} />
@@ -224,11 +224,14 @@ const MyResumeInsert = () => {
                     <button type="button" className={styles.addButton} onClick={addEducation}>추가</button>
                     {resume.education.map(edu => (
                         <div key={edu.id} className={styles.education}>
-                            <div className={styles.removeButton}>
+                            <div className={styles.header}>
+                                <span>학력 세부사항</span>
                                 <RadiusButton color="#9DC3C1" padding="10px" onClick={() => removeEducation(edu.id)} text="X" />
                             </div>
-                            <p>학력 세부사항</p>
-                            현재 재학중 <input type="checkbox" className={styles.checkbox} checked={edu.current} onChange={(e) => handleEducationChange(edu.id, e)} />
+                            <div className={styles.checkbox}>
+                                <span>현재 재학중</span>
+                                <input type="checkbox" checked={edu.current} onChange={(e) => handleEducationChange(edu.id, e)} />
+                            </div>
                             <input type="text" name="schoolName" placeholder="학교명" value={edu.schoolName} onChange={(e) => handleEducationChange(edu.id, e)} />
                             <input type="text" name="major" placeholder="전공" value={edu.major} onChange={(e) => handleEducationChange(edu.id, e)} />
                             <input type="text" name="degree" placeholder="학위 (학사/석사/박사)" value={edu.degree} onChange={(e) => handleEducationChange(edu.id, e)} />
@@ -245,10 +248,10 @@ const MyResumeInsert = () => {
                     <button type="button" className={styles.addButton} onClick={addActivity}>추가</button>
                     {resume.activity.map(act => (
                         <div key={act.id} className={styles.activity}>
-                            <div className={styles.removeButton}>
+                            <div className={styles.header}>
+                                <span>활동 및 기타 세부사항</span>
                                 <RadiusButton color="#9DC3C1" padding="10px" onClick={() => removeActivity(act.id)} text="X" />
                             </div>
-                            <p>활동 및 기타 세부사항</p>
                             <input type="text" name="activityName" placeholder="활동명 및 기타명" value={act.activityName} onChange={(e) => handleactChange(act.id, e)} />
                             <input type="text" name="organizer" placeholder="주최기관" value={act.organizer} onChange={(e) => handleactChange(act.id, e)} />
                             <textarea name="activityDescription" placeholder="세부 내용" value={act.activityDescription} onChange={(e) => handleactChange(act.id, e)}></textarea>
@@ -257,8 +260,7 @@ const MyResumeInsert = () => {
                         </div>
                     ))}
                 </div>
-                <button type="button" className={styles.saveButton} onClick={() => saveResume(true)}>임시 저장</button>
-                <button type="button" className={styles.saveButton} onClick={() => saveResume(false)}>저장하기</button>
+                <button type="button" className={styles.saveButton} onClick={saveResume}>저장하기</button>
             </form>
         </div>
     );
