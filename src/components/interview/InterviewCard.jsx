@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './interviewListComponent.module.css';
+import styles from '../../styles/interview/interviewListComponent.module.css';
 
 const InterviewCard = ({ key, title, description, onSelect}) => {
     return (
