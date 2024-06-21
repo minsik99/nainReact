@@ -4,7 +4,7 @@ import { authStore } from "../stores/authStore"
 const baseUrl = "/api/auth";
 
 export const signUp = (signUpData) => {
-    return axios.post(baseUrl + "/member",signUpData).then(res =>{
+    return axios.post(baseUrl + "/member/signup",signUpData).then(res =>{
         console.log(signUpData)
         return res;
     })

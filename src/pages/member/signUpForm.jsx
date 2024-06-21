@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {signUp} from "../../api/user";
-import {useRouter} from "next/dist/client/router"
+import { useRouter } from 'next/router';
 import {handleAxiosError} from "../../api/errorAxiosHandle";
-import KakaoSignup from "./KakaoSignup";
+import KakaoSignup from "../../components/member/KakaoSignup";
+
 
 const SignUpForm = () => {
     const router = useRouter();
+    
     const [formData, setFormData] = useState({
         memberEmail: '',
         memberPwd: '',
         confirmPassword: '',
         memberName: '',
-        termsAgreed: false, // 약관 동의 추가
     });
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value} = e.target;
         setFormData({
             ...formData,
             [name]: value,
@@ -24,22 +25,27 @@ const SignUpForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         console.log(formData)
         const { memberEmail, memberPwd, confirmPassword, memberName } = formData;
+
         if (memberPwd !== confirmPassword) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
+
         const signUpData = {
             memberEmail: memberEmail,
             memberPwd: memberPwd,
             memberName: memberName,
+        };
+
+        try {
+            await signUp(signUpData);
+            router.push('/member/login');
+        } catch (error) {
+            handleAxiosError(error);
         }
-        console.log(signUpData)
-        signUp(signUpData).then(res =>{
-            console.log(formData.memberEmail)
-            router.push("/member/login")
-        }).catch(handleAxiosError)
     };
 
     return (

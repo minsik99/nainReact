@@ -16,7 +16,8 @@ const LoginForm = () => {
         onSuccess: (data) => {
             // 로그인 성공 후의 동작을 정의합니다.
             console.log('로그인 성공', data);
-            router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
+            // router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
+            window.location.href = '/';
         },
         onError: (error) => {
             // 에러 핸들러를 호출하여 사용자에게 에러를 알립니다.
@@ -31,7 +32,7 @@ const LoginForm = () => {
             [name]: value,
         });
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
         loginMutation.mutate(formData); // mutate 함수로 로그인 요청을 보냅니다.
