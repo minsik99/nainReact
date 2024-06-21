@@ -3,7 +3,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css"; // 기본 CSS
 import "ag-grid-community/styles/ag-theme-balham.css"; // Balham 테마
 import styles from "./AdminGrid.module.css"; // 커스텀 CSS
-import RadiusButton from "../designTool/radiusButton";
+import RadiusButton from "../designTool/RadiusButton";
 import {
   getAdminList,
   updateAdminStatus,

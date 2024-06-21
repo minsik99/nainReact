@@ -343,7 +343,7 @@
 }
 
 /* 챗봇 아이콘 스크롤 고정 */
-.Chatbot.fixed-bottom {
+.chatbot.fixed-bottom {
   position: fixed;
   bottom: 45px;
   margin-left: 20px;

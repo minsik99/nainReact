@@ -17,7 +17,7 @@
     margin-bottom: 20px;
   }
   
-  label {
+  /* label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
@@ -29,13 +29,13 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-  }
+  } */
   
   .button-container {
     text-align: center;
   }
   
-  button {
+  /* button {
     background-color: #77AAAD;
     color: white;
     padding: 10px 20px;
@@ -45,14 +45,14 @@
     width: 100%;
     font-weight: bold;
     transition: background-color 0.3s ease;
-  }
+  } */
   
-  button:hover {
+  /* button:hover {
     background-color: #3E8E87; /* 약간 더 어두운 보라색 */
-  }
-  
+  /* } */ 
+/*   
   p {
     text-align: center;
     color: #6200ee; /* 로딩 텍스트 색상도 보라색 */
-    font-weight: bold;
-  }
+    /* font-weight: bold; */
+  /* } */ 

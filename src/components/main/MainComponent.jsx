@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import RadiusButton from "../designTool/radiusButton";
+import RadiusButton from "../designTool/RadiusButton";
 import { useRouter } from "next/router";
 
 import ChatbotModal from "../../components/common/ChatbotModal"
@@ -239,17 +239,18 @@ const MainComponent = () => {
         </div>
       </div>
 
-      <img className="Chatbot fixed-bottom"
-                src="/image/chatbot.png"
-                width={"100px"}
-                alt="AI Robot" 
-                onClick={handleOpenModal}                             
-              ></img>
-      <button className="chatbot-button" onClick={handleOpenModal}>
-        챗봇 실행
-      </button>
-      <ChatbotModal show={isModalOpen} onClose={handleCloseModal} title="Chatbot"/>
-
+      <div>
+        <img className="chatbot fixed-bottom"
+                  src="/image/chatbot.png"
+                  width={"100px"}
+                  alt="AI Robot" 
+                  onClick={handleOpenModal}                             
+                ></img>
+        <button className="chatbot-button" onClick={handleOpenModal}>
+          챗봇 실행
+        </button>
+        <ChatbotModal show={isModalOpen} onClose={handleCloseModal} title="Chatbot"/>
+      </div>
 
       <div className="subscribe_banner">
         <h1 style={{ color: "#FFFFFF", fontSize: "20pt", fontWeight: "900" }}>

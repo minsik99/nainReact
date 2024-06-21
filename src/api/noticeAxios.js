@@ -1,41 +1,50 @@
-import axios from "./axiosApi"
+import instance from "./axiosApi";
 
-export const getNoticeList = ({ category, status, title, page, size }) => {
-    // 쿼리 파라미터를 사용하여 URL 생성
-    const params = new URLSearchParams({
-        category,
-        status,
-        title,
-        page,
-        size
-    }).toString();
+//기본 url 지정
+const NOTICE_URL = "/notice";
 
-    return axios.get('/notice?${params}')
-        .then(res => {
-            return res.data;
+const noticeAxios = {
+    //게시글 -----------------------------------------------------------------------------------------------------------------
+    //전체목록 조회
+    getNoticeList(page, limit, sort) {
+        return instance.get(NOTICE_URL + "/list", {
+            params : {page: page, limit: limit, sort: sort}
         });
+    },
+
+    //글 상세보기
+    getNoticeDetail(noticeNo) {
+        return instance.get(NOTICE_URL + '/detail',{
+            params : {noticeNo: noticeNo}
+        });
+    },
+
+    //게시글 검색
+    searchNotice(type, keyword, page, limit, sort) {
+        return instance.get(NOTICE_URL + '/search',{
+            params : {type: type, keyword: keyword, page: page, limit: limit, sort: sort}
+        });
+    },
+
+    //새 게시글 등록
+    createNotice(notice) {
+        return instance.post(NOTICE_URL, notice);
+    },
+
+    //게시글 수정
+    modifyNotice(noticeNo, notice) {
+        return instance.put(NOTICE_URL + '/modify',{
+            params : {noticeNo: noticeNo, notice: notice}
+        });
+    },
+
+    //게시글 삭제
+    deleteNotice(noticeNo){
+        return instance.delete(NOTICE_URL + '/delete',{
+            params : {noticeNo: noticeNo}
+        });
+    },
+
 }
 
-export const writePost = (postData) =>{
-    console.log("postData : ", postData);
-    return axios.post("/notice",postData).then(res =>{
-        console.log("res :", res);
-        return res;
-    })
-}
-
-export const postReadCountUp = (postId) => {
-    axios.post(`/notice/read/${postId}`).then(response => {
-        console.log('Read count incremented successfully', response);
-    }).catch(error => {
-        console.error('Error incrementing read count', error);
-    });
-}
-
-export const noticeLikeUp = (requestData) => {
-    axios.post("/notice/likes", requestData).then(res =>{
-        console.log("successfully like ", res)
-    }).catch(err =>{
-        console.log("error like", err);
-    })
-}
+export default noticeAxios;
