@@ -5,12 +5,17 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { authStore } from "../../stores/authStore";
 import useLogoutHandler from "../login/logoutHandler";
+import { useRouter } from "next/router";
 
 
-const NavigationBar = observer(() => {
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+const NavigationBar = observer(() => { 
   const loggedIn = authStore.loggedIn;
-  const { isOpened, modalData, closeModal, handleLogoutClick } = useLogoutHandler();
+  const { handleLogoutClick } = useLogoutHandler();
+  const router = useRouter();
+
+  const handleSignUpClick = () => { 
+    router.push('/member/terms');
+   };
 
   useEffect(() => {
     authStore.checkLoggedIn();
@@ -135,16 +140,15 @@ const NavigationBar = observer(() => {
           </nav>
 
           {loggedIn ? (
-            <Nav>
+          <Nav>
             <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
-            <Modal  isOpened={isOpened} data={modalData} closeModal={closeModal} />
             <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
           </Nav>
         ) : (
           <Nav>
             <Nav.Link href={"/member/login"}>로그인</Nav.Link>
-            <Nav.Link href={"/member"}>회원가입</Nav.Link>
-          </Nav>
+           <Nav.Link onClick={handleSignUpClick}>회원가입</Nav.Link>
+         </Nav>
         )}
       </Navbar.Collapse>
     </Container>
