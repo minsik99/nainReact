@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { AuthContext } from '../../api/authContext';
 import { useContext } from 'react';
-import {axios, instance} from '../../api/axiosApi';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import { startRecording, saveVideo} from './Recording';
-import styles from './interviewComponent.module.css';
+import styles from '../../styles/interview/interviewComponent.module.css';
 
 const InterviewComponent = ({ivtNo}) => {
     const videoRef = useRef(null);

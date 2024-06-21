@@ -1,37 +1,59 @@
 import React, { useCallback, useRef, useState, useEffect, useContext} from 'react';
 import { useMutation } from 'react-query';
-import styles from './interviewListComponent.module.css';
+import styles from '../../styles/interview/interviewListComponent.module.css';
 import InterviewCard from './InterviewCard';
 import { getInterviewList, getInterview } from '../../api/interview';
 import { AuthContext } from '../../api/authContext';
 import CustomDropdown from '../designTool/CustomDropdown';
 import RadiusButton from '../designTool/RadiusButton';
+import useInfiniteScroll from '../hook/useInfiniteScroll';
+import useDropdown from '../hook/useDropdown';
 
 const InterviewListComponent = () => {
+    const {memberNo} = useContext(AuthContext);
+    const containerRef = useRef(null);
+
     const [interviewList, setInterviewList] = useState([]);
     const [page, setPage] = useState(1);
     const [sortKey, setSortKey] = useState('');
-    const {memberNo} = useContext(AuthContext);
     const [hasMore, setHasMore] = useState(true);
-    const containerRef = useRef(null);
-    const [isDropdownVisible, setDropdownVisible] = useState(false);
+    
+    const { isDropdownVisible, toggleDropdown } = useDropdown();
+    const [isChecked, setIsChecked] = useState(false);
+    const [selectedButton, setSelectedButton] = useState('voice');
+ 
+    const loadMore = () => {
+        setPage(prevPage => prevPage + 1);
+    };
+
+    useInfiniteScroll(containerRef, loadMore, hasMore);
+
 
     const size = 3;
     const sort = [{'Header': '타이틀순', 'Accessor': 'title'},
                     {'Header': '최신순', 'Accessor': 'ivtDate'}
     ]
 
-    const toggleDropdown = () => {
-        setDropdownVisible(!isDropdownVisible);
-    };
+    const handleSelected = (button) => {
+        setSelectedButton(button);
+        
+      };
+    
+    const buttons = [
+    { text: 'Voice', id: 'voice' },
+    { text: 'Video', id: 'video' },
+    { text: 'Total', id: 'total' }
+    ];
 
     const handleSelect = (item) => {
         setSortKey(item ? item.Accessor : null);
         setPage(0);
         setInterviewList([]);
         setHasMore(true);
+        if (isDropdownVisible) {
+            toggleDropdown();
+        }
     };
-
 
     const sortData = (data, key) => {
         return [...data].sort((a, b) => {
@@ -72,55 +94,20 @@ const InterviewListComponent = () => {
     }, [page, memberNo, sortKey]);
 
 
-    const loadMore = () => {
-        setPage(prevPage => prevPage + 1);
-    };
-
     //얘는 컴포넌트로 뺄예정
     const mutation = useMutation((ivtNoOne) => getInterview(ivtNoOne));
-
-    const handleScroll = useCallback(() => {
-        if (containerRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-            if (scrollTop + clientHeight >= scrollHeight) {
-                loadMore();
-            }
-        }
-    }, [hasMore]);
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (container) {
-            container.addEventListener('scroll', handleScroll);
-            return () => container.removeEventListener('scroll', handleScroll);
-        }
-    }, [handleScroll]);
 
     return (
             <div className={styles.interviewContainer}>
                 <div className={styles.listContainer}>
-            <div>
-                <button onClick={toggleDropdown}>
-                    Toggle Dropdown
-                </button>
-
-                {/* 드롭다운 박스 */}
-                {isDropdownVisible && (
-                    <div className={styles.dropdownBox}>
-                        <CustomDropdown 
-                            columns={sort} 
-                            onSelect={handleSelect} 
-                            header={sort.header} 
-                            dropdownWidth="110px"
-                        />
-                    </div>
-                )}
-            </div>
-
-                    <div className={styles.dropdownBox}>
+            
+                <img src="/image/sortMenu.png" onClick={toggleDropdown} className={styles.sortMenu} />
+                    {isDropdownVisible && (
+                        <div className={styles.dropdownBox}>
                         <CustomDropdown columns={sort} onSelect={handleSelect} 
                         header={sort.header} dropdownWidth="110px"/>
-                    </div>
+                        </div>
+                    )}
                     <h2 className={styles.title}>AI 면접 분석 History</h2>
                     <div className={styles.cardContainer} ref={containerRef}>
                         <InterviewCard className={styles.blank} title={<img className={styles.img} src="/image/add.png"/>} />
@@ -141,14 +128,18 @@ const InterviewListComponent = () => {
                 </div>
                 </div>
                 <div className={styles.graphContainer}>
-                    <div className={styles.buttonContainer}>
-                            <RadiusButton color="#77AAAD" fontColor="white" text="Voice"
-                            boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)" />
-                            <RadiusButton color="#77AAAD" fontColor="white" text="Video"
-                            boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)" />
-                            <RadiusButton fontColor="#77AAAD" color="white" boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)" 
-                            text="Total" />
-                    </div>
+                            <div className={styles.buttonContainer}>
+                            {buttons.map((button) => (
+                                <RadiusButton
+                                key={button.id}
+                                fontColor={selectedButton === button.id ? 'white' : '#77AAAD'}
+                                color={selectedButton === button.id ? '#77AAAD' : 'white'}
+                                text={button.text}
+                                boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
+                                onClick={() => handleSelected(button.id)}
+                                />
+                            ))}
+                            </div>
                     <div className={styles.graphBox}>
                         <div>
 

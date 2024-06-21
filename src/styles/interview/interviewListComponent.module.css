@@ -51,11 +51,18 @@
     border-right: 3px solid#D8E6E7;
 }
 
+.sortMenu {
+    width: 30px;
+    height: 30px;
+    margin-left: 20rem;
+    cursor: pointer;
+}
+
 .dropdownBox {
-    width: 100%;
-    margin-left: 50rem;
-    display: none;
-    
+    position: absolute;
+    top: 19%;
+    right: 64.5%;
+    z-index: 800;
 }
 
 .cardContainer {
