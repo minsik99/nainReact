@@ -6,7 +6,7 @@ import styles from "./Sidebar.module.css";
 const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
-      <Link href="/manager" legacyBehavior>
+      <Link href="/manager/Dashboard" legacyBehavior>
         <a className="managertitle">관리자페이지</a>
       </Link>
       <ul>
@@ -21,7 +21,7 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/manager/ReportList" legacyBehavior>
+          <Link href="/manager/CommunityReportListPage" legacyBehavior>
             신고리스트
           </Link>
         </li>

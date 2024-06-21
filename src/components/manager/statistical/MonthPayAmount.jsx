@@ -38,8 +38,8 @@ const MonthPayAmount = () => {
     const fetchData = async () => {
       try {
         const data = await getMonthlyPayAmount();
-        const labels = data.map((item) => item.month + "월");
-        const amounts = data.map((item) => item.amount);
+        const labels = data.map((item) => item.month + "월").reverse();
+        const amounts = data.map((item) => item.amount).reverse();
         setChartData({
           labels,
           datasets: [

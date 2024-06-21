@@ -4,6 +4,7 @@ import "ag-grid-community/styles/ag-grid.css"; // 기본 CSS
 import "ag-grid-community/styles/ag-theme-balham.css"; // Balham 테마
 import styles from "./AdminGrid.module.css"; // 커스텀 CSS
 import RadiusButton from "../designTool/RadiusButton";
+import Modal from "../designTool/modal";
 import {
   getAdminList,
   updateAdminStatus,
@@ -13,8 +14,19 @@ import {
 const AdminGrid = () => {
   const [rowData, setRowData] = useState([]);
   const [newRow, setNewRow] = useState({ email: "", name: "", nickname: "" });
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
+  const [modalContent, setModalContent] = useState(""); // 모달 내용 상태 추가
   const gridApi = useRef(null);
   const gridColumnApi = useRef(null);
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const columnDefs = [
     {
@@ -67,7 +79,7 @@ const AdminGrid = () => {
         const data = await getAdminList();
         setRowData(data);
       } catch (error) {
-        alert("관리자 리스트를 가져오지 못했습니다.");
+        openModal("관리자 리스트를 가져오지 못했습니다.");
         console.error("관리자 리스트를 가져오지 못했습니다.", error);
       }
     };
@@ -90,20 +102,24 @@ const AdminGrid = () => {
         (row) => !emails.includes(row.memberEmail)
       );
       setRowData(updatedRows); // 필터링된 상태로 rowData 업데이트
+      openModal("관리자를 삭제했습니다.");
     } catch (error) {
-      alert("관리자 삭제에 실패했습니다.");
+      openModal("관리자 삭제에 실패했습니다.");
       console.error("관리자 삭제에 실패했습니다.", error);
     }
   };
 
   const addAdmin = async () => {
     try {
+      console.log("Adding admin:", newRow.email);
       const updatedMember = await updateAdminStatus(newRow.email); // 서버에 관리자 상태 업데이트 요청
+      console.log("Admin added successfully:", updatedMember);
       const newRowData = [...rowData, updatedMember];
       setRowData(newRowData);
       setNewRow({ email: "", name: "", nickname: "" });
+      openModal("관리자가 추가되었습니다."); // 모달 열기
     } catch (error) {
-      alert("관리자 추가에 실패했습니다.");
+      openModal("관리자 추가에 실패했습니다.");
       console.error("관리자 추가에 실패했습니다.", error);
     }
   };
@@ -167,6 +183,15 @@ const AdminGrid = () => {
           floatingFiltersHeight={50} // 검색 행 높이 설정
         />
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        content={<p>{modalContent}</p>}
+        buttonLabel="닫기"
+        buttonColor="#77aaad"
+        buttonSize="16px"
+        modalSize={{ width: "350px", height: "150px" }}
+      />
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import React from 'react';
+import styles from './interviewListComponent.module.css';
 
-const InterviewCard = ({ title, description, time}) => {
+const InterviewCard = ({ key, title, description, onSelect}) => {
     return (
-        <div className={styles.interviewItem}>
-            <h2 className={styles.interviewTitle}>{title}</h2>
-            <p className={styles.interviewDescription}>{description}</p>
-            <h2 className={styles.interviewTime}>{time}</h2>
+        <div key={key} className={styles.interviewItem}>
+            <p className={styles.interviewTitle}>{key}</p>
+            <p className={styles.title}>{title}</p>
+            <p className={styles.interviewTime}>{description}</p>
+            <img className={styles.trash}  src={title != null && !onSelect ? "/image/colorTrash.png" : "/image/trash.png"} />
         </div>
     );
 };

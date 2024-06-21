@@ -1,0 +1,60 @@
+.base {
+    margin: 0 auto;
+}
+
+.base h2{
+    margin-top: 50px;
+    margin-bottom: 40px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.editor {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-width: 1.5px;
+}
+
+.fileName {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 14px;
+    color: #888; /* 회색으로 설정 */
+}
+
+
+.file {
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.delete {
+    cursor: pointer;
+}
+
+.inputFile{
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 1000px;
+    gap: 10px;
+    margin: 20px;
+}
+

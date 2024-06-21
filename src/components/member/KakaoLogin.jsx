@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from "../../styles/member/member.module.css"
 
 const KakaoLogin = () => {
     const handleLogin = () => {
@@ -18,7 +19,7 @@ const KakaoLogin = () => {
     }
 
     return (
-        <div className="button-container">
+        <div className={styles.buttonContainer}>
             <button onClick={handleLogin}>카카오 로그인</button>
         </div>
     );

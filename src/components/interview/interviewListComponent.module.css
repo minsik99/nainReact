@@ -1,55 +1,160 @@
-.interviewContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
+.mapDiv {
+    height: 100%;
+    margin-bottom:  6rem;
 }
 
+/* 왼쪽 리스트 컨테이너 */
+.interviewContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+}
+.img {
+    width: 2rem;
+}
+
+.trash{
+    width: 1.5rem;
+    height: 1.7rem;
+}
 .icon {
+    width: 52.4px;
+    height: 50.91px;
+    left: 383.91px;
+    top: 621.6px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     margin-bottom: 20px;
     color: #333;
 }
 
+
+
+/* h2 클래스 */
+.title {
+    text-align: center;
+    padding: 1rem;
+    font-weight: 800;
+}
+
+/* 모의 면접 결과 리스트 컨테이너 */
+.listContainer {
+    margin-top: 3rem;
+    margin-left: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 35rem;
+    height: 35rem;
+    border-right: 3px solid#D8E6E7;
+}
+
+.dropdownBox {
+    width: 100%;
+    margin-left: 50rem;
+    display: none;
+    
+}
+
 .cardContainer {
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 100%;
-    max-width: 600px;
+    padding: 0.3em;
+    max-width: 25rem;
+    max-height: 100%;
+    background-color: #D8E6E7;
+    overflow-y: scroll; /* 스크롤바 숨기기 */
+    position: relative;
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
+.cardContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* 무한 스크롤 버튼 */
+.buttonBox {
+    width:23rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    color: white;
+}
+
+.cardBox {
+    display: flex;
+    justify-content: center;
+}
+
+/* 인터뷰카드 */
 .interviewItem {
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 5rem;
+    border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+   
+}
+
+.blank {
+    display: flex;
+    justify-content: space-between
+    
+}
+.interviewItem > p {
+    color: black;
+    width:6.4rem;
+}
+
+.interviewItem > p:hover {
+    color: white;
+}
+
+.interviewItem:hover {
+    background-color: #77AAAD;
+    color: white;
+    cursor: pointer;
+   
 }
 
 .interviewTitle {
     margin: 0;
-    font-size: 1.5em;
+    font-size: 1em;
     color: #333;
 }
 
-.interviewDescription {
-    margin: 10px 0 0;
-    color: #666;
+/* 결과 버튼 */
+.buttonContainer {
+    margin-left: 3rem;
+    margin-top: 3rem;
+    width: 20rem;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    height: 2.5rem;
+    align-items: center; /* 높이 비율 맞추기 위해 추가 */
 }
 
-.loadMoreButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1em;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.loadMoreButton:hover {
-    background-color: #0056b3;
+/* 그래프 컨테이너 */
+.graphBox{
+    margin-left: 4rem;
+    margin-top: 1rem;
+    width: 55rem;
+    height: 90%;
+    border-radius: 8px;
+    border: 2px solid #77AAAD;
 }

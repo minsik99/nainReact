@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import {authStore} from "../../stores/authStore";
 import { AuthContext } from '../../api/authContext';
+import styles from "../../styles/member/member.module.css";
 
 
 const LoginSuccess = () => {

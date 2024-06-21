@@ -4,6 +4,8 @@ import { login } from '../../api/user';
 import { handleAxiosError } from '../../api/errorAxiosHandle';
 import { useRouter } from 'next/router';
 import KakaoLogin from '../member/KakaoLogin';
+import styles from '../../styles/member/member.module.css';
+
 
 const LoginForm = () => {
     const router = useRouter();
@@ -16,7 +18,8 @@ const LoginForm = () => {
         onSuccess: (data) => {
             // 로그인 성공 후의 동작을 정의합니다.
             console.log('로그인 성공', data);
-            router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
+            // router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
+            window.location.href = '/';
         },
         onError: (error) => {
             // 에러 핸들러를 호출하여 사용자에게 에러를 알립니다.
@@ -31,16 +34,16 @@ const LoginForm = () => {
             [name]: value,
         });
     };
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
         loginMutation.mutate(formData); // mutate 함수로 로그인 요청을 보냅니다.
     };
 
     return (
-        <div className="center-div">
-            <form className="form" onSubmit={handleSubmit}>
-                <div className="form-group">
+        <div className={styles.centerDiv}>
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input
                         type="email"
@@ -51,7 +54,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="password">비밀번호:</label>
                     <input
                         type="password"
@@ -62,7 +65,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <div className="button-container">
+                <div className={styles.buttonContainer}>
                     {loginMutation.isLoading ? (
                         // 로그인 중일 때는 로딩 텍스트를 표시합니다.
                         <p>로그인 중...</p>

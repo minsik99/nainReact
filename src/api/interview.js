@@ -2,13 +2,23 @@ import instance from "./axiosApi";
 
 const BASE_URL = "/interview";
 
-export const getInterviewList = async (memberNo) => {
+export const getInterviewList = async (page, size, memberNo) => {
   try {
-    const response = await instance.get(BASE_URL + "/list/" + memberNo);
+    const response = await instance.get(`${BASE_URL}/list?page=${page}&size=${size}&memberNo=${memberNo}`);
     return response.data;
   } catch (error) {
-    console.error("리스트 가져오기 실패", error);
-    console.debug("에러 위치>>");
+    console.error("면접 리스트 가져오기 실패", error);
+    throw error;
+  }
+};
+
+export const getInterview = async (ivtNo) => {
+  try {
+    const response = await instance.get(BASE_URL + "/" + ivtNo);
+    return response.data;
+  } catch (error) {
+    console.error("면접 가져오기 실패", error);
+    throw error;
   }
 };
 
