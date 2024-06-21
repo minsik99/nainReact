@@ -1,0 +1,81 @@
+/* memberLogin.module.css */
+
+
+.centerDiv {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    margin-top : 100px;
+    display: flex;
+    justify-content: center;
+    left:50%;
+}
+
+.centerDiv form {
+    align-items:center;
+    width: 400px;
+    padding: 30px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.buttonContainer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.buttonContainer button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 40px;
+    background-color: #77AAAD;
+    color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttonContainer button:hover {
+    background-color: #6E7783;
+}
+
+.buttonContainer p {
+    font-size: 14px;
+    color: #888;
+}
+
+
+.kakaoLogin {
+    background-color: #fee500;
+    color: #3c1e1e;
+}
+
+.kakaoLogin button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
