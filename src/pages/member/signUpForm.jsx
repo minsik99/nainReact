@@ -3,6 +3,7 @@ import {signUp} from "../../api/user";
 import { useRouter } from 'next/router';
 import {handleAxiosError} from "../../api/errorAxiosHandle";
 import KakaoSignup from "../../components/member/KakaoSignup";
+import styles from "../../styles/member/member.module.css";
 
 
 const SignUpForm = () => {

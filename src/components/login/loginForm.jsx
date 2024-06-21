@@ -4,6 +4,8 @@ import { login } from '../../api/user';
 import { handleAxiosError } from '../../api/errorAxiosHandle';
 import { useRouter } from 'next/router';
 import KakaoLogin from '../member/KakaoLogin';
+import styles from '../../styles/member/member.module.css';
+
 
 const LoginForm = () => {
     const router = useRouter();
@@ -39,9 +41,9 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="center-div">
-            <form className="form" onSubmit={handleSubmit}>
-                <div className="form-group">
+        <div className={styles.centerDiv}>
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input
                         type="email"
@@ -52,7 +54,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="password">비밀번호:</label>
                     <input
                         type="password"
@@ -63,7 +65,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <div className="button-container">
+                <div className={styles.buttonContainer}>
                     {loginMutation.isLoading ? (
                         // 로그인 중일 때는 로딩 텍스트를 표시합니다.
                         <p>로그인 중...</p>
