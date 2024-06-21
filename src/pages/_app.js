@@ -1,8 +1,6 @@
 // 필요한 모듈들을 불러옵니다.
 import "bootstrap/dist/css/bootstrap.css";
 import "../styles/global.css";
-import "../styles/resume/myresume.css";
-import "../styles/resume/AcceptedKeyword.module.css";
 import "../styles/manager/manager.css";
 import "../styles/interview/interview.css";
 import "../styles/member/member.css";

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styles from '../../styles/resume/AcceptedKeyword.module.css';
 import {
   Chart as ChartJS,
@@ -21,74 +22,61 @@ ChartJS.register(
   Legend
 );
 
-const jobKeywords = {
-  '웹 개발자': {
-    keywords: [
-      { name: '웹 개발', usage: 97 },
-      { name: 'HTML', usage: 86 },
-      { name: 'CSS', usage: 84 },
-      { name: 'JavaScript', usage: 75 },
-      { name: 'jQuery', usage: 62 },
-    ],
-    chartData: [97, 86, 84, 75, 62],
-  },
-  '프론트엔드 개발자': {
-    keywords: [
-      { name: 'React', usage: 95 },
-      { name: 'JavaScript', usage: 90 },
-      { name: 'CSS', usage: 85 },
-      { name: 'HTML', usage: 80 },
-      { name: 'Redux', usage: 70 },
-    ],
-    chartData: [95, 90, 85, 80, 70],
-  },
-  '서버 개발자': {
-    keywords: [
-      { name: 'Node.js', usage: 90 },
-      { name: 'Express', usage: 85 },
-      { name: 'MongoDB', usage: 80 },
-      { name: 'SQL', usage: 75 },
-      { name: 'API', usage: 70 },
-    ],
-    chartData: [90, 85, 80, 75, 70],
-  },
-  '자바 개발자': {
-    keywords: [
-      { name: 'Java', usage: 98 },
-      { name: 'Spring', usage: 90 },
-      { name: 'Hibernate', usage: 85 },
-      { name: 'SQL', usage: 80 },
-      { name: 'Maven', usage: 75 },
-    ],
-    chartData: [98, 90, 85, 80, 75],
-  },
-  '파이썬 개발자': {
-    keywords: [
-      { name: 'Python', usage: 99 },
-      { name: 'Django', usage: 88 },
-      { name: 'Flask', usage: 85 },
-      { name: 'Pandas', usage: 80 },
-      { name: 'NumPy', usage: 75 },
-    ],
-    chartData: [99, 88, 85, 80, 75],
-  },
-};
-
 const AcceptedKeyword = () => {
   const [selectedJob, setSelectedJob] = useState('웹 개발자');
-  const jobOptions = Object.keys(jobKeywords);
+  const [jobKeywords, setJobKeywords] = useState([]);
+  const jobOptions = ['웹 개발자', '프론트엔드 개발자', '서버 개발자', '서비스 기획자', 'PM/PO'];
+
+  useEffect(() => {
+    if (selectedJob) {
+      fetchJobKeywords(selectedJob);
+    }
+  }, [selectedJob]);
+
+  const fetchJobKeywords = async (jobCategory) => {
+    try {
+      const response = await axios.get(`http://localhost:9999/acceptedkeyword/api/keywords?jobCategory=${jobCategory}`);
+      setJobKeywords(response.data);
+    } catch (error) {
+      console.error('Failed to fetch job keywords: ', error);
+    }
+  };
+
+  // 상위 5개 사용 빈도 키워드만 추출
+  const topKeywords = jobKeywords
+    .sort((a, b) => b.frequency - a.frequency)
+    .slice(0, 5);
 
   const data = {
-    labels: ['웹 개발', 'HTML', 'CSS', 'JavaScript', 'jQuery'],
+    labels: topKeywords.map(keyword => keyword.acceptKeyword), // 동적 라벨 설정
     datasets: [
       {
-        label: '사용 빈도',
-        data: jobKeywords[selectedJob].chartData,
+        label: '사용빈도',
+        data: topKeywords.map(keyword => keyword.frequency),
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
       },
     ],
+  };
+
+  // chart 최대값, 증감 단위 고정
+  const chartOptions = {
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        suggestedMax: 100,
+        suggestedMin: 50,
+        ticks: {
+          stepSize: 10,
+        },
+        pointLabels: {
+          font: {
+            size: 20,
+          },
+        },
+      },
+    },
   };
 
   return (
@@ -109,18 +97,22 @@ const AcceptedKeyword = () => {
           </button>
         ))}
       </div>
-      <div className={styles.acceptedKeywordKeywords}>
-        <h3>{selectedJob}</h3>
-        <ul>
-          {jobKeywords[selectedJob].keywords.map((keyword) => (
-            <li key={keyword.name}>
-              {keyword.name} - 사용 빈도: {keyword.usage}%
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className={styles.acceptedKeywordChart}>
-        <Radar data={data} />
+      <div className={styles.acceptedKeywordContent}>
+        <div className={styles.acceptedKeywordKeywords}>
+          <label>
+            <h2>{selectedJob}</h2>
+            <ul>
+              {jobKeywords.map((keyword) => (
+                <li key={keyword.keywordNo}>
+                  * {keyword.acceptKeyword} : 사용빈도  {keyword.frequency}%
+                </li>
+              ))}
+            </ul>
+          </label>
+        </div>
+        <div className={styles.acceptedKeywordChart}>
+          <Radar data={data} options={chartOptions} height={700} width={700}/>
+        </div>
       </div>
     </div>
   );

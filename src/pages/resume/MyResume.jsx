@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import instance from '../../api/axiosApi';
+import styles from '../../styles/resume/MyResume.module.css';
 
 const MyResume = () => {
   const router = useRouter();
@@ -15,9 +16,9 @@ const MyResume = () => {
     instance.get(`/resume/member/${memberNo}`).then(response => {
       setResumes(response.data);
     })
-    .catch(error => {
-      console.error('Error fetching resumes:', error);
-    });
+      .catch(error => {
+        console.error('Error fetching resumes:', error);
+      });
   }, []);
 
   const handleMenuClick = (resumeNo) => {
@@ -39,18 +40,18 @@ const MyResume = () => {
       axios.delete(`http://localhost:9999/education/resume/${openResume}`),
       axios.delete(`http://localhost:9999/activity/resume/${openResume}`)
     ])
-    .then(() => {
-      return axios.delete(`http://localhost:9999/resume/${openResume}`);
-    })
-    .then(() => {
-      setResumes(resumes.filter((resume) => resume.resumeNo !== openResume));
-      setShowModal(false);
-      setOpenResume(null);
-    })
-    .catch(error => {
-      console.error('Error deleting resume or related data:', error);
-      setShowModal(false);
-    });
+      .then(() => {
+        return axios.delete(`http://localhost:9999/resume/${openResume}`);
+      })
+      .then(() => {
+        setResumes(resumes.filter((resume) => resume.resumeNo !== openResume));
+        setShowModal(false);
+        setOpenResume(null);
+      })
+      .catch(error => {
+        console.error('Error deleting resume or related data:', error);
+        setShowModal(false);
+      });
   };
 
   const handleCancelDelete = () => {
@@ -76,33 +77,35 @@ const MyResume = () => {
 
   return (
     <>
-      <div className="app">
-        <h1>내 이력서 관리</h1>
-        <div className="resume-management">
-          <div className="resume-actions" onClick={handleAcceptedKeywordClick}>
+      <div className={styles.myresumetitle}>
+        내 이력서 관리
+      </div>
+      <div className={styles.app}>
+        <div className={styles.resumeManagement}>
+          <div className={styles.resumeActions} onClick={handleAcceptedKeywordClick}>
             <button>합격 키워드 분석 →</button>
           </div>
-          <div className="resume-list">
-            <div className="resume-card" onClick={handleNewResumeClick} style={{ cursor: 'pointer' }}>
-              <div className="resume-card-header">
-                <div className="new-resume-icon">
+          <div className={styles.resumeList}>
+            <div className={styles.resumeCard} onClick={handleNewResumeClick} style={{ cursor: 'pointer' }}>
+              <div className={styles.resumeCardHeader}>
+                <div className={styles.newResumeIcon}>
                   <button>+</button>
                 </div>
                 <p style={{ color: 'black' }}>새 이력서 작성</p>
               </div>
             </div>
             {resumes.map((resume) => (
-              <div className="resume-card" key={resume.resumeNo} onClick={() => handleResumeClick(resume.resumeNo)} style={{ cursor: 'pointer' }}> {/* 이력서 상세보기 / 수정페이지 이동 */}
-                <div className="resume-card-header">{resume.title}</div>
-                {resume.jobCategory && <div className="resume-card-status">직무 : {resume.jobCategory}</div>}
-                <div className="resume-card-date">
+              <div className={styles.resumeCard} key={resume.resumeNo} onClick={() => handleResumeClick(resume.resumeNo)} style={{ cursor: 'pointer' }}>
+                <div className={styles.resumeCardHeader}>{resume.title}</div>
+                {resume.jobCategory && <div className={styles.resumeCardStatus}>직무 : {resume.jobCategory}</div>}
+                <div className={styles.resumeCardDate}>
                   {resume.modificationDate != null ? formatDate(resume.modificationDate) : formatDate(resume.createDate)}
                 </div>
-                <div className="resume-card-menu" onClick={(e) => {e.stopPropagation(); handleMenuClick(resume.resumeNo)}}>⋮</div> {/* 메뉴 클릭 이벤트 전파 방지 */}
+                <div className={styles.resumeCardMenu} onClick={(e) => { e.stopPropagation(); handleMenuClick(resume.resumeNo) }}>⋮</div>
                 {openResume === resume.resumeNo && (
-                  <div className="resume-card-options">
-                    <button onClick={(e) => {e.stopPropagation(); handleEditClick(resume.resumeNo)}}>수정하기</button> {/* 수정 버튼 클릭 이벤트 전파 방지 */}
-                    <button onClick={(e) => {e.stopPropagation(); handleDeleteClick()}}>삭제하기</button> {/* 삭제 버튼 클릭 이벤트 전파 방지 */}
+                  <div className={styles.resumeCardOptions}>
+                    <button onClick={(e) => { e.stopPropagation(); handleEditClick(resume.resumeNo) }}>수정하기</button>
+                    <button onClick={(e) => { e.stopPropagation(); handleDeleteClick() }}>삭제하기</button>
                   </div>
                 )}
               </div>
@@ -111,10 +114,10 @@ const MyResume = () => {
         </div>
 
         {showModal && (
-          <div className="modal">
-            <div className="modal-content">
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
               <p>정말 삭제하시겠습니까?<br />삭제하시면 복구가 불가능합니다.</p>
-              <div className="modal-buttons">
+              <div className={styles.modalButtons}>
                 <button onClick={handleCancelDelete}>취소</button>
                 <button onClick={handleConfirmDelete}>삭제</button>
               </div>
