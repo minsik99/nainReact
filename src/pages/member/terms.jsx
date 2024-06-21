@@ -101,11 +101,6 @@ const Terms = () => {
             <h1>이용 약관</h1>
             <div className={styles.termCheckboxes}>
                 <div className={styles.termChecked}>
-                    <input type='checkbox' checked={allTermsChecked} onChange={handleAllTermsChange} />
-                    전체 동의합니다.
-                </div>
-                <button onClick={handleAgreeTerm4}>전체 동의</button>
-                <div className={styles.termChecked}>
                     <input type='checkbox' name="term1" checked={termsAgreed.term1} onChange={handleCheckboxChange} />
                     이용 약관 1에 동의합니다.
                 </div>
@@ -124,6 +119,11 @@ const Terms = () => {
                     이용 약관 3에 동의합니다.
                 </div>
                 <button onClick={handleAgreeTerm3}>확인</button>
+                <div className={styles.termChecked}>
+                    <input type='checkbox' checked={allTermsChecked} onChange={handleAllTermsChange} />
+                    전체 동의합니다.
+                </div>
+                <button onClick={handleAgreeTerm4}>전체 동의</button>
                 
             </div>
             <div className={styles.buttonContainer}>
