@@ -50,6 +50,8 @@
 
 .expandedRow {
   background-color: #f1f1f1;
+  overflow: hidden; /* 이 속성을 추가하여 드롭다운 애니메이션이 부드럽게 됩니다. */
+  transition: height 0.3s ease; /* 높이의 전환 효과를 추가합니다. */
 }
 
 .reportRow {
