@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../../styles/member/member.module.css"
+import styles from '../../styles/member/memberLogin.module.css';
 
 const KakaoLogin = () => {
     const handleLogin = () => {
@@ -19,9 +19,11 @@ const KakaoLogin = () => {
     }
 
     return (
-        <div className={styles.buttonContainer}>
-            <button onClick={handleLogin}>카카오 로그인</button>
-        </div>
+        
+            <div className={styles.kakaoLogin}>
+                <button onClick={handleLogin}>카카오 계정으로 시작하기</button>
+            </div>
+        
     );
 };
 

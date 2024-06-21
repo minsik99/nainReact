@@ -4,10 +4,9 @@ import { login } from '../../api/user';
 import { handleAxiosError } from '../../api/errorAxiosHandle';
 import { useRouter } from 'next/router';
 import KakaoLogin from '../member/KakaoLogin';
-import styles from '../../styles/member/member.module.css';
 
 
-const LoginForm = () => {
+const LoginForm = ({styles}) => {
     const router = useRouter();
     const [formData, setFormData] = useState({
         memberEmail: '',
@@ -41,7 +40,8 @@ const LoginForm = () => {
     };
 
     return (
-        <div className={styles.centerDiv}>
+    
+
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
@@ -73,12 +73,11 @@ const LoginForm = () => {
                         // 로그인 중이 아닐 때는 로그인 버튼을 표시합니다.
                         <button type="submit">로그인</button>
                     )}
-                    {/* 에러 발생 시 에러 메시지는 handleAxiosError 함수에서 처리합니다.
-                        따라서 여기에 별도로 에러 메시지를 표시할 필요는 없습니다. */}
+                   
                 </div>
                 <KakaoLogin />
             </form>
-        </div>
+       
     );
 };
 
