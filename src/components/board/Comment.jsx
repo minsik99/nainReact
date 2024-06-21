@@ -24,6 +24,7 @@ const Comment = ({communityNo, styles}) => {
       if(comment.parentNo === null){
         return(
           <div className={styles.commentParent}>
+            <hr></hr>
             <span className={styles.commentInfo}>
             <p>작성자 : {comment.writer}</p><p>작성날짜 : {comment.commentDate}</p>
             </span>

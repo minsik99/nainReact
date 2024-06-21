@@ -83,11 +83,11 @@
 
 .navigation-container a {
   text-decoration: none;
-  font-weight: 1000;
+  font-weight: 600;
   padding: 0px 12px 0px 18px;
   display: inline-block;
-  font-size: 16px;
-  color: #333;
+  font-size: 17px;
+  color: #222;
 }
 
 .submenu {
@@ -100,8 +100,39 @@
   height: 200px;
   behavior: "smooth";
   z-index: 3;
-  background: #ffffff;
   margin-top: 13px;
+}
+
+.submenu a {
+  padding: 15px 0px 10px 18px;
+  color: #fff;
+}
+
+.menu-background {
+  position: absolute;
+  top: calc(100%);
+  left: 0;
+  width: 100%;
+  max-height: 0;
+  background-color: rgba(157, 195, 193, 0.8); /* 반투명 배경 색상 */
+  z-index: 2; /* 세부 메뉴 뒤에 위치하도록 설정 */
+  transition: max-height 0.3s ease, opacity 0.7s ease;
+  pointer-events: none; /* 마우스 이벤트를 무시 */
+  behavior: "smooth";
+  opacity: 0;
+}
+
+.menu-background-visible {
+  max-height: 320px;
+  opacity: 1;
+}
+
+.navigation-container li:hover .submenu {
+  max-height: 320px;
+}
+
+.navbar:hover .menu-background {
+  height: 210px;
 }
 
 .submenu a {

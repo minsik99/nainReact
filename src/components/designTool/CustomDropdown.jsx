@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import styles from './customDropdown.module.css';
+import styles from '../../styles/common/customDropdown.module.css';
 import useClickOutside from '../hook/useClickOutside';
 
 const CustomDropdown = ({ columns=[], onSelect, Header, dropdownWidth}) => {
