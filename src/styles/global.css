@@ -341,3 +341,7 @@
 .button-container button {
   margin-top: 10px;
 }
+
+.ck-editor__editable {
+  min-height: 30rem;
+}
