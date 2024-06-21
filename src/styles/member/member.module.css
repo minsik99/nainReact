@@ -1,4 +1,4 @@
-  .centerDiv {
+.centerDiv {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,8 +35,8 @@
     text-align: center;
   }
 
-  .p {
-    text-align: center;
-    color: #6200ee; /* 로딩 텍스트 색상도 보라색 */
-    font-weight: bold;
-  }
+.p {
+  text-align: center;
+  color: #6200ee; /* 로딩 텍스트 색상도 보라색 */
+  font-weight: bold;
+}
