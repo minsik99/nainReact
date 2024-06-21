@@ -6,7 +6,7 @@ import Table from "../common/Table";
 import SearchBar from "../common/SearchBar";
 import Loading from "../designTool/Loading";
 import CustomDropdown from '../designTool/CustomDropdown';
-import SortComponent from "../common/SortComponent";
+import SortComponent from "./SortComponent";
 
 const CompanylistComponent = () => {
     const columns = useMemo(() =>[{ Header: 'No', accessor: 'index' },

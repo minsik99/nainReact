@@ -2,10 +2,11 @@ import React, {useEffect, useState} from "react";
 import { observer } from "mobx-react";
 import InterviewListComponent from "../../components/interview/InterviewlistComponent";
 import { AuthProvider } from "../../api/authContext";
+import styles from '../../components/interview/interviewListComponent.module.css';
 
 const videoComponent = observer(()=>{
     return (
-        <div className="map_div">
+        <div className="mapDiv">
             <AuthProvider>
                 <InterviewListComponent/>
             </AuthProvider>
