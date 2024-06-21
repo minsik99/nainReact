@@ -4,6 +4,8 @@
     padding: 20px;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
+    margin-top: 30px;
+    border-radius: 5px;
 }
 
 .resumeContainer h1 {
@@ -19,6 +21,7 @@
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 5px;
+    padding-right: 10px;
 }
 
 .resumeContainer p {
@@ -31,7 +34,7 @@
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 1px;
+    border-radius: 5px;
 }
 
 .resumeContainer textarea {
@@ -40,6 +43,7 @@
     height: calc(30% - 20px);
     border: 1px solid #ccc;
     text-align: left;
+    border-radius: 5px;
 }
 
 .resumeContainer button {
@@ -52,43 +56,17 @@
     cursor: pointer;
 }
 
-.saveButton {
-    width: 300px;
-    height: px;
-}
-
-.saveButton[type="button"]:last-child {
-    background-color: #77AAAD;
-}
-
-.saveButton:hover {
-    background-color: #77AAAD;
-}
-
-.addButton {
-    width: 90px;
-    height: 30px;
-    background-color: transparent;
-    font-size: 12px;
-    color: white;
-    background-color: #9DC3C1;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.addButton:hover {
-    background-color: #77AAAD;
-}
-
 .resumebasic,
 .experience,
 .education,
 .activity {
     position: relative;
+    width: calc(100% - 20px);
     border: 1px solid #ccc;
     padding: 10px;
     padding-left: 30px;
     margin-bottom: 10px;
+    border-radius: 5px;
 }
 
 .experience input {
@@ -96,23 +74,6 @@
     padding: 5px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
-}
-
-.removeButton {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 22rem;
-    width: 10%;
-    border: none;
-    font-size: 1em;
-    margin-bottom: 5px;
-    cursor: pointer;
-    text-align: center;
-    background: #ffffff;
-}
-
-.removeButton:hover {
-    color: #b2b0b0;
 }
 
 .checkboxDiv {
@@ -134,4 +95,50 @@
 }
 .checkbox span {
     width: 10rem;
+}
+
+.addButton {
+    width: 90px;
+    height: 30px;
+    background-color: transparent;
+    font-size: 12px;
+    color: white;
+    background-color: #9DC3C1;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.addButton:hover {
+    background-color: #77AAAD;
+}
+
+.removeButton {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 22rem;
+    width: 10%;
+    border: none;
+    font-size: 1em;
+    margin-bottom: 5px;
+    cursor: pointer;
+    text-align: center;
+    background: #ffffff;
+}
+
+.removeButton:hover {
+    color: #b2b0b0;
+}
+
+.saveButton[type="button"]:last-child {
+    width: 300px;
+    height: 50px;
+    background-color: #77AAAD;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 36%;
+}
+
+.saveButton[type="button"]:hover {
+    background-color: #9DC3C1;
 }
