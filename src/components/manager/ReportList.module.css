@@ -64,16 +64,18 @@
 
 .pageButton {
   margin: 0 5px;
-  padding: 10px 15px;
+  padding: 5px 10px; /* 수정: 버튼 크기 조정 */
   border: 1px solid #ddd;
   cursor: pointer;
+  background-color: #fff; /* 수정: 배경 색상 추가 */
+  color: #333; /* 수정: 글자 색상 추가 */
 }
 
 .activePage {
   background-color: #77aaad;
   color: white;
   margin: 0 5px;
-  padding: 10px 15px;
+  padding: 5px 10px; /* 수정: 버튼 크기 조정 */
   border: 1px solid #ddd;
 }
 
@@ -145,6 +147,7 @@
   font-size: 16px;
   position: absolute;
   bottom: 2px;
+  right: -2px;
 }
 
 .processButton {
