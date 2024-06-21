@@ -69,7 +69,7 @@ const NavigationBar = observer(() => {
                     </Link>
                     <br />
 
-                    <Link href="/chat/ChatList" legacyBehavior>
+                    <Link href="/chat" legacyBehavior>
                       <a className="subword">채팅방</a>
                     </Link>
                     <br />
