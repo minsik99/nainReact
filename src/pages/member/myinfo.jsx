@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from "next/router";
 import axios from "axios";
+import styles from "../../styles/member/member.module.css";
 
 const myinfo = () => {
     const router = useRouter();
@@ -81,9 +82,9 @@ const myinfo = () => {
     };
 
     return (
-        <div className="center-div">
-            <form className="form" onSubmit={handleSubmit}>
-                <div className="form-group">
+        <div className={styles.centerDiv}>
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input 
                         type="email" 
@@ -94,7 +95,7 @@ const myinfo = () => {
                         disabled 
                         />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="password">비밀번호:</label>
                     <input 
                         type="password"
@@ -105,7 +106,7 @@ const myinfo = () => {
                         required
                         />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="confirmPwd">비밀번호 확인:</label>
                     <input
                         type="password"
@@ -116,7 +117,7 @@ const myinfo = () => {
                         required
                         />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="name">이름:</label>
                     <input
                         type="text"
@@ -127,7 +128,7 @@ const myinfo = () => {
                         disabled
                         />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="nickName">닉네임:</label>
                     <input
                         type="text"
@@ -138,7 +139,7 @@ const myinfo = () => {
                         required
                         />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="subscribe">구독 여부:</label>
                     <select
                         id="subscribe"
@@ -151,7 +152,7 @@ const myinfo = () => {
                         <option value="false">구독 취소</option>
                     </select>
                 </div>
-                <div className="button-container">
+                <div className={styles.buttonContainer}>
                     {updateMyinfoMutation.isLoading ? (
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
                         <p>수정 중...</p>
@@ -162,25 +163,6 @@ const myinfo = () => {
                         <button id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
                 </div>
             </form>
-            <style jsx>{`
-                .button-container {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 5px;
-                }
-                #mainButton {
-                background-color: lightgray; /* 버튼의 배경색을 밝은 회색으로 변경 */
-                color: black; /* 버튼 텍스트 색상 */
-                border: none; /* 버튼 테두리 제거 */
-                padding: 10px 20px; /* 버튼 안쪽 여백 조정 */
-                font-size: 16px; /* 버튼 텍스트 크기 조정 */
-                cursor: pointer; /* 커서를 포인터로 변경 */
-                border-radius: 5px; /* 버튼 모서리를 둥글게 변경 */
-                }
-                #mainButton:hover {
-                background-color: darkgray; /* 버튼에 마우스를 올렸을 때 색상 변경 */
-                }
-            `}</style>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-.center-div {
+.centerDiv {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,17 +13,17 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .form-group {
+  .formGroup {
     margin-bottom: 20px;
   }
   
-  label {
+  .formGroup label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
   }
   
-  input {
+  .input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -31,27 +31,11 @@
     box-sizing: border-box;
   }
   
-  .button-container {
+  .buttonContainer {
     text-align: center;
   }
-  
-  button {
-    background-color: #77AAAD;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #3E8E87; /* 약간 더 어두운 보라색 */
-  }
-  
-  p {
+
+  .p {
     text-align: center;
     color: #6200ee; /* 로딩 텍스트 색상도 보라색 */
     font-weight: bold;
