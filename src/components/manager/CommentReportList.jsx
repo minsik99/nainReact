@@ -115,8 +115,6 @@ const CommentReportList = () => {
                   <td colSpan="5">
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailBox}>
-                        <strong>제목:</strong> {report.commentContents}
-                        <br />
                         <strong>내용:</strong> {report.commentContents}
                       </div>
                       <div className={styles.detailRow}>
