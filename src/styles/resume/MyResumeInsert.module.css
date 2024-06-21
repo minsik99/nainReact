@@ -1,0 +1,137 @@
+.resumeContainer {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+.resumeContainer h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.resumeContainer form > div {
+    margin-bottom: 15px;
+}
+
+.resumeContainer label {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.resumeContainer p {
+    text-align: left;
+    color: black;
+}
+
+.resumeContainer input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+}
+
+.resumeContainer textarea {
+    padding: 10px;
+    width: calc(100% - 20px);
+    height: calc(30% - 20px);
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.resumeContainer button {
+    margin-right: 10px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #9DC3C1;
+    color: white;
+    cursor: pointer;
+}
+
+.saveButton {
+    width: 300px;
+    height: px;
+}
+
+.saveButton[type="button"]:last-child {
+    background-color: #77AAAD;
+}
+
+.saveButton:hover {
+    background-color: #77AAAD;
+}
+
+.addButton {
+    width: 90px;
+    height: 30px;
+    background-color: transparent;
+    font-size: 12px;
+    color: white;
+    background-color: #9DC3C1;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.addButton:hover {
+    background-color: #77AAAD;
+}
+
+.resumebasic,
+.experience,
+.education,
+.activity {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 10px;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+
+.experience input {
+    width: calc(100% - 20px);
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+}
+
+.removeButton {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 22rem;
+    width: 10%;
+    border: none;
+    font-size: 1em;
+    margin-bottom: 5px;
+    cursor: pointer;
+    text-align: center;
+    background: #ffffff;
+}
+
+.removeButton:hover {
+    color: #b2b0b0;
+}
+
+.checkboxDiv {
+    text-align: left;
+}
+
+.span {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.checkbox {
+    position: left;
+    top: 9px;
+    width: 12rem;
+    height: 2rem;
+    display: flex;
+    flex-direction: row;
+}
+.checkbox span {
+    width: 10rem;
+}
