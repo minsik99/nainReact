@@ -33,6 +33,12 @@ const CommunityAxios = {
         });
     },
 
+    getFile(fileName){
+        return instance.get(COMMUNITY_URL + '/download', {
+            params : {fileName: fileName}
+        })
+    },
+
     //게시글 검색
     searchCommunity(type, keyword, page, limit, sort) {
         // return axios.get(`${COMMUNITY_URL}/search?type=${type}&keyword=${keyword}&page=${page}&limit=${limit}&sort=${sort}`)
@@ -42,25 +48,30 @@ const CommunityAxios = {
     },
 
     //새 게시글 등록
+    //파일
+    insertFile(formData) {
+        return instance.post(COMMUNITY_URL + '/file', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    },
+
+    //글 등록
     createCommunity(community) {
-        //return axios.post(`${COMMUNITY_URL}`, community);
         return instance.post(COMMUNITY_URL, community);
     },
 
     //게시글 수정
     modifyCommunity(communityNo, community) {
         // return axios.put(`${COMMUNITY_URL}/modify/${communityNo}`, community);
-        return instance.put(COMMUNITY_URL + '/modify',{
-            params : {communityNo: communityNo, community: community}
-        });
+        return instance.put(COMMUNITY_URL + `/modify/${communityNo}`, community);
     },
 
     //게시글 삭제값 추가
     deleteCommunity(communityNo, community) {
         // return axios.put(`${COMMUNITY_URL}/del/${communityNo}`, community)
-        return instance.put(COMMUNITY_URL + '/del',{
-            params : {communityNo: communityNo, community: community}
-        });
+        return instance.put(COMMUNITY_URL + `/del/${communityNo}`, community);
     },
 
     //게시글 DB삭제
@@ -84,9 +95,7 @@ const CommunityAxios = {
     //댓글 등록
     createComment(comment){
         // return axios.post(`${COMMUNITY_URL}/comment`, comment)
-        return instance.post(COMMUNITY_URL + '/comment',{
-            params : {comment: comment}
-        });
+        return instance.post(COMMUNITY_URL + '/comment', comment);
     },
 
     //댓글 수정

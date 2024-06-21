@@ -7,14 +7,18 @@ const RadiusButton = ({
   text,
   onClick,
   fontSize,
+  border,
+  fontColor,
+  boxShadow,
   borderRadius,
 }) => {
   const buttonStyles = {
     padding: padding || "12px 24px",
     backgroundColor: color,
     border: "none",
+    boxShadow: boxShadow,
     borderRadius: borderRadius || "10px",
-    color: "#fff",
+    color: fontColor|| "#fff",
     cursor: "pointer",
     fontWeight: "600",
     fontSize: fontSize || "14px",
@@ -31,8 +35,10 @@ RadiusButton.propTypes = {
   padding: PropTypes.string,
   color: PropTypes.string,
   text: PropTypes.string.isRequired,
+  boxShadow: PropTypes.string,
   onClick: PropTypes.func,
   fontSize: PropTypes.string,
+  fontColor: PropTypes.string,
   borderRadius: PropTypes.string,
 };
 

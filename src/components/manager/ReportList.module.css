@@ -1,0 +1,164 @@
+.reportListTableContainer {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.reportListTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+  border: 1px solid #bbb;
+}
+
+.reportListTable th,
+.reportListTable td {
+  padding: 10px;
+  border-bottom: 1px solid #d4d4d4;
+  cursor: pointer;
+}
+
+.reportListTable td {
+  border-right: none;
+}
+
+.reportListTable th {
+  color: #77aaad;
+  font-weight: bold;
+  background-color: #d8e6e7;
+  font-size: 16px;
+  position: relative;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.reportListTable th:hover {
+  background-color: #f7f7f7;
+}
+
+.reportListTable tr {
+  background: #ffffff;
+}
+
+.reportListTable tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+.reportListTable tr:hover {
+  background-color: #eef3f3;
+}
+
+.expandedRow {
+  background-color: #f1f1f1;
+  overflow: hidden; /* 이 속성을 추가하여 드롭다운 애니메이션이 부드럽게 됩니다. */
+  transition: height 0.3s ease; /* 높이의 전환 효과를 추가합니다. */
+}
+
+.reportRow {
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pageButton {
+  margin: 0 5px;
+  padding: 5px 10px; /* 수정: 버튼 크기 조정 */
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background-color: #fff; /* 수정: 배경 색상 추가 */
+  color: #333; /* 수정: 글자 색상 추가 */
+}
+
+.activePage {
+  background-color: #77aaad;
+  color: white;
+  margin: 0 5px;
+  padding: 5px 10px; /* 수정: 버튼 크기 조정 */
+  border: 1px solid #ddd;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detailBox {
+  border: 1px solid #bbb;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.detailColumn {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.detailColumn span {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.customCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-right: 20px;
+}
+
+.checkboxContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.customCheckbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+}
+
+.customCheckbox input[type="checkbox"]:checked {
+  background-color: #ffffff;
+  border: 1px solid #77aaad;
+}
+
+.customCheckbox input[type="checkbox"]:checked::before {
+  content: "✔";
+  display: block;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-size: 16px;
+  position: absolute;
+  bottom: 2px;
+  right: -2px;
+}
+
+.processButton {
+  padding: 10px 15px;
+  background-color: #77aaad;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  width: 100%;
+  margin-top: 10px;
+}

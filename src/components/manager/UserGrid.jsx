@@ -9,11 +9,22 @@ import {
   removeSubscribeStatus,
 } from "../../api/userManager";
 import RadiusButton from "../designTool/radiusButton";
+import Modal from "../designTool/modal";
 
 const UserGrid = () => {
   const [rowData, setRowData] = useState([]);
   const gridApi = useRef(null);
   const gridColumnApi = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const columnDefs = [
     {
@@ -137,8 +148,9 @@ const UserGrid = () => {
         return updatedMember ? updatedMember : row;
       });
       setRowData(newRowData);
+      openModal("구독처리에 성공했습니다.");
     } catch (error) {
-      alert("구독처리에 실패했습니다.");
+      openModal("구독처리에 실패했습니다.");
       console.error("구독처리에 실패했습니다.", error);
     }
   };
@@ -159,8 +171,9 @@ const UserGrid = () => {
         return updatedMember ? updatedMember : row;
       });
       setRowData(newRowData);
+      openModal("구독제거에 성공했습니다.");
     } catch (error) {
-      alert("구독제거에 실패했습니다.");
+      openModal("구독제거에 실패했습니다.");
       console.error("구독제거에 실패했습니다.", error);
     }
   };
@@ -229,6 +242,15 @@ const UserGrid = () => {
           />
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        content={<p>{modalContent}</p>}
+        buttonLabel="닫기"
+        buttonColor="#77aaad"
+        buttonSize="16px"
+        modalSize={{ width: "350px", height: "150px" }}
+      />
     </div>
   );
 };

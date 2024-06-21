@@ -2,8 +2,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../styles/global.css";
 import "../styles/manager/manager.css";
-import "../styles/interview/interview.css";
-import "../styles/member/member.css";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query"; // 리액트 쿼리에서 필요한 모듈을 추가로 불러옵니다.
 import NavigationBar from "../components/layouts/navigationBar";

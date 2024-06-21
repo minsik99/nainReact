@@ -17,7 +17,7 @@ const Paging = ({paging, sort,setCurrentPage}) => {
         console.log(pageNums);
     
         return (pageNums.map((page) =>
-            <li className="page-item" key={page.toString()} >
+            <li className={`page-item ${paging.currentPage === page ? styles.activePage : ''}`} key={page.toString()} >
               <a className="page-link" onClick = {() => listBoard(page)}>
                 <div className={styles.pages}>{page}</div>
               </a>

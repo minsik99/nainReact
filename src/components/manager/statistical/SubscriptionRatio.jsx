@@ -20,25 +20,33 @@ const SubscriptionChart = () => {
   });
 
   useEffect(() => {
-    // 하드코딩된 값 사용
-    const totalMembers = 10;
-    const subscribers = 3;
-    const nonSubscribers = totalMembers - subscribers;
+    const fetchSubscriptionData = async () => {
+      try {
+        const response = await getSubscription();
+        const totalMembers = response.map((item) => item.memberCount);
+        const subscribers = response.map((item) => item.subscriptionCount);
+        const nonSubscribers = totalMembers - subscribers;
 
-    setChartData({
-      labels: ["Subscribers", "Non-Subscribers"],
-      datasets: [
-        {
-          data: [subscribers, nonSubscribers],
-          backgroundColor: [
-            "rgba(54, 162, 235, 0.4)",
-            "rgba(255, 99, 132, 0.4)",
+        setChartData({
+          labels: ["Subscribers", "Non-Subscribers"],
+          datasets: [
+            {
+              data: [subscribers, nonSubscribers],
+              backgroundColor: [
+                "rgba(54, 162, 235, 0.4)",
+                "rgba(255, 99, 132, 0.4)",
+              ],
+              borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
+              borderWidth: 1,
+            },
           ],
-          borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
-          borderWidth: 1,
-        },
-      ],
-    });
+        });
+      } catch (error) {
+        console.error("Error fetching subscription data:", error);
+      }
+    };
+
+    fetchSubscriptionData();
   }, []);
 
   return (

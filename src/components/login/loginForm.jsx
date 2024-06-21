@@ -5,7 +5,8 @@ import { handleAxiosError } from '../../api/errorAxiosHandle';
 import { useRouter } from 'next/router';
 import KakaoLogin from '../member/KakaoLogin';
 
-const LoginForm = () => {
+
+const LoginForm = ({styles}) => {
     const router = useRouter();
     const [formData, setFormData] = useState({
         memberEmail: '',
@@ -15,7 +16,9 @@ const LoginForm = () => {
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
             // 로그인 성공 후의 동작을 정의합니다.
-            router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
+            console.log('로그인 성공', data);
+            // router.push('/'); // 예를 들어, 사용자를 홈 페이지로 리다이렉션합니다.
+            window.location.href = '/';
         },
         onError: (error) => {
             // 에러 핸들러를 호출하여 사용자에게 에러를 알립니다.
@@ -37,9 +40,10 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="center-div">
-            <form className="form" onSubmit={handleSubmit}>
-                <div className="form-group">
+    
+
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input
                         type="email"
@@ -50,7 +54,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="password">비밀번호:</label>
                     <input
                         type="password"
@@ -61,7 +65,7 @@ const LoginForm = () => {
                         required
                     />
                 </div>
-                <div className="button-container">
+                <div className={styles.buttonContainer}>
                     {loginMutation.isLoading ? (
                         // 로그인 중일 때는 로딩 텍스트를 표시합니다.
                         <p>로그인 중...</p>
@@ -69,12 +73,11 @@ const LoginForm = () => {
                         // 로그인 중이 아닐 때는 로그인 버튼을 표시합니다.
                         <button type="submit">로그인</button>
                     )}
-                    {/* 에러 발생 시 에러 메시지는 handleAxiosError 함수에서 처리합니다.
-                        따라서 여기에 별도로 에러 메시지를 표시할 필요는 없습니다. */}
+                   
                 </div>
                 <KakaoLogin />
             </form>
-        </div>
+       
     );
 };
 
