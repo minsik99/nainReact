@@ -3,6 +3,7 @@ import { useMutation } from 'react-query';
 import { useRouter } from "next/router";
 import axios from "axios";
 import styles from "../../styles/member/member.module.css";
+import { authStore } from "../../stores/authStore";
 
 const myinfo = () => {
     const router = useRouter();
@@ -15,6 +16,8 @@ const myinfo = () => {
         subscribe: 'true'
     });
 
+    const memberNo = authStore.memberNo;
+    
     useEffect(() => {
         //서버에서 사용자 정보 가져오기
         const fetchMemberInfo = async () => {
@@ -81,8 +84,10 @@ const myinfo = () => {
         router.push("/");
     };
 
+    console.log(memberNo);
     return (
         <div className={styles.centerDiv}>
+           
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>

@@ -20,8 +20,11 @@ export const login = (loginData) => {
                 const pureToken = token.split(' ')[1];
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
-                window.localStorage.setItem("refresh", response.data.refresh)
-                authStore.setIsAdmin(response.data.isAdmin)
+                window.localStorage.setItem("refresh", response.data.refresh);
+                console.log(response.data.memberNo)
+                authStore.setIsAdmin(response.data.isAdmin);
+                authStore.setMemberNo(response.data.memberNo);
+               
                 authStore.checkLoggedIn()
                 
             }
