@@ -3,157 +3,148 @@ import CommunityAxios from "../../api/CommunityAxios";
 import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/board/boardDetail.module.css';
+import Comment from '../../components/board/Comment';
 
 const BoardDetail = () => {
     const router = useRouter();
     const { communityNo } = router.query;
+    const [showModal, setShowModal] = useState(false);
     const [board, setBoard] = useState({
         communityNo : communityNo,
         title: '',
         writer: '',
-        date: '',
+        communityDate: '',
+        modifiedDate: '',
         content: '',
         fileName: '',
+        fileModified: '',
         readCount : '',
     });
-    const [comments, setComments] = useState({
-        commentNo: '',
-        parentNo: '',
-        writer: '',
-        content: '',
-        date: '',
-    });
-    const commentList = [];
+    const [date, setDate] = useState('');
+    const [modifiedDate, setModifiedDate] = useState('');
 
+    console.log("가져온 정보", board);
     useEffect(() => {
-        // 게시글 데이터 조회
-        console.log("커뮤니티no 확인", communityNo)
-        CommunityAxios.getCommunityDetail(communityNo)
-            .then(res => {
-                const data = res.data;
-                setBoard({
-                    communityNo : communityNo,
-                    title: data.title,
-                    writer: data.writer,
-                    date: data.communityDate,
-                    content: data.content,
-                    fileName: data.fileModified,
-                    readCount: data.readCount,
+        if (communityNo) {
+            // 게시글 데이터 조회
+            console.log("커뮤니티 no 확인", communityNo)
+            CommunityAxios.getCommunityDetail(communityNo)
+                .then(res => {
+                    const data = res.data;
+                    const enroll = new Date(data.communityDate);
+                    const modi = new Date(data.modifiedDate);
+                    setDate(enroll.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
+                    setModifiedDate(modi.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
+
+                    setBoard({
+                        communityNo : communityNo,
+                        title: data.title,
+                        writer: data.writer,
+                        communityDate: data.communityDate,
+                        modifiedDate: data.modifiedDate ? data.modifiedDate : null,
+                        content: data.content,
+                        fileName: data.fileUpload,
+                        fileModified: data.fileModified,
+                        readCount: data.readCount,
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching board detail:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching board detail:', error);
-            });
+        }
     }, [communityNo]);
 
-    useEffect(() => {
-        CommunityAxios.getCommentList(communityNo)
-            .then(res => {
-                setComments(res.data.list);
-            })
-            .catch(error => {
-                console.error('Error fetching comment:', error);
-            });
-    }, [communityNo]);
-
-    function buildCommentTree(comments){
-        const commentMap = {};
-        comments.forEach(comment => {
-          comment.replies = [];
-          commentMap[comment.comment_no] = comment;
+    const downloadFile = () => {
+        CommunityAxios.getFile(board.fileModified).then(res => {
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', board.fileName); // 다운로드되는 파일의 이름 설정
+            document.body.appendChild(link);
+            link.click();
         });
-      
-        const rootComments = [];
-        comments.forEach(comment => {
-          if (comment.comment_parent === null) {
-            rootComments.push(comment);
-          } else {
-            const parent = commentMap[comment.comment_parent];
-            parent.replies.push(comment);
-          }
-        });
-      
-        return rootComments;
-      };
-
-      const CommentItem = ({ comment }) => {
-        return (
-          <div>
-            <div className="comment-content">
-              <p><strong>{comment.member_name}</strong> <span>{new Date(comment.comment_date).toLocaleString()}</span></p>
-              <p>{comment.comment_content}</p>
-            </div>
-            <div className="replies">
-              {comment.replies.map(reply => (
-                <CommentItem key={reply.comment_no} comment={reply} />
-              ))}
-            </div>
-          </div>
-        );
-      };
-
-      const CommentList = ({ comments }) => {
-        return (
-          <div className="comment-list">
-            {comments.map(comment => (
-              <CommentItem key={comment.comment_no} comment={comment} />
-            ))}
-          </div>
-        );
-      };
-
-    const insertComment = () =>{
-
     };
-      
-    const reload =() => {
+
+    // const OwnBoard = board.communityNo === userNo;
+
+    const reload = () => {
         router.push("/community");
-      };
+    };
 
     const handleReportClick = () => {
         alert('게시글을 신고했습니다.');
     };
+    
     const deleteBoard = () => {
-        alert('게시글을 신고했습니다.');
+        console.log("삭제하려는 게시판 정보", board);
+        CommunityAxios.deleteCommunity(board.communityNo, board).then(res => {
+            setShowModal(true); // 성공 모달 열기
+            setTimeout(() => {
+              setShowModal(false); // 모달 닫기
+              router.push('/community'); // 페이지 이동
+            }, 500); // 2초 후에 페이지 이동
+        })
+        .catch(error => {
+            alert('게시글 삭제 오류');
+        })
     };
+
     const modifyBoard = () => {
-        alert('게시글을 신고했습니다.');
+        router.push({
+            pathname: '/community/new',
+            query: { primalBoard: JSON.stringify(board) }
+        });
     };
 
     return (
         <div className={styles.base}>
             <h2>커뮤니티 게시판</h2>
             <div className={styles.buttons}>
-            <RadiusButton color="#77AAAD" text="전체 목록" onClick={reload}/>
-            <img src="/image/report.png" onClick={handleReportClick} />
+                <RadiusButton color="#77AAAD" text="전체 목록" onClick={reload} />
+                <img src="/image/report.png" onClick={handleReportClick} />
             </div>
             <div className={styles.container}>
                 <div className={styles.header}>
                     <h3>{board.title}</h3>
-                    <p>작성자 : {board.writer}</p>
+                    
                     <div className={styles.info}>
-                        <span>조회수 : {board.readCount}</span>
-                        <p>작성날짜 : {board.date.substring(0, 10)}</p>
+                        <span>
+                            <p>작성자 : {board.writer}</p>
+                            <p>조회수 : {board.readCount}</p>
+                        </span>
+                        <span>
+                        <p>작성날짜 : {date}</p>
+                        {board.modifiedDate && (
+                            <p>수정날짜 : {modifiedDate}</p>
+                        )}
+                        </span>
+                        
                     </div>
-                    {board.fileName && (
-                    <div className={styles.fileName}>첨부 파일 : <a className={styles.file}>{board.fileName}</a></div>
-                    )}
+
                 </div>
                 <div className={styles.content} dangerouslySetInnerHTML={{ __html: board.content }} />
+                {board.fileName && (
+                        <div>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{board.fileName}</a></div>
+                    )}
+            </div>
+            {/* {OwnBoard ? ( */}
+                <div className={styles.buttons}>
+                    <RadiusButton color="#77AAAD" text="삭제" onClick={deleteBoard} />
+                    {showModal && (
+                <div className="modal">
+                <div className="modal-content">
+                    <h5>게시글을 삭제하였습니다.</h5>
+                </div>
+            </div>
+                    )}
+                    <RadiusButton color="#77AAAD" text="수정" onClick={modifyBoard} />
+                </div>
+            {/* ) : (
+                <div></div>
+            )} */}
 
-            </div>
-            <div className={styles.buttons}>
-                    <RadiusButton color="#77AAAD" text="삭제" onClick={deleteBoard}/>
-                    <RadiusButton color="#77AAAD" text="수정" onClick={modifyBoard}/>
-            </div>
             <h4>댓글</h4>
-            <div className={styles.commentEnroll}>
-                <textarea className={styles.commentBox} placeholder="댓글 입력"></textarea>
-                <RadiusButton color="#77AAAD" text="댓글 등록" onClick={insertComment}></RadiusButton>
-            </div>
-            <div className="comment-list">
-                {CommentList}
-            </div>
+            <Comment communityNo={communityNo} styles={styles} />
         </div>
     );
 };
