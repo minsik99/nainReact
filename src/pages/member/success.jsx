@@ -7,9 +7,10 @@ import styles from "../../styles/member/member.module.css";
 
 const LoginSuccess = () => {
     const router = useRouter();
-    const member = useContext(AuthContext);
+   
     useEffect(() => {
         const { access, refresh, isAdmin } = router.query;
+ 
 
         if (access && refresh) {
             // JWT 토큰과 사용자 정보를 로컬 스토리지에 저장합니다.
@@ -27,6 +28,7 @@ const LoginSuccess = () => {
     return (
         <div>
             <p>로그인 성공! 리다이렉트 중...</p>
+            
         </div>
     );
 };

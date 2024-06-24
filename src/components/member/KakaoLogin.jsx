@@ -19,11 +19,9 @@ const KakaoLogin = () => {
     }
 
     return (
-        
-            <div className={styles.kakaoLogin}>
-                <button onClick={handleLogin}>카카오 계정으로 시작하기</button>
-            </div>
-        
+            
+                <img className={styles.kakaoLogin} src='/image/kakaoLogin.png' onClick={handleLogin} />
+ 
     );
 };
 
