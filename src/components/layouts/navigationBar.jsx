@@ -64,16 +64,16 @@ const NavigationBar = observer(() => {
                       <a className="subword">이력서 작성</a>
                     </Link>
                     <br />
-                    <Link href="/resume/MyResume" passHref legacyBehavior>
+                    <Link href="/resume" passHref legacyBehavior>
                       <a className="subword">이력서 관리</a>
                     </Link>
                     <br />
 
-                    <Link href="/chat/ChatList" legacyBehavior>
+                    <Link href="/chat" legacyBehavior>
                       <a className="subword">채팅방</a>
                     </Link>
                     <br />
-                    <Link href="/resume/MyResume" passHref legacyBehavior>
+                    <Link href="/resume/AcceptedKeyword" passHref legacyBehavior>
                       <a className="subword">합격자 키워드 분석</a>
                     </Link>
                     <br />

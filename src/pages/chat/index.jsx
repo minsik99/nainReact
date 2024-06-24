@@ -1,11 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react";
-import WebSocketClient from "../../components/chat/WebSocketClient";
+import ChatPage from "../../components/chat/chatpage";
 
 const chatComponent = observer(()=>{
     return (
         <div>
-            <WebSocketClient />
+            <ChatPage />
         </div>
     )
 })

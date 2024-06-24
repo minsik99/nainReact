@@ -1,6 +1,15 @@
 .mapDiv {
     height: 100%;
-    margin-bottom:  6rem;
+    width: 100%;
+    display:flex;
+    align-items: center;
+}
+
+
+.interviewListContainer {
+    display:flex;
+    flex-direction: row;
+    margin-left: 10vw;
 }
 
 /* 왼쪽 리스트 컨테이너 */
@@ -8,28 +17,26 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    padding: 20px;
+    padding: 1rem;
     border-radius: 8px;
     width: 90%;
+    height: 40rem;
+   
 }
 .img {
-    width: 2rem;
+    width: 2.2rem;
 }
 
-.trash{
-    width: 1.5rem;
-    height: 1.7rem;
-}
 .icon {
     width: 52.4px;
     height: 50.91px;
     left: 383.91px;
     top: 621.6px;
+    cursor: pointer;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     margin-bottom: 20px;
     color: #333;
 }
-
 
 
 /* h2 클래스 */
@@ -48,8 +55,10 @@
     align-items: center;
     width: 35rem;
     height: 35rem;
+    padding-right: 3rem;
     border-right: 3px solid#D8E6E7;
 }
+
 
 .sortMenu {
     width: 30px;
@@ -57,12 +66,14 @@
     margin-left: 20rem;
     cursor: pointer;
 }
-
+.menuContainer{
+    position: relative;
+}
 .dropdownBox {
     position: absolute;
-    top: 19%;
-    right: 64.5%;
-    z-index: 800;
+    top: 100%; /* 부모 요소의 하단에 위치하게 설정 */
+    left: 90%;
+    z-index: 1000;
 }
 
 .cardContainer {
@@ -79,6 +90,7 @@
     align-items: center;
     padding-top: 2rem;
     padding-bottom: 2rem;
+    
 }
 
 .cardContainer::-webkit-scrollbar {
@@ -100,6 +112,7 @@
 .cardBox {
     display: flex;
     justify-content: center;
+    background-color: initial;
 }
 
 /* 인터뷰카드 */
@@ -108,27 +121,43 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 90%;
     height: 5rem;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: white;
-   
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+.addBlock {
+    width: 90%;
+    border-radius: 8px;
+    padding:1.2rem;
+    background-color: white;
+    display: flex;
+    justify-content: center;
 }
 
-.blank {
-    display: flex;
-    justify-content: space-between
-    
+.trash{
+    margin-left: 0.7rem;
+    width: 1.5rem;
+    height: 1.7rem;
+    transition: background-image 0.3s ease; /* 이미지 변경 시 부드러운 전환 효과 */
+
 }
+.trash:hover {
+    content: url('/image/trash.png'); 
+}
+
+
 .interviewItem > p {
     color: black;
-    width:6.4rem;
+    width:8.2rem;
+}
+.interviewItem:hover > p {
+    color: white;
 }
 
-.interviewItem > p:hover {
-    color: white;
+.interviewItem:hover .trash {
+    content: url('/image/trash.png');
 }
 
 .interviewItem:hover {
@@ -138,30 +167,24 @@
    
 }
 
+.selected {
+background-color: #77AAAD;
+}
+
+.selected > p {
+    color: white;
+}
+
+.selected .trash {
+    content: url('/image/trash.png');
+}
+
+
+.selectedText {
+    color: white; 
+}
 .interviewTitle {
-    margin: 0;
     font-size: 1em;
     color: #333;
 }
 
-/* 결과 버튼 */
-.buttonContainer {
-    margin-left: 3rem;
-    margin-top: 3rem;
-    width: 20rem;
-    padding-left: 1rem;
-    display: flex;
-    flex-direction: row;
-    height: 2.5rem;
-    align-items: center; /* 높이 비율 맞추기 위해 추가 */
-}
-
-/* 그래프 컨테이너 */
-.graphBox{
-    margin-left: 4rem;
-    margin-top: 1rem;
-    width: 55rem;
-    height: 90%;
-    border-radius: 8px;
-    border: 2px solid #77AAAD;
-}

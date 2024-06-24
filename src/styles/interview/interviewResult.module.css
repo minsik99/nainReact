@@ -1,0 +1,117 @@
+
+.graphContainer {
+    width: 50vw;
+    height: 90%;
+
+}
+
+.resultContainer {
+    width: 90%;
+    height: 90%;
+    margin-left: 3rem;
+    margin-top: 1.5rem;
+    
+}
+
+.graphContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.resultContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.chartRow {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+.donutContainer {
+    position: relative; /* 상대 위치로 설정 */
+
+    height: 27vh; /* 원하는 높이로 설정 */
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    border-radius: 8px;
+}
+
+.chartBox {
+    position: relative;
+    width: 87%;
+    border-radius: 8px;
+    border: 2px solid #77AAAD;
+    margin:1rem;
+    padding: 1rem;
+    height: 95%;
+
+}
+
+.title {
+    position: absolute; /* 절대 위치로 설정 */
+    top: 5%;
+    left: 5%;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    width: auto; /* 텍스트 길이에 맞게 너비 자동 조절 */
+    line-height: 2rem; /* 줄 높이 조정 */
+    color: #6E7783;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.chartContainer {
+    position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    margin: 10px 0;
+}
+
+.textRow {
+    width: 40vw;
+    margin-left: 1rem;
+}
+
+.resultText {
+    display: flex;
+    flex-direction: row;
+    padding:1rem;
+    width: 90%;
+    height: 10vh;
+    border: 2px solid #77AAAD;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FDFEFE 14%, #D8E6E7 93%);
+    border-radius: 8px;
+    border: 1px solid rgba(119, 170, 173, 0.8);
+    align-items: center;
+}
+
+.leftText {
+    margin: 2rem;
+}
+.rightText {
+    font-weight: 600;
+}
+.totalContainer {
+    display: flex;
+    flex-direction: column;
+    width: 42vw;
+}
+
+.totalBox {
+    height: 50%;
+}
+
+.totalV {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+}
