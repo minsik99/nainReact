@@ -1,4 +1,4 @@
-import instance from "./axiosApi";
+import instance from "../axiosApi";
 
 const BASE_URL = "/interview";
 

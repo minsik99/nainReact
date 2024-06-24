@@ -1,7 +1,7 @@
 import React, {useRef, useState, useEffect, useContext, useCallback} from 'react';
 import styles from '../../styles/interview/interviewListComponent.module.css';
 import InterviewCard from './InterviewCard';
-import { getInterviewList, getInterview } from '../../api/interview';
+import { getInterviewList, getInterview } from '../../api/interview/interview';
 import useInfiniteScroll from '../hook/useInfiniteScroll';
 import InterviewResultComponent from './InterviewResult';
 import useDropdown from '../../components/hook/useDropdown';
