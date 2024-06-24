@@ -4,7 +4,7 @@ import WebSocketClient from "../../components/chat/WebSocketClient";
 
 const chatComponent = observer(()=>{
     return (
-        <div>
+        <div className={styles.interviewContainer}>
             <WebSocketClient />
         </div>
     )

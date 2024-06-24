@@ -1,0 +1,23 @@
+/* 결과 버튼 */
+.buttonContainer {
+    position: inherit;
+    margin-left: 2.5rem; 
+    margin-top: 3rem;
+    width: 100%;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    height: 2.5rem;
+    align-items: center; /* 높이 비율 맞추기 위해 추가 */
+    
+}
+
+/* 그래프 컨테이너 */
+.graphBox{
+    margin-left: 4rem;
+    margin-top: 1rem;
+    width: 55rem;
+    height: 90%;
+    border-radius: 8px;
+    border: 2px solid #77AAAD;
+}
