@@ -1,16 +1,14 @@
 import React, {useEffect, useState} from "react";
 import styles from "../../styles/board/search.module.css";
-import RadiusButton from '../designTool/RadiusButton';
-import CommunityAxios from "../../api/CommunityAxios";
 
 
-const Search = ({ options, onSearch, setBoards, sortOption, setPaging}) => {
+const Search = ({ options, onSearch}) => {
     const [selectedOption, setSelectedOption] = useState('');
     const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         setSelectedOption(selectedOption);
-      }, [sortOption]);
+      }, [selectedOption]);
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);

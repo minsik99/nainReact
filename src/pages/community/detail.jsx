@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/board/boardDetail.module.css';
 import Comment from '../../components/board/Comment';
+import modal from '../../components/designTool/modal';
+import CustomDropdown from '../../components/designTool/CustomDropdown';
 
 const BoardDetail = () => {
     const router = useRouter();
@@ -22,6 +24,7 @@ const BoardDetail = () => {
     });
     const [date, setDate] = useState('');
     const [modifiedDate, setModifiedDate] = useState('');
+    const [reportOpen, setReportOpen] = useState(false);
 
     console.log("가져온 정보", board);
     useEffect(() => {
@@ -30,26 +33,22 @@ const BoardDetail = () => {
             console.log("커뮤니티 no 확인", communityNo)
             CommunityAxios.getCommunityDetail(communityNo)
                 .then(res => {
-                    const data = res.data;
-                    const enroll = new Date(data.communityDate);
-                    const modi = new Date(data.modifiedDate);
+                    const enroll = new Date(res.data.communityDate);
+                    const modi = new Date(res.data.modifiedDate);
                     setDate(enroll.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
                     setModifiedDate(modi.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
 
                     setBoard({
                         communityNo : communityNo,
-                        title: data.title,
-                        writer: data.writer,
-                        communityDate: data.communityDate,
-                        modifiedDate: data.modifiedDate ? data.modifiedDate : null,
-                        content: data.content,
-                        fileName: data.fileUpload,
-                        fileModified: data.fileModified,
-                        readCount: data.readCount,
+                        title: res.data.title,
+                        writer: res.data.writer,
+                        communityDate: res.data.communityDate,
+                        modifiedDate: res.data.modifiedDate ? res.data.modifiedDate : null,
+                        content: res.data.content,
+                        fileName: res.data.fileUpload,
+                        fileModified: res.data.fileModified,
+                        readCount: res.data.readCount,
                     });
-                })
-                .catch(error => {
-                    console.error('Error fetching board detail:', error);
                 });
         }
     }, [communityNo]);
@@ -72,7 +71,9 @@ const BoardDetail = () => {
     };
 
     const handleReportClick = () => {
-        alert('게시글을 신고했습니다.');
+        return(
+            <modal isOpen={true} content={'테스트'}/>
+        )
     };
     
     const deleteBoard = () => {
