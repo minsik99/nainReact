@@ -44,6 +44,7 @@ const sendFramesToServer = () => {
     const context = canvasRef.current.getContext('2d');
 
     const captureFrame = () => {
+        
         if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
             canvasRef.current.width = videoRef.current.videoWidth;
             canvasRef.current.height = videoRef.current.videoHeight;

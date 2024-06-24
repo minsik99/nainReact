@@ -1,0 +1,20 @@
+/* Breadcrumb.css */
+.pathText {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    font-weight: 700;
+}
+
+.pathTextItem {
+    margin-right: 0.5rem;
+}
+
+.pathTextLink {
+    text-decoration: none;
+    color: #77AAAD;
+}
+
+.pathTextSeparator {
+    margin: 0 0.5rem;
+}
