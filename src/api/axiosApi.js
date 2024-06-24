@@ -68,6 +68,10 @@ instance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        if (!error.response || error.response.status === null){
+            logout();
+        }
+
         // 401 오류가 발생하고, 이미 재시도를 한 적이 없다면
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true; // 재시도 했음을 표시
