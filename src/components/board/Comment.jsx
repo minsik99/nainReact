@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import CommunityAxios from "../../api/CommunityAxios";
 import RadiusButton from '../designTool/RadiusButton';
+import CommentDetail from './CommentDetail';
 
 const Comment = ({communityNo, styles}) => {
     const [comments, setComments] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [content, setContent] = useState('');
-
 
 
     useEffect(() => {
@@ -20,58 +20,31 @@ const Comment = ({communityNo, styles}) => {
             });
     }, [communityNo]);
 
-    const CommentList = comments.map(comment => {
-      if(comment.parentNo === null){
-        return(
-          <div className={styles.commentParent}>
-            <hr></hr>
-            <span className={styles.commentInfo}>
-            <p>작성자 : {comment.writer}</p><p>작성날짜 : {comment.commentDate}</p>
-            </span>
-            <div className={styles.commentContent} 
-            dangerouslySetInnerHTML={{ __html: comment.content }} />
-          </div>
-        )
-      }else{
-        return(
-        <div className={styles.commentChild}>
-          <img src="/image/comment.png"></img>
-          <div className={styles.underComment}>
-            <span className={styles.commentInfo}>
-              <p>작성자 : {comment.writer}</p><p>작성날짜 : {comment.commentDate}</p>
-            </span>
-              <div className={styles.commentContent} 
-              dangerouslySetInnerHTML={{ __html: comment.content }} />
-          </div>
-        </div>
-        )
-      };
-    });
+    const handleComment = (event) => {
+      setContent(event.target.value);
+    };
 
-      const insertComment = () =>{
-        const newComment = {
-          communityNo: communityNo,
-          writer: '',
-          content: content,
-        }
-        try {
-        if(content){
-          CommunityAxios.createComment(newComment).then(res => {
-              window.location.reload();
-          }).catch(
-            alert('댓글 등록에 실패했습니다.')
-        )}else{
-            alert('내용을 입력해주세요.');
-        }
-        }catch(error){
-          console.error("댓글 등록 실패")
-        };
-      };
+
+    const insertComment = () =>{
+      const newComment = {
+        communityNo: communityNo,
+        writer: '',
+        content: content,
+      }
+      console.log(newComment);
+      if(content){
+        CommunityAxios.createComment(newComment).then(res => {
+            window.location.reload();
+      })}else{
+          alert('내용을 입력해주세요.');
+      }
+    };
 
     return (
     <div>
         <div className={styles.commentEnroll}>
-          <textarea className={styles.commentBox} placeholder="댓글 입력" onChange={setContent}></textarea>
+          <textarea className={styles.commentBox} placeholder="댓글 입력" 
+          value={content} onChange={handleComment}/>
           <RadiusButton color="#77AAAD" text="댓글 등록" onClick={insertComment}></RadiusButton>
             {showModal && (
                 <div className="modal">
@@ -82,8 +55,11 @@ const Comment = ({communityNo, styles}) => {
             )}
         </div>
         <div>
-            {CommentList}
-        </div>      
+          {comments.map(comment => {
+            console.log("comment 1개 : ", comment);
+            <CommentDetail key={comment.commentNo} comment={comment} styles={styles}/>
+          })}
+        </div>  
     </div>
     );
 };

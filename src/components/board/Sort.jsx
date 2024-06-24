@@ -7,7 +7,7 @@ const Sort = ({options, onSort}) => {
     const handleOptionChange = (event) => {
         const value = event.target.value;
         setSelectedOption(value);
-        onSort(value);
+        onSort(selectedOption);
       };
 
   return (

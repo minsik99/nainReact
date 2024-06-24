@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import styles from '../../styles/board/paging.module.css';
 
-const Paging = ({paging, sort,setCurrentPage}) => {
-    const limit = paging.limit;
+const Paging = ({paging, setCurrentPage}) => {
     // const router = useRouter();
 
     const listBoard = (page) => {

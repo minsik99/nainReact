@@ -24,9 +24,46 @@ const NewBoard = () => {
           'heading', '|',
           'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
           'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
-          'undo', 'redo',
-        ]
+          'undo', 'redo', '|',
+          'insertImage',
+        ],
+      extraPlugins: [ MyCustomUploadAdapterPlugin ]
       };
+
+      function MyCustomUploadAdapterPlugin(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return new MyUploadAdapter(loader);
+        };
+      }
+
+      class MyUploadAdapter {
+        constructor(loader) {
+            this.loader = loader;
+        }
+        upload() {
+            return this.loader.file.then(
+                file =>
+                    new Promise((resolve, reject) => {
+                        const data = new FormData();
+                        data.append('file', file);
+    
+                        fetch('http://localhost:9999/api/image/upload', {
+                            method: 'POST',
+                            body: data,
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                resolve({
+                                    default: result.url
+                                });
+                            })
+                            .catch(error => {
+                                reject(error);
+                            });
+                    })
+              );
+          }
+      }
 
       const saveBoard = async () => {
         //글 수정
@@ -71,7 +108,7 @@ const NewBoard = () => {
                 pathname: '/community/detail',
                 query: {communityNo:community.communityNo},
               });
-            }, 500); // 2초 후에 페이지 이동
+            }, 500); // 
           } catch (error) {
             alert("글 등록 실패");
             console.error("글 등록 실패", error);
@@ -117,7 +154,7 @@ const NewBoard = () => {
               pathname: '/community/detail',
               query: {communityNo: community.communityNo},
             }); // 페이지 이동
-          }, 500); // 2초 후에 페이지 이동
+          }, 500); // 
         } catch (error) {
           alert("글 등록 실패");
           console.error("글 등록 실패", error);
@@ -160,7 +197,7 @@ const NewBoard = () => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="제목을 입력하세요"
+              placeholder="제목을 입력하세요."
               />
             <CKEditor
             className={styles.ckeditor}
