@@ -1,69 +1,41 @@
-// pages/index.js
 import { useEffect, useState } from 'react';
-import mqtt from 'mqtt';
+import { useRouter } from 'next/router';
 import instance from '../../api/axiosApi';
 
-const MQTT_BROKER_URL = "ws://localhost:9001";
-
-const ChatPage = () => {
-    const [messages, setMessages] = useState([]);
-    const [messageText, setMessageText] = useState('');
-    const [client, setClient] = useState(null);
+const ChatRoomsPage = () => {
+    const [rooms, setRooms] = useState([]);
+    const router = useRouter();
 
     useEffect(() => {
-        const client = mqtt.connect(MQTT_BROKER_URL);
-
-        client.on('connect', () => {
-            console.log('Connected to MQTT Broker');
-            client.subscribe('chat/messages');
-        });
-
-        client.on('message', (topic, message) => {
-            const payload = JSON.parse(message.toString());
-            setMessages((prevMessages) => [...prevMessages, payload]);
-        });
-
-        setClient(client);
-
-        return () => {
-            if (client) {
-                client.end();
+        const fetchRooms = async () => {
+            try {
+                const response = await instance.get('/chat/rooms');
+                setRooms(response.data);
+            } catch (error) {
+                console.error('Error fetching rooms:', error);
             }
         };
+
+        fetchRooms();
     }, []);
 
-    const sendMessage = async () => {
-
-        const message = {
-            "messageText": messageText,
-        };
-        try {
-            await instance.post('/chat/send', message);
-            setMessageText('');
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
+    const enterRoom = (roomId) => {
+        router.push(`/chat/${roomId}`);
     };
-
 
     return (
         <div>
-            <h1>Chat Room</h1>
+            <h1>Chat Rooms</h1>
             <div>
-                {messages.map((msg, index) => (
-                    <div key={index}>
-                        <strong>Member {msg.memberNo}:</strong> {msg.messageText}
+                {rooms.map((room) => (
+                    <div key={room.chatRoomNo}>
+                        <span>{room.name}</span>
+                        <button onClick={() => enterRoom(room.chatRoomNo)}>Enter</button>
                     </div>
                 ))}
             </div>
-            <input
-                type="text"
-                value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
-                placeholder="Enter your message"
-            />
-            <button onClick={sendMessage}>Send</button>
         </div>
     );
-}
-export default ChatPage;
+};
+
+export default ChatRoomsPage;
