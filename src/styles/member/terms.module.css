@@ -1,66 +1,91 @@
 .termsContainer {
+    width: 100%;
+    padding: 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
     padding: 20px;
-    width: 100%; 
-    max-width: 600px; 
-    margin: 0 auto; 
+}
+
+.termsContainer h1 {
+    margin-bottom: 20px;
+    color: #333;
 }
 
 .termCheckboxes {
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     width: 100%;
-    max-width: 400px; 
-    margin-top: 20px; 
-    text-align: left; 
+    max-width: 500px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .termChecked {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-    width: 80%;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
-.termChecked input[type="checkbox"] {
+
+.termChecked input[type='checkbox'] {
     margin-right: 10px;
 }
 
-/* 전체 동의 체크 시 버튼 색상 변경 */
-.termChecked input[type="checkbox"]:checked + button {
-    background-color: #6c757d; /* 진한 회색 */
-}
-
-
-.buttonContainer button:disabled {
-    background-color: #6c757d; /* 진한 회색 */
-    cursor: not-allowed;
-}
-
-.buttonContainer {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    flex-direction: column;
-    
-}
-
-.buttonContainer button {
+.termCheckboxes button {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px 20px;
-    background-color: #6c757d;
+    padding: 10px 118px;
+    background-color: #77AAAD;
     color: white;
-    border: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
+.termCheckboxes button:hover {
+    background-color: #6E7783;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+}
+
+.buttonContainer button {
+    width: 80%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #77AAAD;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.buttonContainer button:hover {
+    background-color: #6E7783;
+}
+
 .buttonContainer button:disabled {
-    background-color: #ccc;
+    background-color: #cccccc;
     cursor: not-allowed;
 }

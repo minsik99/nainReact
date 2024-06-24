@@ -46,7 +46,7 @@
 .buttonContainer button {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px 40px;
+    padding: 10px 125px;
     background-color: #77AAAD;
     color: white;
     border: 1px solid #ddd;
@@ -66,6 +66,22 @@
 .buttonContainer p {
     font-size: 14px;
     color: #888;
+}
+
+.signupContainer button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 118px;
+    background-color: #77AAAD;
+    color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signupContainer button:hover{
+    background-color: #6E7783;
 }
 
 
