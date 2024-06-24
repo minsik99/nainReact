@@ -49,3 +49,25 @@ export const logout = () =>{
         throw error;
     });
 };
+
+// 이메일 유효성 검사 API 호출 함수 추가
+export const checkEmail = (emailData) => {
+    return axios.post(baseUrl + "/check-email", emailData), then(res => {
+        return res.data;
+    }).catch(error => {
+        console.error("이메일 유효성 검사 오류:", error.response ? error.response.data : error.message);
+        throw error;
+    });
+};
+
+// 내정보 불러오기 
+export const myinfo = (memberNo) => {
+    return axios.get(baseUrl + "/myinfo", {
+        params: {memberNo}
+    }).then(res => {
+        return res.data;
+    }).catch(error => {
+        console.error("회원정보 불러오기 오류", error.res ? error.res.data : error.message);
+        throw error;
+    });
+};
