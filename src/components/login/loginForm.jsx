@@ -39,6 +39,10 @@ const LoginForm = ({styles}) => {
         loginMutation.mutate(formData); // mutate 함수로 로그인 요청을 보냅니다.
     };
 
+    const handleSignupClick = () => {
+        router.push('/member/signUpForm');
+    }
+
     return (
     
 
@@ -76,6 +80,9 @@ const LoginForm = ({styles}) => {
                    
                 </div>
                 <KakaoLogin />
+                <div className={styles.signupContainer}>
+                    <button type='button' onClick={handleSignupClick}>회원가입</button>
+                </div>
             </form>
        
     );

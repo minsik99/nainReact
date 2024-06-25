@@ -1,0 +1,147 @@
+.myresumetitle {
+  width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.app {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 50px;
+  border: 2px solid #ccc;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+.resumeManagement {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.resumeActions {
+  margin-bottom: 20px;
+}
+
+.resumeActions button {
+  margin: 0 5px;
+  padding: 10px 20px;
+  width: 200px;
+  background-color: #77AAAD;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  position: relative;
+  left: 54.7rem;
+}
+
+.resumeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: left;
+}
+
+.resumeCard {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 200px;
+  padding: 15px;
+  position: relative;
+  text-align: center;
+}
+
+.resumeCardHeader {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.newResumeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #77AAAD;
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 50px;
+  font-size: 24px;
+  margin: 0 auto;
+  margin-bottom: 15px;
+}
+
+.resumeCardDate,
+.resumeCardStatus {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.resumeCardMenu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.resumeCardOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.resumeCardOptions button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.modalButtons button {
+  padding: 10px 20px;
+  background-color: #77AAAD;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalButtons button:last-child {
+  background-color: #777;
+}

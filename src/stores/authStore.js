@@ -4,6 +4,8 @@ import {makeAutoObservable} from 'mobx';
 class AuthStore{
     loggedIn = false;
     isAdmin = false;
+    memberNo = null;
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -18,6 +20,10 @@ class AuthStore{
 
     setIsAdmin(status){
         this.isAdmin = status;
+    }
+
+    setMemberNo(memberNo){
+        this.memberNo = memberNo;
     }
 }
 

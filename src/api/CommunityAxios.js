@@ -10,19 +10,17 @@ const COMMUNITY_URL = "/community";
 const CommunityAxios = {
     //게시글 -----------------------------------------------------------------------------------------------------------------
     //커뮤니티 전체목록 조회
-    getCommunityList(page, limit, sort) {
-        // return axios.get(`http://localhost:9999${COMMUNITY_URL}/list?page=${page}&limit=${limit}&sort=${sort}`);
-        return instance.get(COMMUNITY_URL + "/list", {
-            params : {page: page, limit: limit, sort: sort}
-        });
-    },
+    // getCommunityList(page, limit, sort) {
+    //     // return axios.get(`http://localhost:9999${COMMUNITY_URL}/list?page=${page}&limit=${limit}&sort=${sort}`);
+    //     return instance.get(COMMUNITY_URL + "/list", {
+    //         params : {page: page, limit: limit, sort: sort}
+    //     });
+    // },
 
     //내 글 목록조회
-    getMyCommunity(page, limit, sort) {
+    myInfo() {
         // return axios.get(`${COMMUNITY_URL}/mylist/?page=${page}&limit=${limit}&sort=${sort}`);
-        return instance.get(COMMUNITY_URL + '/mylist',{
-            params : {page: page, limit: limit, sort: sort}
-        });
+        return instance.get(COMMUNITY_URL + '/mylist');
     },
 
     //글 상세보기

@@ -46,13 +46,17 @@
 .buttonContainer button {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px 40px;
+    padding: 10px 125px;
     background-color: #77AAAD;
     color: white;
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.kakaoLogin {
+    cursor: pointer;
 }
 
 .buttonContainer button:hover {
@@ -64,18 +68,20 @@
     color: #888;
 }
 
-
-.kakaoLogin {
-    background-color: #fee500;
-    color: #3c1e1e;
-}
-
-.kakaoLogin button{
+.signupContainer button {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px 40px;
+    padding: 10px 118px;
+    background-color: #77AAAD;
+    color: white;
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+.signupContainer button:hover{
+    background-color: #6E7783;
+}
+
+

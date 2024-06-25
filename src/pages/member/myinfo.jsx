@@ -2,9 +2,11 @@ import React, {useEffect, useState} from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from "next/router";
 import axios from "axios";
-import styles from "../../styles/member/member.module.css";
+import { authStore } from "../../stores/authStore";
+import styles from "../../styles/member/memberMyinfo.module.css";
+import { myinfo } from "../../api/user";
 
-const myinfo = () => {
+const Myinfo = () => {
     const router = useRouter();
     const [formData, setFormData] = useState({
         memberEmail:'',
@@ -15,15 +17,13 @@ const myinfo = () => {
         subscribe: 'true'
     });
 
+    const memberNo = authStore.memberNo;
+    
     useEffect(() => {
         //서버에서 사용자 정보 가져오기
-        const fetchMemberInfo = async () => {
+        const fetchMemberInfo = () => {
         try {
-            const res = await axios.get('/api/auth/member', {
-                headers:{ 
-                     Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const res = myinfo (memberNo)
             setFormData({
                 memberEmail: res.data.email,
                 memberName: res.data.name,
@@ -81,8 +81,10 @@ const myinfo = () => {
         router.push("/");
     };
 
+    console.log(memberNo);
     return (
         <div className={styles.centerDiv}>
+           
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
@@ -168,4 +170,4 @@ const myinfo = () => {
 };
 
 
-export default myinfo;
+export default Myinfo;

@@ -1,59 +1,35 @@
-import React, { useCallback, useRef, useState, useEffect, useContext} from 'react';
-import { useMutation } from 'react-query';
+import React, {useRef, useState, useEffect, useContext, useCallback} from 'react';
 import styles from '../../styles/interview/interviewListComponent.module.css';
 import InterviewCard from './InterviewCard';
-import { getInterviewList, getInterview } from '../../api/interview';
-import { AuthContext } from '../../api/authContext';
-import CustomDropdown from '../designTool/CustomDropdown';
-import RadiusButton from '../designTool/RadiusButton';
+import { getInterviewList, getInterview } from '../../api/interview/interview';
 import useInfiniteScroll from '../hook/useInfiniteScroll';
-import useDropdown from '../hook/useDropdown';
+import InterviewResultComponent from './InterviewResult';
+import useDropdown from '../../components/hook/useDropdown';
+import CustomDropdown from '../../components/designTool/CustomDropdown';
+import useClickOutside from '../hook/useClickOutside';
 
-const InterviewListComponent = () => {
-    const {memberNo} = useContext(AuthContext);
+
+const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton, handleSelected, sort}) => {
     const containerRef = useRef(null);
-
     const [interviewList, setInterviewList] = useState([]);
+    const [selectedInterview, setSelectedInterview] = useState(null);
     const [page, setPage] = useState(1);
-    const [sortKey, setSortKey] = useState('');
     const [hasMore, setHasMore] = useState(true);
-    
     const { isDropdownVisible, toggleDropdown } = useDropdown();
-    const [isChecked, setIsChecked] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('voice');
- 
+    const size = 3;
+    const wrapperRef = useClickOutside(toggleDropdown);
+
+    const buttons = [
+        { text: 'Voice', id: 'voice' },
+        { text: 'Video', id: 'video' },
+        { text: 'Total', id: 'total' }
+    ];
+
     const loadMore = () => {
         setPage(prevPage => prevPage + 1);
     };
 
     useInfiniteScroll(containerRef, loadMore, hasMore);
-
-
-    const size = 3;
-    const sort = [{'Header': '타이틀순', 'Accessor': 'title'},
-                    {'Header': '최신순', 'Accessor': 'ivtDate'}
-    ]
-
-    const handleSelected = (button) => {
-        setSelectedButton(button);
-        
-      };
-    
-    const buttons = [
-    { text: 'Voice', id: 'voice' },
-    { text: 'Video', id: 'video' },
-    { text: 'Total', id: 'total' }
-    ];
-
-    const handleSelect = (item) => {
-        setSortKey(item ? item.Accessor : null);
-        setPage(0);
-        setInterviewList([]);
-        setHasMore(true);
-        if (isDropdownVisible) {
-            toggleDropdown();
-        }
-    };
 
     const sortData = (data, key) => {
         return [...data].sort((a, b) => {
@@ -66,18 +42,31 @@ const InterviewListComponent = () => {
         });
     };
 
+    const handleSelectInterview = useCallback((id) => {
+        console.log("확인용::::", id)
+        setSelectedInterview(id);
+    });
+
+    const handleSelect = (item) => {
+        setSortKey(item ? item.Accessor : null);
+        toggleDropdown();
+    };
+
+
     useEffect(() => {
         if (memberNo !== null) {
             const fetchInterviews = async () => {
                 try {
                     const data = await getInterviewList(page, size, memberNo);
                     const interviews = data.content;
-                    if (interviews.size < size) {
+
+                    if (interviews.length < size) {
                         setHasMore(false);
                     }
+
                     setInterviewList(prev => {
                         const newInterviews = interviews.filter(
-                            newInterview => !prev.some(
+                            newInterview => newInterview.itvNo && !prev.some(
                                 existingInterview => existingInterview.itvNo === newInterview.itvNo
                             )
                         );
@@ -93,74 +82,52 @@ const InterviewListComponent = () => {
         }
     }, [page, memberNo, sortKey]);
 
-
-    //얘는 컴포넌트로 뺄예정
-    const mutation = useMutation((ivtNoOne) => getInterview(ivtNoOne));
-
-    return (
-            <div className={styles.interviewContainer}>
-                <div className={styles.listContainer}>
-            
-                <img src="/image/sortMenu.png" onClick={toggleDropdown} className={styles.sortMenu} />
-                    {isDropdownVisible && (
-                        <div className={styles.dropdownBox}>
-                        <CustomDropdown columns={sort} onSelect={handleSelect} 
-                        header={sort.header} dropdownWidth="110px"/>
+    return (    
+        <div className={styles.interviewListContainer}>  
+            <div className={styles.listContainer}>
+                <div className={styles.menuContainer} >
+                    <img src="/image/sortMenu.png" onClick={toggleDropdown} className={styles.sortMenu} />
+                        {isDropdownVisible && (
+                            <div className={styles.dropdownBox} ref={wrapperRef}>
+                                <CustomDropdown columns={sort} onSelect={handleSelect} 
+                                header={sort.header} dropdownWidth="110px"/>
+                                </div>
+                        )}
+                </div>
+                <h2 className={styles.title}>AI 면접 분석 History</h2>
+                <div className={styles.cardContainer} ref={containerRef}>
+                    <div className={styles.addBlock}><img className={styles.img} src="/image/add.png"/></div>
+                    {interviewList.map(interview => {
+                        if (!interview.itvNo) {
+                            console.error('itvNo is undefined for interview:', interview);
+                            return null;
+                        }
+                        return (
+                            <div key={interview.itvNo} className={styles.cardBox}>
+                            <InterviewCard 
+                                key={interview.itvNo}
+                                id={interview.itvNo}
+                                title={interview.title}
+                                description={interview.itvDate}
+                                onSelect={handleSelectInterview}
+                                isSelected={selectedInterview === interview.itvNo}
+                            /> 
                         </div>
-                    )}
-                    <h2 className={styles.title}>AI 면접 분석 History</h2>
-                    <div className={styles.cardContainer} ref={containerRef}>
-                        <InterviewCard className={styles.blank} title={<img className={styles.img} src="/image/add.png"/>} />
-                        {interviewList.map(interview => (
-                            <div className={styles.cardBox} key={interview.ivtNo}>
-                                <InterviewCard 
-                                    title={interview.title}
-                                    description={interview.itvDate}
-                                    onSelect={handleSelect}
-                                />  
-                            </div>
-                        ))}
-                   <div className={styles.buttonBox}>
+                        );
+                    })}
+                    <div className={styles.buttonBox}>
                         {hasMore && (
                         <img onClick={loadMore} src="/image/arrowbutton.png" className={styles.icon} />
                         ) }
                     </div>
                 </div>
-                </div>
-                <div className={styles.graphContainer}>
-                            <div className={styles.buttonContainer}>
-                            {buttons.map((button) => (
-                                <RadiusButton
-                                key={button.id}
-                                fontColor={selectedButton === button.id ? 'white' : '#77AAAD'}
-                                color={selectedButton === button.id ? '#77AAAD' : 'white'}
-                                text={button.text}
-                                boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
-                                onClick={() => handleSelected(button.id)}
-                                />
-                            ))}
-                            </div>
-                    <div className={styles.graphBox}>
-                        <div>
-
-                        </div>
-                        <div>
-                            
-                        </div>
-                        <div>
-                            
-                        </div>
-                        <div>
-                            
-                        </div>
-
-                    </div>
+            </div>
+                <div className={styles.resultContainer}>
+                <InterviewResultComponent memberNo={memberNo} buttons={buttons} selectedButton={selectedButton} handleSelected={handleSelected} itvNo={selectedInterview} />
                 </div>
             </div>
-       
     );
-
-}
+};
 
 export default InterviewListComponent;
 
@@ -180,8 +147,8 @@ const handleOpenChang = useCallback(()=>{
 //     setIsOpen(value => !value)
 // },[])
 
-// const mutation = useMutation(ivtNoOne => {
+// const mutation = useMutation(itvNoOne => {
 //     return axios.post("http://127.0.0.1:8080/companylistsearch", 
-// { ivtNo: ivtNoOne });
+// { itvNo: itvNoOne });
 // });}
 */}

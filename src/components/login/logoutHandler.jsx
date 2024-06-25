@@ -17,7 +17,7 @@ const useLogoutHandler = (res) => {
       }
     };
   
-    return { isOpened, modalData, openModal, closeModal, handleLogoutClick };
+    return { handleLogoutClick };
   };
 
   export default useLogoutHandler;

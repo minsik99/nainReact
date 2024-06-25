@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../../styles/member/member.module.css"
+import styles from "../../styles/member/memberSignup.module.css"
 
 const KakaoSignup = () => {
     const handleSignup = () => {
@@ -11,9 +11,7 @@ const KakaoSignup = () => {
     };
 
     return (
-        <div className={styles.buttonContainer}>
-            <button onClick={handleSignup}>카카오 회원가입</button>
-        </div>
+        <img className={styles.kakaoSignup} src='/image/kakaoSignup.png' onClick={handleSignup} />
     );
 };
 

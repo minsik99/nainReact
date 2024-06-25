@@ -20,8 +20,11 @@ export const login = (loginData) => {
                 const pureToken = token.split(' ')[1];
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
-                window.localStorage.setItem("refresh", response.data.refresh)
-                authStore.setIsAdmin(response.data.isAdmin)
+                window.localStorage.setItem("refresh", response.data.refresh);
+                console.log(response.data.memberNo)
+                authStore.setIsAdmin(response.data.isAdmin);
+                authStore.setMemberNo(response.data.memberNo);
+               
                 authStore.checkLoggedIn()
                 
             }
@@ -43,6 +46,28 @@ export const logout = () =>{
     .catch(error => {
         console.error("로그아웃 오류:", error.response ? error.response.data : error.message);
         // 에러 메시지나 상세 정보를 반환하거나 추가 처리
+        throw error;
+    });
+};
+
+// 이메일 유효성 검사 API 호출 함수 추가
+export const checkEmail = (emailData) => {
+    return axios.post(baseUrl + "/check-email", emailData), then(res => {
+        return res.data;
+    }).catch(error => {
+        console.error("이메일 유효성 검사 오류:", error.response ? error.response.data : error.message);
+        throw error;
+    });
+};
+
+// 내정보 불러오기 
+export const myinfo = (memberNo) => {
+    return axios.get(baseUrl + "/myinfo", {
+        params: {memberNo}
+    }).then(res => {
+        return res.data;
+    }).catch(error => {
+        console.error("회원정보 불러오기 오류", error.res ? error.res.data : error.message);
         throw error;
     });
 };
