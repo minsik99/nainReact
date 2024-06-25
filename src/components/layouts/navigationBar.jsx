@@ -57,7 +57,7 @@ const NavigationBar = observer(() => {
               <ul style={{ marginBottom: "0px" }}>
                 <li>
                   <Link href="/resume" passHref legacyBehavior>
-                    <a style={{ marginRight: "10px" }}>이력서 매니저</a>
+                    <a style={{ marginRight: "15px" }}>이력서 매니저</a>
                   </Link>
                   <div className="submenu">
                     <Link href="/resume/MyResumeInsert" passHref legacyBehavior>

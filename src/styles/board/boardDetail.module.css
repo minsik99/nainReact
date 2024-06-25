@@ -5,7 +5,8 @@
 
 .base h2{
     margin-top: 50px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-left: 0.5rem;
     width: 100%;
     font-weight: bold;
 }
@@ -17,6 +18,12 @@
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.commentContainer {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .header {
@@ -79,19 +86,17 @@
     display: flex;
     justify-content: space-between;
     width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    gap: 10px;
+    margin: 10px;
 }
 
 .buttons img {
-    margin-right: 10px;
     height: 40px;
     cursor: pointer;
 }
 
 .base h4{
-    margin-top: 25px;
+    margin-top: 30px;
+    margin-left: 2.5rem;
     width: 100%;
     font-weight: bold;
 }
@@ -99,57 +104,96 @@
 .commentEnroll{
     display: flex;
     justify-content: space-between;
-    width: 95%;
-    margin: 0 auto;
-    padding: 20px;
+    width: 90%;
     gap: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
 }
+
+.commentEnroll button{
+    width: 100px;
+    height: 100px;
+}
+
+.childArrow {
+    height: 50px;
+}
+
+
+.childCommentButton {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+.childCommentButton button{
+    text-align: center;
+    vertical-align: middle;
+    width: 5%;
+    height: 2%;
+}
+
 
 .commentBox {
     margin-left: 1rem;
     text-align: left;
     width: 85%;
-    min-height: 150px;
     padding: 15px; /* 내부 여백 */
     border-radius: 8px; /* 둥근 테두리 반경 */
 }
 
-.commentParent{
-    width: 87%;
-    min-height: 100px;
-    gap: 10px;
-    margin: 0 auto;
-    margin-top: 10px;
+/* 대댓글 작성 태그 */
+.commentBoxChild {
+    margin-right: -3%;
+    width: 100%;
+    position: relative;
 }
 
-.commentChild{
-    display: flex;
-    justify-content: space-between;
-    width: 87%;
+.commentBoxChild textArea{
+    width: 95%;
     min-height: 100px;
-    gap: 10px;
-    margin: 0 auto;
-    margin-top: 10px;
+    padding: 10px; /* 내부 여백 */
+    border-radius: 8px; /* 둥근 테두리 반경 */
 }
 
+.close {
+    position: absolute;
+    top: 5.5%;
+    right: 5.5%;
+    cursor: pointer;
+}
+
+/* 대댓글 부모태그 */
 .underComment{
     width: 1000px;
 }
 
+/* 댓글 작성자+신고+작성날짜 */
 .commentInfo{
     display: flex;
     justify-content: space-between;
 }
 
-.commentChild p {
-    background-color: #f9f9f9;
-    border: none; /* 테두리 제거 */
-    padding: 10px;
-    border-radius: 10px;
+.commentInfo2{
+    display: flex;
+}
+.commentInfo2 img{
+    position: relative;
+    margin-left: 10px;
+    margin-top: 8px;
+    height: 30px;
+    cursor: pointer;
 }
 
-.commentChild img {
-    height: 50px;
+/* 댓글 부모태그 */
+.commentParent{
+    width: 90%;
+    min-height: 100px;
+    gap: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
 }
 
 .commentParent p {
@@ -159,10 +203,50 @@
     border-radius: 10px;
 }
 
+/* 대댓글 부모태그 */
+.commentChild{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    min-height: 100px;
+    gap: 10px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.commentChild p {
+    background-color: #f9f9f9;
+    border: none; /* 테두리 제거 */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.underArrow {
+    height: 50px;
+}
+
+
+
 .commentContent {
     background-color: #f9f9f9;
     border: none; /* 테두리 제거 */
-    min-height: 100px;
+    width: 100%;
+    min-height: 80px;
     padding: 15px;
     border-radius: 10px;
+    position: relative;
+}
+
+/* 댓글 내용 + 버튼(신고, 삭제) */
+.commentInner {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+/*  */
+.innerBtns {
+    position: absolute;
+    right: 1%;
+    cursor: pointer;
 }

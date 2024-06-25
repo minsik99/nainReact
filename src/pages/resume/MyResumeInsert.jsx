@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styles from '../../styles/resume/MyResumeInsert.module.css';
-import RadiusButton from '../../components/designTool/RadiusButton';
 
 const MyResumeInsert = () => {
     const router = useRouter();
@@ -135,7 +134,7 @@ const MyResumeInsert = () => {
             alert(errorMessage);
             return;
         }
-        
+
         try {
             // resume 객체 복사
             const modifiedResume = {
@@ -210,8 +209,8 @@ const MyResumeInsert = () => {
             <h1>이력서 작성하기</h1>
             <form>
                 <div>
-                    <label>직무 카테고리</label>
-                    <select name="jobCategory" value={resume.jobCategory} onChange={handleChange}>
+                    <label>직무 카테고리</label><p />
+                    <select name="jobCategory" value={resume.jobCategory} className={styles.jobCateory} onChange={handleChange}>
                         <option value="">직무 카테고리를 선택하세요</option>
                         <option value="웹 개발자">웹 개발자</option>
                         <option value="프론트엔드 개발자">프론트엔드 개발자</option>
@@ -225,6 +224,7 @@ const MyResumeInsert = () => {
                     <label>이력서 제목</label>
                     <input type="text" name="title" value={resume.title} onChange={handleChange} />
                 </div>
+
 
                 <label>기본 정보</label>
                 <div className={styles.resumebasic}>
@@ -241,6 +241,7 @@ const MyResumeInsert = () => {
                         <input type="tel" name="phone" value={resume.phone} onChange={handleChange} />
                     </div>
                 </div>
+                &nbsp;
 
                 <div>
                     <label>자기 소개서</label>
@@ -250,12 +251,17 @@ const MyResumeInsert = () => {
 
                 <div>
                     <label>경력</label>
-                    <button type="button" className={styles.addButton} onClick={addExperience}>추가</button>
+                    <button type="button" className={styles.addButton} onClick={addExperience}>
+                        <img src="/image/MyResumeInsertPlus.png" alt="추가" className={styles.addButtonImage} />
+                    </button>
+
                     {resume.experience.map(exp => (
                         <div key={exp.id} className={styles.experience}>
                             <div className={styles.header}>
                                 <span>경력 세부사항</span>
-                                <RadiusButton color="#9DC3C1" padding="7px" onClick={() => removeExperience(exp.id)} text="x" />
+                                <button type="button" className={styles.removeButton} onClick={() => removeExperience(exp.id)}>
+                                    <img src="/image/MyResumeInsertDelete.png" alt="삭제" className={styles.removeButtonImage} />
+                                </button>
                             </div>
                             <div className={styles.checkbox}>
                                 <span>현재 근무중</span>
@@ -280,12 +286,16 @@ const MyResumeInsert = () => {
 
                 <div>
                     <label>학력</label>
-                    <button type="button" className={styles.addButton} onClick={addEducation}>추가</button>
+                    <button type="button" className={styles.addButton} onClick={addEducation}>
+                        <img src="/image/MyResumeInsertPlus.png" alt="추가" className={styles.addButtonImage} />
+                    </button>
                     {resume.education.map(edu => (
                         <div key={edu.id} className={styles.education}>
                             <div className={styles.header}>
                                 <span>학력 세부사항</span>
-                                <RadiusButton color="#9DC3C1" padding="7px" onClick={() => removeEducation(edu.id)} text="x" />
+                                <button type="button" className={styles.removeButton} onClick={() => removeEducation(edu.id)}>
+                                    <img src="/image/MyResumeInsertDelete.png" alt="삭제" className={styles.removeButtonImage} />
+                                </button>
                             </div>
                             <div className={styles.checkbox}>
                                 <span>현재 재학중</span>
@@ -309,12 +319,16 @@ const MyResumeInsert = () => {
 
                 <div>
                     <label>활동 및 기타</label>
-                    <button type="button" className={styles.addButton} onClick={addActivity}>추가</button>
+                    <button type="button" className={styles.addButton} onClick={addActivity}>
+                        <img src="/image/MyResumeInsertPlus.png" alt="추가" className={styles.addButtonImage} />
+                    </button>
                     {resume.activity.map(act => (
                         <div key={act.id} className={styles.activity}>
                             <div className={styles.header}>
                                 <span>활동 및 기타 세부사항</span>
-                                <RadiusButton color="#9DC3C1" padding="7px" onClick={() => removeActivity(act.id)} text="x" />
+                                <button type="button" className={styles.removeButton} onClick={() => removeActivity(act.id)}>
+                                    <img src="/image/MyResumeInsertDelete.png" alt="삭제" className={styles.removeButtonImage} />
+                                </button>
                             </div>
                             <input type="text" name="activityName" placeholder="활동명 및 기타명" value={act.activityName} onChange={(e) => handleactChange(act.id, e)} />
                             <input type="text" name="organizer" placeholder="주최기관" value={act.organizer} onChange={(e) => handleactChange(act.id, e)} />
