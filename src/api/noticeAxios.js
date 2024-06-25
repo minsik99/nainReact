@@ -4,7 +4,6 @@ import instance from "./axiosApi";
 const NOTICE_URL = "/notice";
 
 const noticeAxios = {
-    //게시글 -----------------------------------------------------------------------------------------------------------------
     //전체목록 조회
     getNoticeList(page, limit, sort) {
         return instance.get(NOTICE_URL + "/list", {
@@ -17,7 +16,7 @@ const noticeAxios = {
         return instance.get(NOTICE_URL + '/detail',{
             params : {noticeNo: noticeNo}
         });
-    },
+    }, 
 
     //게시글 검색
     searchNotice(type, keyword, page, limit, sort) {

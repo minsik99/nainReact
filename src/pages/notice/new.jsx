@@ -8,8 +8,8 @@ import { useRouter } from 'next/router';
 
 
 const NewBoard = () => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState(''); 
+    const [noticeTitle, setNoticeTitle] = useState('');
+    const [noticeContent, setNoticeContent] = useState(''); 
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
 
@@ -53,8 +53,8 @@ const NewBoard = () => {
           <div>
             <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={noticeTitle}
+            onChange={(e) => setNoticeTitle(e.target.value)}
             placeholder="제목을 입력하세요"
             style={{ width: '100%', padding: '10px', marginBottom: '20px' }}
             />
@@ -69,7 +69,7 @@ const NewBoard = () => {
               onChange={(event, editor) => {
               const data = editor.getData();
               console.log(data);
-              setContent(data);
+              setNoticeContent(data);
               }}
               onBlur={(event, editor) => {
               console.log('Blur.', editor);
