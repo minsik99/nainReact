@@ -105,9 +105,7 @@ const CommunityAxios = {
     //댓글 삭제값 추가
     deleteComment(commentNo, comment){
         // return axios.put(`${COMMUNITY_URL}/comment/del/${commentNo}`, comment)
-        return instance.put(COMMUNITY_URL + '/comment/del',{
-            params : {commentNo: commentNo, comment: comment}
-        });
+        return instance.put(COMMUNITY_URL + `/comment/del/${commentNo}`, comment);
     },
 
     //댓글 DB삭제
