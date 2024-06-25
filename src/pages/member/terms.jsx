@@ -102,26 +102,26 @@ const Terms = () => {
             <div className={styles.termCheckboxes}>
                 <div className={styles.termChecked}>
                     <input type='checkbox' name="term1" checked={termsAgreed.term1} onChange={handleCheckboxChange} />
-                    이용 약관 1에 동의합니다.
+                    [필수] 이용약관 동의
                 </div>
                 <button onClick={handleAgreeTerm1}>확인</button>
                 <br />
 
                 <div className={styles.termChecked}>
                     <input type='checkbox' name="term2" checked={termsAgreed.term2} onChange={handleCheckboxChange} />
-                    이용 약관 2에 동의합니다.
+                    [필수] 개인정보 이용 수집 방침
                 </div>
                 <button onClick={handleAgreeTerm2}>확인</button>
                 <br />
 
                 <div className={styles.termChecked}>
                     <input type='checkbox' name="term3" checked={termsAgreed.term3} onChange={handleCheckboxChange} />
-                    이용 약관 3에 동의합니다.
+                    [필수] 개인정보 제3자 제공 동의
                 </div>
                 <button onClick={handleAgreeTerm3}>확인</button>
                 <div className={styles.termChecked}>
                     <input type='checkbox' checked={allTermsChecked} onChange={handleAllTermsChange} />
-                    전체 동의합니다.
+                    이용약관 전체 동의
                 </div>
                 <button onClick={handleAgreeTerm4}>전체 동의</button>
                 

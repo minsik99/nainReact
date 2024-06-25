@@ -9,6 +9,8 @@ const LoginSuccess = () => {
     const router = useRouter();
    
     useEffect(() => {
+        if(!router.isReady) return;
+
         const { access, refresh, isAdmin, memberNo } = router.query;
  
 
@@ -23,7 +25,7 @@ const LoginSuccess = () => {
             console.log("MemberNo:", memberNo);
 
             // 원하는 페이지로 리다이렉트합니다.
-            router.push('/');
+            router.push('/main');
         } else {
             console.log("쿼리 파라미터가 없습니다.");
         }

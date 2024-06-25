@@ -21,21 +21,26 @@ const Myinfo = () => {
     
     useEffect(() => {
         //서버에서 사용자 정보 가져오기
-        const fetchMemberInfo = () => {
+        const fetchMemberInfo = async () => {
         try {
-            const res = myinfo (memberNo)
+            const res = await myinfo(memberNo)
             setFormData({
-                memberEmail: res.data.email,
-                memberName: res.data.name,
-                memberNickName: res.data.nickName,
-                subscribe: res.data.subscribe.toString()
+                memberEmail: res.memberEmail,
+                memberName: res.memberName,
+                memberNickName: res.memberNickName,
+                subscribe: res.subscribe.toString()
             });
         } catch(error) {
             console.error('Error fetching member info:', error);
         }
     };
-    fetchMemberInfo();
-}, []);
+
+    if(memberNo){
+        fetchMemberInfo();
+    } else{
+        console.log("memberNo is null");
+    }
+}, [memberNo]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -162,7 +167,7 @@ const Myinfo = () => {
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
                         <button type="submit">수정</button>
                     )}
-                        <button id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
+                        <button type="button" id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
                 </div>
             </form>
         </div>
