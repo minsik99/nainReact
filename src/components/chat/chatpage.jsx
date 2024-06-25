@@ -44,6 +44,12 @@ const ChatRoomsPage = () => {
         }
     };
 
+
+    // 임시 페이지 전환
+    const moveChatList = () => {
+        router.push('/chat/ChatList');
+    }
+
     return (
         <div>
             <h1>Chat Rooms</h1>
@@ -65,6 +71,9 @@ const ChatRoomsPage = () => {
                     </div>
                 ))}
             </div>
+
+            {/* 임시 페이지 전환 */}
+            <button type="button" onClick={moveChatList}>chatList 이동</button>
         </div>
     );
 };
