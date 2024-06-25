@@ -157,7 +157,7 @@ const AdminGrid = () => {
       </div>
       <div
         className={`ag-theme-balham ${styles.customGrid}`}
-        style={{ height: 600, width: "100%", marginTop: "20px" }}
+        style={{ height: 1000, width: "100%", marginTop: "20px" }}
       >
         <AgGridReact
           rowData={rowData}
@@ -177,7 +177,7 @@ const AdminGrid = () => {
           onGridReady={onGridReady}
           rowSelection="multiple"
           pagination={true}
-          paginationPageSize={10}
+          paginationPageSize={20}
           rowHeight={50} // 행 높이 설정
           headerHeight={50} // 타이틀 행 높이 설정
           floatingFiltersHeight={50} // 검색 행 높이 설정

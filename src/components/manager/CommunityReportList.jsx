@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ReportList.module.css";
-import { getCommunityReport } from "../../api/ReportAxios";
+import {
+  getCommunityReport,
+  getCommunityReportCount,
+  processDeletePost,
+  processBlockAccount,
+} from "../../api/ReportAxios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CommunityReportList = () => {
   const [reports, setReports] = useState([]);
+  const [reportCounts, setReportCounts] = useState([]);
   const [expandedRow, setExpandedRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({
@@ -12,19 +20,35 @@ const CommunityReportList = () => {
   });
   const [blockAccount, setBlockAccount] = useState({});
   const [deletePost, setDeletePost] = useState({});
+  const [showUnprocessedOnly, setShowUnprocessedOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [reportStartDate, setReportStartDate] = useState(null);
+  const [reportEndDate, setReportEndDate] = useState(null);
+  const [handledStartDate, setHandledStartDate] = useState(null);
+  const [handledEndDate, setHandledEndDate] = useState(null);
 
   useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const data = await getCommunityReport();
-        setReports(data || []);
-      } catch (error) {
-        console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
-      }
-    };
-
     fetchReports();
+    fetchReportCounts();
   }, []);
+
+  const fetchReports = async () => {
+    try {
+      const data = await getCommunityReport();
+      setReports(data || []);
+    } catch (error) {
+      console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+    }
+  };
+
+  const fetchReportCounts = async () => {
+    try {
+      const data = await getCommunityReportCount();
+      setReportCounts(data || []);
+    } catch (error) {
+      console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+    }
+  };
 
   const toggleRow = (id) => {
     setExpandedRow(expandedRow === id ? null : id);
@@ -38,12 +62,108 @@ const CommunityReportList = () => {
     }
   };
 
-  const handleProcess = (id) => {
-    console.log("처리:", id, blockAccount[id], deletePost[id]);
+  const handleProcess = async (report) => {
+    try {
+      const adminId = 1; // 실제 admin ID 사용
+      const block = blockAccount[report.communityReportId] || false;
+      const del = deletePost[report.communityReportId] || false;
+
+      if (block) {
+        try {
+          await processBlockAccount(
+            report.communityReportId,
+            adminId,
+            "차단 사유를 여기에 입력하세요"
+          );
+          alert("계정 차단이 성공적으로 처리되었습니다.");
+        } catch (error) {
+          console.error("계정 차단 중 오류가 발생했습니다.", error);
+          alert("계정 차단 처리 중 오류가 발생했습니다.");
+        }
+      }
+
+      if (del) {
+        try {
+          await processDeletePost(
+            report.communityReportId,
+            adminId,
+            report.communityNo
+          );
+          alert("글 삭제가 성공적으로 처리되었습니다.");
+        } catch (error) {
+          console.error("글 삭제 중 오류가 발생했습니다.", error);
+          alert("글 삭제 처리 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 글 삭제나 계정 차단을 하지 않더라도 처리 상태 업데이트
+      if (!block && !del) {
+        await processBlockAccount(
+          report.communityReportId,
+          adminId,
+          "처리 사유를 여기에 입력하세요"
+        );
+      }
+
+      // 데이터 갱신
+      await fetchReports();
+      await fetchReportCounts();
+    } catch (error) {
+      console.error("처리 중 오류가 발생했습니다.", error);
+      alert("처리 중 오류가 발생했습니다.");
+    }
   };
 
   const itemsPerPage = 20;
-  let sortedReports = [...reports];
+  let filteredReports = [...reports];
+
+  if (showUnprocessedOnly) {
+    filteredReports = filteredReports.filter(
+      (report) => report.communityReportHandledYN !== "Y"
+    );
+  }
+
+  if (searchQuery) {
+    filteredReports = filteredReports.filter((report) => {
+      const searchRegex = new RegExp(searchQuery, "i");
+      return (
+        searchRegex.test(report.communityReportMemberEmail) ||
+        searchRegex.test(report.communityReportMemberName) ||
+        searchRegex.test(report.communityReportAdminName)
+      );
+    });
+  }
+
+  if (reportStartDate || reportEndDate) {
+    filteredReports = filteredReports.filter((report) => {
+      const reportDate = new Date(report.communityReportDate);
+      if (reportStartDate && reportEndDate) {
+        return reportDate >= reportStartDate && reportDate <= reportEndDate;
+      } else if (reportStartDate) {
+        return reportDate >= reportStartDate;
+      } else if (reportEndDate) {
+        return reportDate <= reportEndDate;
+      }
+      return true;
+    });
+  }
+
+  if (handledStartDate || handledEndDate) {
+    filteredReports = filteredReports.filter((report) => {
+      if (!report.communityReportHandledDate) return false;
+      const handledDate = new Date(report.communityReportHandledDate);
+      if (handledStartDate && handledEndDate) {
+        return handledDate >= handledStartDate && handledDate <= handledEndDate;
+      } else if (handledStartDate) {
+        return handledDate >= handledStartDate;
+      } else if (handledEndDate) {
+        return handledDate <= handledEndDate;
+      }
+      return true;
+    });
+  }
+
+  let sortedReports = [...filteredReports];
 
   if (sortConfig.key) {
     sortedReports.sort((a, b) => {
@@ -76,6 +196,53 @@ const CommunityReportList = () => {
 
   return (
     <div className={styles.reportListTableContainer}>
+      <div className={styles.tableHeader}>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="검색어를 입력하세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <div className={styles.dateRange}>
+          <DatePicker
+            selected={reportStartDate}
+            onChange={(date) => setReportStartDate(date)}
+            placeholderText="신고 시작 날짜"
+            className={styles.datePicker}
+          />
+          <p> ~ </p>
+          <DatePicker
+            selected={reportEndDate}
+            onChange={(date) => setReportEndDate(date)}
+            placeholderText="신고 종료 날짜"
+            className={styles.datePicker}
+          />
+        </div>
+        <div className={styles.dateRange}>
+          <DatePicker
+            selected={handledStartDate}
+            onChange={(date) => setHandledStartDate(date)}
+            placeholderText="처리 시작 날짜"
+            className={styles.datePicker}
+          />
+          <p> ~ </p>
+          <DatePicker
+            selected={handledEndDate}
+            onChange={(date) => setHandledEndDate(date)}
+            placeholderText="처리 종료 날짜"
+            className={styles.datePicker}
+          />
+        </div>
+        <label className={styles.showUnprocessedOnly}>
+          미처리 건만 보기
+          <input
+            type="checkbox"
+            checked={showUnprocessedOnly}
+            onChange={() => setShowUnprocessedOnly(!showUnprocessedOnly)}
+          />
+        </label>
+      </div>
       <table className={styles.reportListTable}>
         <thead>
           <tr>
@@ -99,7 +266,7 @@ const CommunityReportList = () => {
                 onClick={() => toggleRow(report.communityReportId)}
                 className={styles.reportRow}
               >
-                <td>{report.communityReportId}</td>
+                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                 <td>
                   {new Date(report.communityReportDate).toLocaleDateString()}
                 </td>
@@ -117,11 +284,20 @@ const CommunityReportList = () => {
                         <strong>내용:</strong> {report.communityContents}
                       </div>
                       <div className={styles.detailRow}>
-                        <div className={styles.detailColumn}>
-                          <span>
-                            <strong>신고사유:</strong>{" "}
-                            {report.communityReportType}
-                          </span>
+                        <div className={styles.reportCounts}>
+                          <strong>신고 사유:</strong>
+                          <ul>
+                            {reportCounts
+                              .filter(
+                                (count) =>
+                                  count.communityNo === report.communityNo
+                              )
+                              .map((count, index) => (
+                                <li key={index}>
+                                  {count.reportType} : {count.reportCount}건
+                                </li>
+                              ))}
+                          </ul>
                         </div>
                         <div className={styles.detailColumn}>
                           <span>
@@ -130,7 +306,7 @@ const CommunityReportList = () => {
                               ? new Date(
                                   report.communityReportHandledDate
                                 ).toLocaleDateString()
-                              : "N/A"}
+                              : "없음"}
                           </span>
                           <span>
                             <strong>처리자:</strong>{" "}
@@ -138,6 +314,7 @@ const CommunityReportList = () => {
                           </span>
                         </div>
                       </div>
+
                       <div className={styles.checkboxContainer}>
                         <label className={styles.customCheckbox}>
                           계정차단
@@ -172,7 +349,7 @@ const CommunityReportList = () => {
                       </div>
                       <button
                         className={styles.processButton}
-                        onClick={() => handleProcess(report.communityReportId)}
+                        onClick={() => handleProcess(report)}
                       >
                         처리
                       </button>
@@ -186,7 +363,7 @@ const CommunityReportList = () => {
       </table>
       <div className={styles.pagination}>
         {Array.from(
-          { length: Math.ceil(reports.length / itemsPerPage) },
+          { length: Math.ceil(filteredReports.length / itemsPerPage) },
           (_, i) => (
             <button
               key={i + 1}

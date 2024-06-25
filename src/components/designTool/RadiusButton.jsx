@@ -18,7 +18,7 @@ const RadiusButton = ({
     border: "none",
     boxShadow: boxShadow,
     borderRadius: borderRadius || "10px",
-    color: fontColor|| "#fff",
+    color: fontColor || "#fff",
     cursor: "pointer",
     fontWeight: "600",
     fontSize: fontSize || "14px",
@@ -40,16 +40,6 @@ RadiusButton.propTypes = {
   fontSize: PropTypes.string,
   fontColor: PropTypes.string,
   borderRadius: PropTypes.string,
-};
-
-RadiusButton.defaultProps = {
-  padding: "12px 24px",
-  color: "#007bff",
-  onClick: () => {
-    alert("뭘봐");
-  },
-  fontSize: "14px",
-  borderRadius: "10px",
 };
 
 export default RadiusButton;

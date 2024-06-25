@@ -16,7 +16,6 @@
 .reportListTable td {
   padding: 10px;
   border-bottom: 1px solid #d4d4d4;
-  cursor: pointer;
 }
 
 .reportListTable td {
@@ -30,6 +29,7 @@
   font-size: 16px;
   position: relative;
   border-bottom: 1px solid #d4d4d4;
+  cursor: pointer;
 }
 
 .reportListTable th:hover {
@@ -161,4 +161,65 @@
   border-radius: 3px;
   width: 100%;
   margin-top: 10px;
+}
+
+.showUnprocessedOnly {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #77aaad;
+  margin: 0px 20px;
+}
+
+.showUnprocessedOnly input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+}
+
+.showUnprocessedOnly input[type="checkbox"]:checked {
+  background-color: #ffffff;
+  border: 1px solid #77aaad;
+}
+
+.showUnprocessedOnly input[type="checkbox"]:checked::before {
+  content: "✔";
+  display: block;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-size: 16px;
+  position: absolute;
+  bottom: 2px;
+  right: -2px;
+}
+
+.searchInput,
+.datePicker {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dateRange {
+  display: flex;
+  gap: 10px;
+  margin: 0px 40px;
 }

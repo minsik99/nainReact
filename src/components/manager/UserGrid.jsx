@@ -8,7 +8,7 @@ import {
   updateSubscribeStatus,
   removeSubscribeStatus,
 } from "../../api/userManager";
-import RadiusButton from "../designTool/radiusButton";
+import RadiusButton from "../designTool/RadiusButton";
 import Modal from "../designTool/modal";
 
 const UserGrid = () => {
@@ -214,7 +214,7 @@ const UserGrid = () => {
         </div>
         <div
           className={`ag-theme-balham ${styles.customGrid}`}
-          style={{ height: 600, width: "100%", marginTop: "20px" }}
+          style={{ height: 1000, width: "100%", marginTop: "20px" }}
         >
           <AgGridReact
             rowData={rowData}
@@ -235,7 +235,7 @@ const UserGrid = () => {
             onGridReady={onGridReady}
             rowSelection="multiple"
             pagination={true}
-            paginationPageSize={10}
+            paginationPageSize={20}
             rowHeight={50}
             headerHeight={50}
             floatingFiltersHeight={50}
