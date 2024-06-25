@@ -6,11 +6,13 @@ const CommentDetail = ({ comment, styles }) => {
     const [showInput, setShowInput] = useState(false);
     const [isParent, setIsParent] = useState(true);
     const [content, setContent] = useState('');
+    const [isMine, setIsMine] = useState(false);
 
     useEffect(() => {
         if (comment.parentNo !== null) {
             setIsParent(false);
         }
+        // if(comment.memberNo = )
     }, [comment]);
 
     const insertChild = () => {
@@ -37,6 +39,10 @@ const CommentDetail = ({ comment, styles }) => {
         setContent(event.target.value);
     };
 
+    const delComment = () => {
+
+    };
+
     return (
         <div>
             {isParent ? (
@@ -50,13 +56,24 @@ const CommentDetail = ({ comment, styles }) => {
                             dangerouslySetInnerHTML={{ __html: comment.content }} />
                     </div>
                     {!showInput && (
-                        <RadiusButton color="#77AAAD" text="댓글 쓰기" onClick={() => setShowInput(true)} />
+                        <div className={styles.childCommentButton}>
+                            <div>
+                                {isMine && (
+                                <RadiusButton color="#77AAAD" text="삭제" onClick={delComment} />
+                                )}
+                            </div>
+                            <RadiusButton color="#77AAAD" text="댓글 쓰기" onClick={() => setShowInput(true)} />
+                        </div>
                     )}
                     {showInput && (
                         <div className={styles.commentEnroll}>
-                            <textarea className={styles.commentBox} placeholder="댓글 입력"
+                            <img className={styles.childArrow} src="/image/comment.png" alt="comment" />
+                            <div className={styles.commentBoxChild}>
+                            <textarea  placeholder="댓글 입력"
                                 value={content} onChange={handleComment} />
-                            <RadiusButton color="#77AAAD" text="댓글 등록" onClick={insertChild} />
+                            <img className={styles.close} src="/image/pngegg11.png" onClick={() => setShowInput(false)}/>
+                            </div>
+                            <RadiusButton color="#77AAAD" padding="5px 20px" text="등록" onClick={insertChild} />
                         </div>
                     )}
                 </div>

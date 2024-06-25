@@ -147,12 +147,13 @@ const NewBoard = () => {
         try {
           // 글 작성 비동기 처리
           const createCommunityResponse = await CommunityAxios.createCommunity(community);
+          const communityNo = community.communityNo;
           setShowModal(true); // 성공 모달 열기
           setTimeout(() => {
             setShowModal(false); // 모달 닫기
             router.push({
               pathname: '/community/detail',
-              query: {communityNo: community.communityNo},
+              query: {communityNo: communityNo},
             }); // 페이지 이동
           }, 500); // 
         } catch (error) {

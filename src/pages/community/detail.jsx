@@ -22,6 +22,7 @@ const BoardDetail = () => {
         fileModified: '',
         readCount : '',
     });
+    const [comments, setComments] = useState([]);
     const [date, setDate] = useState('');
     const [modifiedDate, setModifiedDate] = useState('');
     const [reportOpen, setReportOpen] = useState(false);
@@ -29,29 +30,34 @@ const BoardDetail = () => {
     console.log("가져온 정보", board);
     useEffect(() => {
         if (communityNo) {
-            // 게시글 데이터 조회
-            console.log("커뮤니티 no 확인", communityNo)
             CommunityAxios.getCommunityDetail(communityNo)
                 .then(res => {
-                    const enroll = new Date(res.data.communityDate);
-                    const modi = new Date(res.data.modifiedDate);
+                    const community = res.data.communityDto
+                    const enroll = new Date(community.communityDate);
+                    const modi = new Date(community.modifiedDate);
                     setDate(enroll.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
                     setModifiedDate(modi.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
 
                     setBoard({
-                        communityNo : communityNo,
-                        title: res.data.title,
-                        writer: res.data.writer,
-                        communityDate: res.data.communityDate,
-                        modifiedDate: res.data.modifiedDate ? res.data.modifiedDate : null,
-                        content: res.data.content,
-                        fileName: res.data.fileUpload,
-                        fileModified: res.data.fileModified,
-                        readCount: res.data.readCount,
+                        communityNo: communityNo,
+                        title: community.title,
+                        writer: community.writer,
+                        communityDate: community.communityDate,
+                        modifiedDate: community.modifiedDate ? community.modifiedDate : null,
+                        content: community.content,
+                        fileName: community.fileUpload,
+                        fileModified: community.fileModified,
+                        readCount: community.readCount,
                     });
+                    setComments(res.data.list);
+                })
+                .catch(error => {
+                    console.error("Failed to fetch community detail:", error);
                 });
         }
     }, [communityNo]);
+
+    
 
     const downloadFile = () => {
         CommunityAxios.getFile(board.fileModified).then(res => {
@@ -119,33 +125,26 @@ const BoardDetail = () => {
                             <p>수정날짜 : {modifiedDate}</p>
                         )}
                         </span>
-                        
                     </div>
-
                 </div>
                 <div className={styles.content} dangerouslySetInnerHTML={{ __html: board.content }} />
-                {board.fileName && (
+                    {board.fileName && (
                         <div>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{board.fileName}</a></div>
                     )}
-            </div>
-            {/* {OwnBoard ? ( */}
+                </div>
                 <div className={styles.buttons}>
                     <RadiusButton color="#77AAAD" text="삭제" onClick={deleteBoard} />
                     {showModal && (
-                <div className="modal">
-                <div className="modal-content">
-                    <h5>게시글을 삭제하였습니다.</h5>
-                </div>
-            </div>
+                        <div className="modal">
+                        <div className="modal-content">
+                                <h5>게시글을 삭제하였습니다.</h5>
+                            </div>
+                        </div>
                     )}
                     <RadiusButton color="#77AAAD" text="수정" onClick={modifyBoard} />
                 </div>
-            {/* ) : (
-                <div></div>
-            )} */}
-
             <h4>댓글</h4>
-            <Comment communityNo={communityNo} styles={styles} />
+            <Comment comments={comments} communityNo={board.communityNo} styles={styles} />
         </div>
     );
 };

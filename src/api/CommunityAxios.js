@@ -26,9 +26,7 @@ const CommunityAxios = {
     //글 상세보기
     getCommunityDetail(communityNo) {
         // return axios.get(`${COMMUNITY_URL}/detail/${communityNo}`);
-        return instance.get(COMMUNITY_URL + '/detail',{
-            params : {communityNo: communityNo}
-        });
+        return instance.get(COMMUNITY_URL + `/detail/${communityNo}`);
     },
 
     getFile(fileName){
