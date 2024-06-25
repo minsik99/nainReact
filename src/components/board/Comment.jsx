@@ -3,27 +3,13 @@ import CommunityAxios from "../../api/CommunityAxios";
 import RadiusButton from '../designTool/RadiusButton';
 import CommentDetail from './CommentDetail';
 
-const Comment = ({communityNo, styles}) => {
-    const [comments, setComments] = useState([]);
+const Comment = ({comments, communityNo, styles}) => {
     const [showModal, setShowModal] = useState(false);
     const [content, setContent] = useState('');
-
-
-    useEffect(() => {
-        CommunityAxios.getCommentList(communityNo)
-            .then(res => {
-                setComments(res.data);
-                console.log(comments);
-            })
-            .catch(error => {
-                console.error('Error fetching comment:', error);
-            });
-    }, [communityNo]);
 
     const handleComment = (event) => {
       setContent(event.target.value);
     };
-
 
     const insertComment = () =>{
       const newComment = {
@@ -41,11 +27,11 @@ const Comment = ({communityNo, styles}) => {
     };
 
     return (
-    <div>
+    <div className={styles.commentContainer}>
         <div className={styles.commentEnroll}>
           <textarea className={styles.commentBox} placeholder="댓글 입력" 
           value={content} onChange={handleComment}/>
-          <RadiusButton color="#77AAAD" text="댓글 등록" onClick={insertComment}></RadiusButton>
+          <RadiusButton color="#77AAAD" padding="5px 30px" text="등록" onClick={insertComment}></RadiusButton>
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
@@ -57,7 +43,7 @@ const Comment = ({communityNo, styles}) => {
         <div>
           {comments.map(comment => {
             console.log("comment 1개 : ", comment);
-            <CommentDetail key={comment.commentNo} comment={comment} styles={styles}/>
+            return <CommentDetail key={comment.commentNo} comment={comment} styles={styles}/>;
           })}
         </div>  
     </div>
