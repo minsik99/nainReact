@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ReportList.module.css";
-import { getCommentReport } from "../../api/ReportAxios";
+import {
+  getCommentReport,
+  processDeleteComment,
+  processBlockAccount,
+} from "../../api/ReportAxios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CommentReportList = () => {
   const [reports, setReports] = useState([]);
@@ -12,19 +18,25 @@ const CommentReportList = () => {
   });
   const [blockAccount, setBlockAccount] = useState({});
   const [deletePost, setDeletePost] = useState({});
+  const [showUnprocessedOnly, setShowUnprocessedOnly] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [reportStartDate, setReportStartDate] = useState(null);
+  const [reportEndDate, setReportEndDate] = useState(null);
+  const [handledStartDate, setHandledStartDate] = useState(null);
+  const [handledEndDate, setHandledEndDate] = useState(null);
 
   useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const data = await getCommentReport();
-        setReports(data || []);
-      } catch (error) {
-        console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
-      }
-    };
-
     fetchReports();
   }, []);
+
+  const fetchReports = async () => {
+    try {
+      const data = await getCommentReport();
+      setReports(data || []);
+    } catch (error) {
+      console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+    }
+  };
 
   const toggleRow = (id) => {
     setExpandedRow(expandedRow === id ? null : id);
@@ -38,12 +50,112 @@ const CommentReportList = () => {
     }
   };
 
-  const handleProcess = (id) => {
-    console.log("처리:", id, blockAccount[id], deletePost[id]);
+  const handleProcess = async (report) => {
+    try {
+      const adminId = 1; // 실제 admin ID 사용
+      const block = blockAccount[report.commentReportId] || false;
+      const del = deletePost[report.commentReportId] || false;
+      let blockSuccess = false;
+      let deleteSuccess = false;
+
+      if (block) {
+        try {
+          await processBlockAccount(
+            report.commentReportId,
+            adminId,
+            "차단 사유를 여기에 입력하세요"
+          );
+          blockSuccess = true;
+          alert("계정 차단이 성공적으로 처리되었습니다.");
+        } catch (error) {
+          console.error("계정 차단 중 오류가 발생했습니다.", error);
+          alert("계정 차단 처리 중 오류가 발생했습니다.");
+        }
+      }
+
+      if (del) {
+        try {
+          await processDeleteComment(
+            report.commentReportId,
+            adminId,
+            report.commentNo // commentNo를 전달
+          );
+          deleteSuccess = true;
+          alert("댓글 삭제가 성공적으로 처리되었습니다.");
+        } catch (error) {
+          console.error("댓글 삭제 중 오류가 발생했습니다.", error);
+          alert("댓글 삭제 처리 중 오류가 발생했습니다.");
+        }
+      }
+
+      if (!block && !del) {
+        alert("처리할 작업을 선택하세요.");
+      }
+
+      console.log(
+        "처리 완료:",
+        report.commentReportId,
+        block,
+        del,
+        blockSuccess,
+        deleteSuccess
+      );
+    } catch (error) {
+      console.error("처리 중 오류가 발생했습니다.", error);
+      alert("처리 중 오류가 발생했습니다.");
+    }
   };
 
   const itemsPerPage = 20;
-  let sortedReports = [...reports];
+  let filteredReports = [...reports];
+
+  if (showUnprocessedOnly) {
+    filteredReports = filteredReports.filter(
+      (report) => report.commentReportHandledYN !== "Y"
+    );
+  }
+
+  if (searchQuery) {
+    filteredReports = filteredReports.filter((report) => {
+      const searchRegex = new RegExp(searchQuery, "i");
+      return (
+        searchRegex.test(report.communityReportMemberEmail) ||
+        searchRegex.test(report.communityReportMemberName) ||
+        searchRegex.test(report.communityReportAdminName)
+      );
+    });
+  }
+
+  if (reportStartDate || reportEndDate) {
+    filteredReports = filteredReports.filter((report) => {
+      const reportDate = new Date(report.communityReportDate);
+      if (reportStartDate && reportEndDate) {
+        return reportDate >= reportStartDate && reportDate <= reportEndDate;
+      } else if (reportStartDate) {
+        return reportDate >= reportStartDate;
+      } else if (reportEndDate) {
+        return reportDate <= reportEndDate;
+      }
+      return true;
+    });
+  }
+
+  if (handledStartDate || handledEndDate) {
+    filteredReports = filteredReports.filter((report) => {
+      if (!report.communityReportHandledDate) return false;
+      const handledDate = new Date(report.communityReportHandledDate);
+      if (handledStartDate && handledEndDate) {
+        return handledDate >= handledStartDate && handledDate <= handledEndDate;
+      } else if (handledStartDate) {
+        return handledDate >= handledStartDate;
+      } else if (handledEndDate) {
+        return handledDate <= handledEndDate;
+      }
+      return true;
+    });
+  }
+
+  let sortedReports = [...filteredReports];
 
   if (sortConfig.key) {
     sortedReports.sort((a, b) => {
@@ -74,11 +186,55 @@ const CommentReportList = () => {
     currentPage * itemsPerPage
   );
 
-  // 콘솔에 paginatedReports 출력
-  console.log("paginatedReports:", paginatedReports);
-
   return (
     <div className={styles.reportListTableContainer}>
+      <div className={styles.tableHeader}>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="검색어를 입력하세요"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <div className={styles.dateRange}>
+          <DatePicker
+            selected={reportStartDate}
+            onChange={(date) => setReportStartDate(date)}
+            placeholderText="신고 시작 날짜"
+            className={styles.datePicker}
+          />
+          <p> ~ </p>
+          <DatePicker
+            selected={reportEndDate}
+            onChange={(date) => setReportEndDate(date)}
+            placeholderText="신고 종료 날짜"
+            className={styles.datePicker}
+          />
+        </div>
+        <div className={styles.dateRange}>
+          <DatePicker
+            selected={handledStartDate}
+            onChange={(date) => setHandledStartDate(date)}
+            placeholderText="처리 시작 날짜"
+            className={styles.datePicker}
+          />
+          <p> ~ </p>
+          <DatePicker
+            selected={handledEndDate}
+            onChange={(date) => setHandledEndDate(date)}
+            placeholderText="처리 종료 날짜"
+            className={styles.datePicker}
+          />
+        </div>
+        <label className={styles.showUnprocessedOnly}>
+          미처리 건만 보기
+          <input
+            type="checkbox"
+            checked={showUnprocessedOnly}
+            onChange={() => setShowUnprocessedOnly(!showUnprocessedOnly)}
+          />
+        </label>
+      </div>
       <table className={styles.reportListTable}>
         <thead>
           <tr>
@@ -102,7 +258,7 @@ const CommentReportList = () => {
                 onClick={() => toggleRow(report.commentReportId)}
                 className={styles.reportRow}
               >
-                <td>{report.commentReportId}</td>
+                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                 <td>
                   {new Date(report.commentReportDate).toLocaleDateString()}
                 </td>
@@ -173,7 +329,7 @@ const CommentReportList = () => {
                       </div>
                       <button
                         className={styles.processButton}
-                        onClick={() => handleProcess(report.commentReportId)}
+                        onClick={() => handleProcess(report)}
                       >
                         처리
                       </button>
@@ -187,7 +343,7 @@ const CommentReportList = () => {
       </table>
       <div className={styles.pagination}>
         {Array.from(
-          { length: Math.ceil(reports.length / itemsPerPage) },
+          { length: Math.ceil(filteredReports.length / itemsPerPage) },
           (_, i) => (
             <button
               key={i + 1}
