@@ -6,16 +6,24 @@ import { saveOneVideo, realTimeAnaly } from '../../api/interview/video';
 import {addInterview} from '../../api/interview/interview';
 import Loading from '../../components/designTool/Loading';
 import PathText from '../../components/interview/PathText';
-import { authStore } from '../../stores/authStore';
+import VideoComponent from '../../components/interview/Recording';
 
 const InterviewComponent = observer(() => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
-    const memberNo = authStore.memberNo;
+    const [memberNo, setMemberNo] = useState(null);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [stream, setStream] = useState(null);
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [mediaRecorder, setMediaRecorder] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const memberNo = window.localStorage.getItem("memberNo");
+            setMemberNo(memberNo);
+        }
+    }, []);
+
 
     const paths = [
         { name: '메인', link: '/' },
@@ -34,7 +42,6 @@ const InterviewComponent = observer(() => {
             };
             recorder.start();
             setMediaRecorder(recorder);
-            console.log("번호확인:::::", memberNo);
         }
     };
 
@@ -52,9 +59,8 @@ const InterviewComponent = observer(() => {
             const itvNo = await addInterview(memberNo);
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             const formData = new FormData();
-            formData.append('video', blob, 'videotest.webm');
             formData.append('video', blob, `${itvNo}.webm`);
-
+            //문제는 여기임 cors
             const response = await saveOneVideo(formData);
             console.log('Server response:', response.data);
         } catch (err) {
@@ -65,24 +71,32 @@ const InterviewComponent = observer(() => {
     // 카메라 시작
     const startCamera = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            console.log("Media devices acquired:", stream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                setStream(stream);
-                console.log("Stream assigned to video element");
-            }
-            setIsCameraOn(true);
-            console.log("Camera is on");
-            startRecording(stream);
-            if(videoRef.current && context) {
-            sendFramesToServer(); // 프레임을 서버로 전송 시작
-            console.log("Sending frames to server");
-            }
-        } catch (err) {
-            console.error("Error accessing webcam: ", err);
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+        }
+        setIsCameraOn(true);
+        startRecording(stream);
+        // if (videoRef.current) {
+        //     sendFramesToServer(); // 프레임을 서버로 전송 시작
+        //     console.log("Sending frames to server");
+        // }
+        } catch (error) {
+        console.error("Error accessing media devices.", error);
         }
     };
+
+    useEffect(() => {
+        if (isCameraOn) {
+            startCamera();
+        }
+        return () => {
+          if (videoRef.current && videoRef.current.srcObject) {
+            videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+          }
+        };
+      }, [isCameraOn]);
+
 
     // 카메라 중지
     const stopCamera = () => {
@@ -92,6 +106,7 @@ const InterviewComponent = observer(() => {
         if (stream) {
             stream.getTracks().forEach(track => track.stop());
         }
+        stopRecording();
         setIsCameraOn(false);
     };
 
@@ -105,31 +120,30 @@ const InterviewComponent = observer(() => {
     }, [stream]);
 
     // 프레임을 서버로 전송
-    const sendFramesToServer = () => {
-        const captureFrame = () => {
-            if(videoRef.current && context) {
-                const context = canvasRef.current.getContext('2d');
-            if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
-                canvasRef.current.width = videoRef.current.videoWidth;
-                canvasRef.current.height = videoRef.current.videoHeight;
-                context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-                const frame = canvasRef.current.toDataURL('image/jpeg', 0.7); // 70% 품질로 압축
+    // const sendFramesToServer = () => {
+    //     const captureFrame = () => {
+    //         const context = canvasRef.current.getContext('2d');
+    //         if(videoRef.current && context) {
+    //             if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
+    //                 canvasRef.current.width = videoRef.current.videoWidth;
+    //                 canvasRef.current.height = videoRef.current.videoHeight;
+    //                 context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    //                 const frame = canvasRef.current.toDataURL('image/jpeg', 0.7); // 70% 품질로 압축
 
-                try {
-                    const response = realTimeAnaly(frame);
-                    console.log('Server response:', response.data);
-                } catch (err) {
-                    console.error("Error sending frame to server: ", err);
-                }
-            }
-        } else {
-            <Loading text="Loading..." />
-        }
-        };
-        const frameRate = 10;
-        const id = setInterval(captureFrame, 1000 / frameRate); // frameRate에 따라 프레임 전송
-        setIntervalId(id);
-    };
+    //                 try {
+    //                     const response = realTimeAnaly(frame);
+    //                 } catch (err) {
+    //                     console.error("Error sending frame to server: ", err);
+    //                 }
+    //             }
+    //     } else {
+    //         <Loading text="Loading..." />
+    //     }
+    //     };
+    //     const frameRate = 10;
+    //     const id = setInterval(captureFrame, 1000 / frameRate); // frameRate에 따라 프레임 전송
+    //     setIntervalId(id);
+    // };
 
     return (
         <>
@@ -142,9 +156,8 @@ const InterviewComponent = observer(() => {
                         <img className={styles.arrowBox} src="/image/arrowbox.png"/>
                     </div>
                     {isCameraOn ? (
-                        <video className={styles.video} ref={videoRef} autoPlay playsInline>
-                            
-                            </video>
+                        // <VideoComponent />
+                        <video className={styles.video} ref={videoRef} autoPlay playsInline />
                     ) : (
                         <div className={styles.emptyScreen}><Loading text="Loading.."/></div>
                     )}                  
@@ -175,4 +188,4 @@ const InterviewComponent = observer(() => {
 });
 
 export default InterviewComponent;
-    
+          
