@@ -63,18 +63,9 @@
   margin-bottom: 10px;
 }
 
-.newResumeIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #77AAAD;
-  color: white;
-  border-radius: 50%;
-  width: 60px;
-  height: 50px;
-  font-size: 24px;
-  margin: 0 auto;
-  margin-bottom: 15px;
+.newResumeIcon img {
+  width: 50px;
+  margin-bottom: 10px;
 }
 
 .resumeCardDate,
