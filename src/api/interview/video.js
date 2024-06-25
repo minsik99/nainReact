@@ -7,7 +7,12 @@ const boot_url ='/video';
 
 export const saveOneVideo = async (formData) => {
     try {
-        const response = await axios.post(python_url + "/startVideo");
+        const response = await axios.post(python_url + "/save", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+        });
+        console.log(formData);
         return response.data;
       } catch (error) {
         console.error("영상 저장 실패", error);
