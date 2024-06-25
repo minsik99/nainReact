@@ -106,7 +106,7 @@ const MyResume = () => {
             <div className={styles.resumeCard} onClick={handleNewResumeClick} style={{ cursor: 'pointer' }}>
               <div className={styles.resumeCardHeader}>
                 <div className={styles.newResumeIcon}>
-                  <button>+</button>
+                  <img src="image/MyResumeInsertIcon.png" alt="MyResumeInsertIcon" />
                 </div>
                 <p style={{ color: 'black' }}>새 이력서 작성</p>
               </div>
