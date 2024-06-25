@@ -42,7 +42,6 @@ const Comment = ({comments, communityNo, styles}) => {
         </div>
         <div>
           {comments.map(comment => {
-            console.log("comment 1개 : ", comment);
             return <CommentDetail key={comment.commentNo} comment={comment} styles={styles}/>;
           })}
         </div>  
