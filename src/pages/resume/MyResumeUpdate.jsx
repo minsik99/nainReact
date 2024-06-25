@@ -28,23 +28,31 @@ const MyResumeUpdate = () => {
                 .catch(error => {
                     console.error('Error fetching resume:', error);
                 });
-
+    
             axios.get(`http://localhost:9999/experience/resume/${resumeNo}`)
                 .then(response => {
-                    setExperience(response.data);
+                    const experiences = response.data.map(exp => ({
+                        ...exp,
+                        current: exp.current === 'Y'
+                    }));
+                    setExperience(experiences);
                 })
                 .catch(error => {
                     console.error('Error fetching experiences:', error);
                 });
-
+    
             axios.get(`http://localhost:9999/education/resume/${resumeNo}`)
                 .then(response => {
-                    setEducation(response.data);
+                    const educations = response.data.map(edu => ({
+                        ...edu,
+                        current: edu.current === 'Y'
+                    }));
+                    setEducation(educations);
                 })
                 .catch(error => {
                     console.error('Error fetching education:', error);
                 });
-
+    
             axios.get(`http://localhost:9999/activity/resume/${resumeNo}`)
                 .then(response => {
                     setActivity(response.data);
@@ -71,13 +79,17 @@ const MyResumeUpdate = () => {
     };
 
     const handleExperienceChange = (id, e) => {
-        const { name, value } = e.target;
+        const { name, value, checked, type } = e.target;
+        const valueToUse = type === 'checkbox' ? checked : value;
         const newExperience = experience.map(exp => {
-            const updatedExp = { ...exp, [name]: value };
-            if (name === 'startDate' || name === 'endDate') {
-                updatedExp.exDuration = calculateDuration(updatedExp.startDate, updatedExp.endDate);
+            if (exp.experienceNo === id) {
+                const updatedExp = { ...exp, [name]: valueToUse };
+                if (name === 'startDate' || name === 'endDate') {
+                    updatedExp.exDuration = calculateDuration(updatedExp.startDate, updatedExp.endDate);
+                }
+                return updatedExp;
             }
-            return updatedExp;
+            return exp;
         });
         setExperience(newExperience);
     };
@@ -129,36 +141,69 @@ const MyResumeUpdate = () => {
             education: education.map(edu => ({ ...edu, current: edu.current ? 'Y' : 'N' })),
             activities: activity.map(act => ({ ...act }))
         };
-
+    
         try {
-            const resumeResponse = await axios.put(`http://localhost:9999/resume/${resumeNo}`, modifiedResume);
-
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found');
+            }
+    
+            const resumeResponse = await axios.put(`http://localhost:9999/resume/${resumeNo}`, modifiedResume, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+    
             const experiencePromises = modifiedResume.experiences.map(exp => {
                 if (exp.experienceNo.toString().length > 10) { // 새로운 항목
-                    return axios.post(`http://localhost:9999/experience/resume/${resumeNo}/create`, exp);
+                    return axios.post(`http://localhost:9999/experience/resume/${resumeNo}/create`, exp, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                 } else { // 기존 항목
-                    return axios.put(`http://localhost:9999/experience/${exp.experienceNo}`, exp);
+                    return axios.put(`http://localhost:9999/experience/${exp.experienceNo}`, exp, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                 }
             });
-
+    
             const educationPromises = modifiedResume.education.map(edu => {
                 if (edu.educationNo.toString().length > 10) { // 새로운 항목
-                    return axios.post(`http://localhost:9999/education/resume/${resumeNo}/create`, edu);
+                    return axios.post(`http://localhost:9999/education/resume/${resumeNo}/create`, edu, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                 } else { // 기존 항목
-                    return axios.put(`http://localhost:9999/education/${edu.educationNo}`, edu);
+                    return axios.put(`http://localhost:9999/education/${edu.educationNo}`, edu, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                 }
             });
-
+    
             const activityPromises = modifiedResume.activities.map(act => {
                 if (act.activityNo.toString().length > 10) { // 새로운 항목
-                    return axios.post(`http://localhost:9999/activity/resume/${resumeNo}/create`, act);
+                    return axios.post(`http://localhost:9999/activity/resume/${resumeNo}/create`, act, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                 } else { // 기존 항목
-                    return axios.put(`http://localhost:9999/activity/${act.activityNo}`, act);
+                    return axios.put(`http://localhost:9999/activity/${act.activityNo}`, act, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                 }
             });
-
+    
             await Promise.all([...experiencePromises, ...educationPromises, ...activityPromises]);
-            router.push('/resume/MyResume');
+            router.push('/resume');
         } catch (error) {
             console.error('Error updating resume:', error);
         }
@@ -212,7 +257,15 @@ const MyResumeUpdate = () => {
                         <div key={exp.experienceNo} className={styles.experience}>
                             <button type="button" className={styles.removeButton} onClick={() => removeExperience(exp.experienceNo)}>x</button>
                             <p>경력 세부사항</p>
-                            현재 근무중<input type="checkbox" className={styles.checkbox} checked={exp.current} onChange={(e) => handleExperienceChange(exp.experienceNo, e)} />
+                            <div className={styles.checkbox}>
+                                <span>현재 근무중</span>
+                                <input
+                                    type="checkbox"
+                                    name="current"
+                                    checked={exp.current}
+                                    onChange={(e) => handleExperienceChange(exp.experienceNo, e)}
+                                />
+                            </div>
                             <input type="text" name="company" placeholder="회사명" value={exp.company} onChange={(e) => handleExperienceChange(exp.experienceNo, e)} />
                             <input type="text" name="department" placeholder="부서명" value={exp.department} onChange={(e) => handleExperienceChange(exp.experienceNo, e)} />
                             <input type="text" name="exPosition" placeholder="직책" value={exp.exPosition} onChange={(e) => handleExperienceChange(exp.experienceNo, e)} />
@@ -232,7 +285,15 @@ const MyResumeUpdate = () => {
                         <div key={edu.educationNo} className={styles.education}>
                             <button type="button" className={styles.removeButton} onClick={() => removeEducation(edu.educationNo)}>x</button>
                             <p>학력 세부사항</p>
-                            현재 재학중 <input type="checkbox" className={styles.checkbox} checked={edu.current} onChange={(e) => handleEducationChange(edu.educationNo, e)} />
+                            <div className={styles.checkbox}>
+                                <span>현재 재학중</span>
+                                <input
+                                    type="checkbox"
+                                    name="current"
+                                    checked={edu.current}
+                                    onChange={(e) => handleEducationChange(edu.educationNo, e)}
+                                />
+                            </div>
                             <input type="text" name="schoolName" placeholder="학교명" value={edu.schoolName} onChange={(e) => handleEducationChange(edu.educationNo, e)} />
                             <input type="text" name="major" placeholder="전공" value={edu.major} onChange={(e) => handleEducationChange(edu.educationNo, e)} />
                             <input type="text" name="degree" placeholder="학위 (학사/석사/박사)" value={edu.degree} onChange={(e) => handleEducationChange(edu.educationNo, e)} />
