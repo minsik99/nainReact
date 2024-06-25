@@ -38,6 +38,7 @@ export const logout = () =>{
         window.localStorage.removeItem("token");
         window.localStorage.removeItem("isAdmin");
         window.localStorage.removeItem("refresh");
+        window.localStorage.removeItem("memberNo");
         // authStore 상태 초기화
         authStore.setIsAdmin(false);
         authStore.checkLoggedIn();
