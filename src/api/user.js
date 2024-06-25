@@ -21,7 +21,7 @@ export const login = (loginData) => {
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
                 window.localStorage.setItem("refresh", response.data.refresh);
-                console.log(response.data.memberNo)
+                window.localStorage.setItem("memberNo", response.data.memberNo);
                 authStore.setIsAdmin(response.data.isAdmin);
                 authStore.setMemberNo(response.data.memberNo);
                
@@ -62,6 +62,8 @@ export const checkEmail = (emailData) => {
 
 // 내정보 불러오기 
 export const myinfo = (memberNo) => {
+    console.log("memberNo: ", memberNo);
+
     return axios.get(baseUrl + "/myinfo", {
         params: {memberNo}
     }).then(res => {
