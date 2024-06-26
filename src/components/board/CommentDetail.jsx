@@ -12,7 +12,15 @@ const CommentDetail = ({ comment, styles }) => {
     const [date, setDate] = useState('');
     const reportModal = useModal();
     const delModal = useModal();
-    
+    const [commentDetail, setCommentDetail] = useState({
+        commentNo: comment.commentNo,
+        memberNo: comment.memberDto.memberNo,
+        communityNo: comment.communityNo,
+        parentNo: comment.parentNo? comment.parentNo : null,
+        writer: comment.writer,
+        commentDate: comment.commentDate,
+        content: comment.content,
+    });
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -78,13 +86,9 @@ const CommentDetail = ({ comment, styles }) => {
           content: '정말로 삭제하시겠습니까?', 
           columns: comment.commentNo,
           onConfirm: (commentNo) => {
-            console.log(comment, comment.commentNo)
-            CommunityAxios.deleteComment(commentNo, comment).then(res => {
-                setShowModal(true); // 성공 모달 열기
-                setTimeout(() => {
-                  setShowModal(false); // 모달 닫기
-                  router.push('/community'); // 페이지 이동
-                }, 500); // 2초 후에 페이지 이동
+            console.log(commentDetail);
+            CommunityAxios.deleteComment(commentNo, commentDetail).then(res => {
+                window.location.reload();
             })
             .catch(error => {
                 alert('게시글 삭제 오류');
