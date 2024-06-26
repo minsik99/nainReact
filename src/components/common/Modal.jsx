@@ -45,8 +45,9 @@ const CustomModal = ({ data, closeModal, onConfirm}) => {
 
   return (
     <div className={styles.modalBody}>
-      <div className={styles.modalTitle}></div>
+      <div className={styles.modalTitle}>{data.title}</div>
       <div className={styles.modalContent}>
+      {data.content} : &nbsp;
         <CustomDropdown
           dropdownWidth="200px"
           columns={data.columns}

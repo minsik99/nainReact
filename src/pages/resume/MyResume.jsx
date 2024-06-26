@@ -11,14 +11,16 @@ const MyResume = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const memberNo = 1;
-
-    instance.get(`/resume/member/${memberNo}`).then(response => {
-      setResumes(response.data);
-    })
-      .catch(error => {
+    const fetchResumes = async () => {
+      try {
+        const response = await instance.get('/resume/member');
+        setResumes(response.data);
+      } catch (error) {
         console.error('Error fetching resumes:', error);
-      });
+      }
+    };
+
+    fetchResumes();
   }, []);
 
   const handleMenuClick = (resumeNo) => {
@@ -34,25 +36,40 @@ const MyResume = () => {
   };
 
   // resume 삭제 : experience, education, activity 삭제 후 resume 삭제
-  const handleConfirmDelete = () => {
-    axios.all([
-      axios.delete(`http://localhost:9999/experience/resume/${openResume}`),
-      axios.delete(`http://localhost:9999/education/resume/${openResume}`),
-      axios.delete(`http://localhost:9999/activity/resume/${openResume}`)
-    ])
-      .then(() => {
-        return axios.delete(`http://localhost:9999/resume/${openResume}`);
-      })
-      .then(() => {
+  const handleConfirmDelete = async () => {
+    try {
+        const token = localStorage.getItem('token'); // 실제 유효한 토큰으로 교체
+        await Promise.all([
+            axios.delete(`http://localhost:9999/experience/resume/${openResume}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }),
+            axios.delete(`http://localhost:9999/education/resume/${openResume}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }),
+            axios.delete(`http://localhost:9999/activity/resume/${openResume}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        ]);
+        await axios.delete(`http://localhost:9999/resume/${openResume}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
         setResumes(resumes.filter((resume) => resume.resumeNo !== openResume));
         setShowModal(false);
         setOpenResume(null);
-      })
-      .catch(error => {
+    } catch (error) {
         console.error('Error deleting resume or related data:', error);
         setShowModal(false);
-      });
-  };
+    }
+};
 
   const handleCancelDelete = () => {
     setShowModal(false);
@@ -89,7 +106,7 @@ const MyResume = () => {
             <div className={styles.resumeCard} onClick={handleNewResumeClick} style={{ cursor: 'pointer' }}>
               <div className={styles.resumeCardHeader}>
                 <div className={styles.newResumeIcon}>
-                  <button>+</button>
+                  <img src="image/MyResumeInsertIcon.png" alt="MyResumeInsertIcon" />
                 </div>
                 <p style={{ color: 'black' }}>새 이력서 작성</p>
               </div>

@@ -10,7 +10,7 @@ const UserManagement = () => {
       </div>
 
       <div className="userManagement">
-        <div className="selectbutton">
+        <div className="ManagerSelectbutton">
           <a
             style={{
               borderBottom: "4px solid #9dc3c1",

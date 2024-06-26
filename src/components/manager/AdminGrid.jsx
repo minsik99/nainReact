@@ -11,6 +11,26 @@ import {
   removeAdminStatus,
 } from "../../api/adminManager";
 
+const CustomFloatingFilter = (props) => {
+  const [filterValue, setFilterValue] = useState("");
+
+  const onFilterChange = (e) => {
+    setFilterValue(e.target.value);
+    props.parentFilterInstance((instance) => {
+      instance.onFloatingFilterChanged("contains", e.target.value);
+    });
+  };
+
+  return (
+    <input
+      type="text"
+      value={filterValue}
+      onChange={onFilterChange}
+      className={styles.customFloatingFilterInput}
+    />
+  );
+};
+
 const AdminGrid = () => {
   const [rowData, setRowData] = useState([]);
   const [newRow, setNewRow] = useState({ email: "", name: "", nickname: "" });
@@ -52,6 +72,7 @@ const AdminGrid = () => {
       floatingFilterComponentParams: {
         suppressFilterButton: true,
       },
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "이름",
@@ -61,6 +82,7 @@ const AdminGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "닉네임",
@@ -70,6 +92,7 @@ const AdminGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
+      floatingFilterComponent: CustomFloatingFilter,
     },
   ];
 
@@ -157,7 +180,7 @@ const AdminGrid = () => {
       </div>
       <div
         className={`ag-theme-balham ${styles.customGrid}`}
-        style={{ height: 600, width: "100%", marginTop: "20px" }}
+        style={{ height: 1000, width: "100%", marginTop: "20px" }}
       >
         <AgGridReact
           rowData={rowData}
@@ -177,7 +200,7 @@ const AdminGrid = () => {
           onGridReady={onGridReady}
           rowSelection="multiple"
           pagination={true}
-          paginationPageSize={10}
+          paginationPageSize={20}
           rowHeight={50} // 행 높이 설정
           headerHeight={50} // 타이틀 행 높이 설정
           floatingFiltersHeight={50} // 검색 행 높이 설정

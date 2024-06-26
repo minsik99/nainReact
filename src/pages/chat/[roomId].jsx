@@ -53,14 +53,20 @@ const ChatRoom = () => {
 
     const sendMessage = async () => {
         const message = {
-            "messageText": messageText,
-            "chatRoomNo": roomId,
+            messageText: messageText,
+            chatRoomNo: roomId,
         };
         try {
             await instance.post(`/chat/rooms/${roomId}/send`, message);
             setMessageText('');
         } catch (error) {
             console.error('Error sending message:', error);
+        }
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
         }
     };
 
@@ -78,6 +84,7 @@ const ChatRoom = () => {
                 type="text"
                 value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}
+                onKeyPress={handleKeyPress}
                 placeholder="Enter your message"
             />
             <button onClick={sendMessage}>Send</button>

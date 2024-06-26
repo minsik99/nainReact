@@ -15,7 +15,7 @@ const CustomDropdown = ({ columns=[], onSelect, Header, dropdownWidth}) => {
     };
 
     const wrapperRef = useClickOutside(closeDropdown);
-    const defaultHeader = Header || (columns.length > 0 ? columns[0].Header : '');
+    const defaultHeader = Header || (columns.length > 0 ? '(선택)' : '');
 
     const handleItemClick = (item) => {
         setSelectedItem(item);

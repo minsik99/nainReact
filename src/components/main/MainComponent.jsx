@@ -5,10 +5,22 @@ import "slick-carousel/slick/slick-theme.css";
 import RadiusButton from "../designTool/RadiusButton";
 import { useRouter } from "next/router";
 
-import ChatbotModal from "../../components/common/ChatbotModal"
-import { observer } from 'mobx-react-lite';
+import ChatbotModal from "../../components/common/ChatbotModal";
+import { observer } from "mobx-react-lite";
+import { authStore } from "../../stores/authStore";
 
 const MainComponent = () => {
+  useEffect(() => {
+    console.log(authStore.isAdmin);
+    console.log(authStore.memberNo);
+    if (authStore.isAdmin) {
+      console.log(authStore.isAdmin);
+    }
+    if (authStore.memberNo) {
+      console.log(authStore.memberNo);
+    }
+  }, [authStore.isAdmin, authStore.memberNo]);
+
   const router = useRouter();
 
   const settings = {
@@ -19,8 +31,8 @@ const MainComponent = () => {
     slidesToScroll: 1,
     autoplay: true,
   };
-  
-  //맨처음 모달창이 보이지 않도록 state 초기값 설정함 
+
+  //맨처음 모달창이 보이지 않도록 state 초기값 설정함
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   //Chatbot 이미지 클릭시 state 값 바꾸어 모달창 보이게 안보이게 함
@@ -31,7 +43,7 @@ const MainComponent = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-    
+
   return (
     <>
       <div className="slider">
@@ -240,16 +252,21 @@ const MainComponent = () => {
       </div>
 
       <div>
-        <img className="chatbot fixed-bottom"
-                  src="/image/chatbot.png"
-                  width={"100px"}
-                  alt="AI Robot" 
-                  onClick={handleOpenModal}                             
-                ></img>
+        <img
+          className="chatbot fixed-bottom"
+          src="/image/chatbot.png"
+          width={"100px"}
+          alt="AI Robot"
+          onClick={handleOpenModal}
+        ></img>
         <button className="chatbot-button" onClick={handleOpenModal}>
           챗봇 실행
         </button>
-        <ChatbotModal show={isModalOpen} onClose={handleCloseModal} title="Chatbot"/>
+        <ChatbotModal
+          show={isModalOpen}
+          onClose={handleCloseModal}
+          title="Chatbot"
+        />
       </div>
 
       <div className="subscribe_banner">

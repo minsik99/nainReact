@@ -9,7 +9,7 @@ const CommentReportListPage = () => {
         <Sidebar />
       </div>
       <div className="reportList">
-        <div className="selectbutton">
+        <div className="reportSelectbutton">
           <a
             className="selectCommunityReport"
             href="/manager/CommunityReportListPage"
