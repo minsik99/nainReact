@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/board/boardDetail.module.css';
 
-const NoticeDetail = () => {
+const noticeDetail = () => {
     const router = useRouter();
     const { noticeNo } = router.query;
     const [showModal, setShowModal] = useState(false);
@@ -48,9 +48,6 @@ const NoticeDetail = () => {
                     noticeMFile: data.noticeMFile,
                     noticeReadCount: data.noticeReadCount,
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching board detail:', error);
             });
         }
     }, [noticeNo]);
@@ -86,14 +83,10 @@ const NoticeDetail = () => {
     };
 
     const handleModifyBoard = () => {
-        // 공지사항 수정
-        noticeAxios.updateNotice(modifiedBoard.noticeNo, modifiedBoard)
-        .then(res => {
-          setShowModal(false); // 수정 모달 닫기
-          router.push('/notice'); // 공지사항 목록 페이지로 이동
-        })
-        .catch(error => {
-          console.error('수정 실패:', error);
+        //글 수정
+        router.push({
+            pathname: '/notice/new',
+            query: { primalBoard: JSON.stringify(board) }
         });
     };
 
@@ -119,7 +112,6 @@ const NoticeDetail = () => {
                             <p>수정날짜 : {noticeModify}</p>
                         )}
                         </span>
-
                     </div>
                     <div className={styles.noticeContent} dangerouslySetInnerHTML={{ __html: board.noticeContent }} />
                 {board.noticeFileName && (
@@ -135,4 +127,4 @@ const NoticeDetail = () => {
     );
 };
 
-export default NoticeDetail;
+export default noticeDetail;

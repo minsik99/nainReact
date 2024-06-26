@@ -5,6 +5,7 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import noticeAxios from "../../api/noticeAxios";
 import { useRouter } from 'next/router';
+import styles from '../../styles/board/newBoard.module.css';
 
 
 const NewBoard = () => {
@@ -12,6 +13,10 @@ const NewBoard = () => {
     const [noticeContent, setNoticeContent] = useState(''); 
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
+
+    const reload = () => {
+      router.push("/notice");
+    };
 
     
     const editorConfiguration = {
@@ -78,7 +83,10 @@ const NewBoard = () => {
               console.log('Focus.', editor);
               }}
            />
-          <RadiusButton className="btn btn-primary" text="등록" onClick={saveBoard}/>
+          <div className={styles.buttons}>
+            <RadiusButton color="#77AAAD" text="목록" onClick={reload}/>
+            <RadiusButton color="#77AAAD" text="등록" onClick={saveBoard}/>
+          </div>
           {showModal && (
                 <div className="modal">
                     <div className="modal-content">

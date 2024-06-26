@@ -12,7 +12,7 @@ import Sort from '../../components/board/Sort';
 const noticeList = observer((props) => {
   const [boards, setBoards] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(15);
+  const [limit, setLimit] = useState(10);
   const [sort, setSort] = useState();
   const [paging, setPaging] = useState({});
   const router = useRouter();

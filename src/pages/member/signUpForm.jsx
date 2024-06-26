@@ -33,7 +33,7 @@ const SignUpForm = () => {
     };
 
     const handleEmailCheck = async () => {
-        if (!validateEmail(formDate.memberEmail)) {
+        if (!validateEmail(formData.memberEmail)) {
             setEmailError('유효한 이메일 주소를 입력해주세요.')
             setEmailValid(false);
             return;
