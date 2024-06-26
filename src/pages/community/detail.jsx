@@ -10,7 +10,6 @@ import {useModal} from '../../components/hook/useModal';
 const BoardDetail = () => {
     const router = useRouter();
     const { communityNo } = router.query;
-    const [showModal, setShowModal] = useState(false);
     const [board, setBoard] = useState({
         communityNo : communityNo,
         title: '',
@@ -29,7 +28,6 @@ const BoardDetail = () => {
     const [isMine, setIsMine] = useState(false);
     const reportModal = useModal();
     const delModal = useModal();
-    const [data, setData] = useState('');
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -110,18 +108,13 @@ const BoardDetail = () => {
           columns: board.communityNo,
           onConfirm: (communityNo) => {
             CommunityAxios.deleteCommunity(communityNo, board).then(res => {
-                setShowModal(true); // 성공 모달 열기
-                setTimeout(() => {
-                  setShowModal(false); // 모달 닫기
-                  router.push('/community'); // 페이지 이동
-                }, 500); // 2초 후에 페이지 이동
+                router.push('/community');
             })
             .catch(error => {
                 alert('게시글 삭제 오류');
             })
             delModal.closeModal();
           },
-    //드롭다운 선택시 안에 들어있는 값가지고 옴
         });
       };
 
@@ -166,13 +159,6 @@ const BoardDetail = () => {
                         <div className={styles.buttons}>
                         <RadiusButton color="#77AAAD" text="삭제" onClick={handleOpenDelete} />
                         <Modal type='default' isOpened={delModal.isOpened} data={delModal.modalData} closeModal={delModal.closeModal}/>
-                        {showModal && (
-                            <div className="modal">
-                            <div className="modal-content">
-                                    <h5>게시글을 삭제하였습니다.</h5>
-                                </div>
-                            </div>
-                        )}
                         <RadiusButton color="#77AAAD" text="수정" onClick={modifyBoard} />
                     </div>
                     )}
