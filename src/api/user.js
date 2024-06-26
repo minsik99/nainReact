@@ -21,10 +21,8 @@ export const login = (loginData) => {
       window.localStorage.setItem("isAdmin", response.data.isAdmin);
       window.localStorage.setItem("refresh", response.data.refresh);
       window.localStorage.setItem("memberNo", response.data.memberNo);
-      const isAdmin = response.data.isAdmin;
-      const memberNo = response.data.memberNo;
-      authStore.setIsAdmin(isAdmin);
-      authStore.setMemberNo(memberNo);
+      authStore.setIsAdmin(response.data.isAdmin);
+      authStore.setMemberNo(response.data.memberNo);
 
       authStore.checkLoggedIn();
     }
