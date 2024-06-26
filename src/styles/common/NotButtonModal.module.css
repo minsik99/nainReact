@@ -1,0 +1,33 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  max-height: 400px;
+  min-width: 300px;
+  background-color: #77AAAD;
+  color: white;
+  border-radius: 8px;
+  /* 위치 설정을 위한 기본 값 */
+}
+
+.dropDown{
+    width: 200px;
+}
+.modalContent{
+padding: 1.2rem;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+
