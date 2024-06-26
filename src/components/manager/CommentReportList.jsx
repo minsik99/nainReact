@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./ReportList.module.css";
 import {
   getCommentReport,
+  getCommentReportCount,
   processDeleteComment,
-  processBlockAccount,
+  processBlockAccountComment,
 } from "../../api/ReportAxios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal from "../designTool/modal";
 
 const CommentReportList = () => {
   const [reports, setReports] = useState([]);
+  const [reportCounts, setReportCounts] = useState([]);
   const [expandedRow, setExpandedRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({
@@ -24,9 +27,20 @@ const CommentReportList = () => {
   const [reportEndDate, setReportEndDate] = useState(null);
   const [handledStartDate, setHandledStartDate] = useState(null);
   const [handledEndDate, setHandledEndDate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     fetchReports();
+    fetchReportCounts();
   }, []);
 
   const fetchReports = async () => {
@@ -35,6 +49,17 @@ const CommentReportList = () => {
       setReports(data || []);
     } catch (error) {
       console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+      openModal("데이터를 가져오는 중 오류가 발생했습니다.");
+    }
+  };
+
+  const fetchReportCounts = async () => {
+    try {
+      const data = await getCommentReportCount();
+      setReportCounts(data || []);
+    } catch (error) {
+      console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+      openModal("데이터를 가져오는 중 오류가 발생했습니다.");
     }
   };
 
@@ -55,21 +80,17 @@ const CommentReportList = () => {
       const adminId = 1; // 실제 admin ID 사용
       const block = blockAccount[report.commentReportId] || false;
       const del = deletePost[report.commentReportId] || false;
-      let blockSuccess = false;
-      let deleteSuccess = false;
-
       if (block) {
         try {
-          await processBlockAccount(
+          await processBlockAccountComment(
             report.commentReportId,
             adminId,
-            "차단 사유를 여기에 입력하세요"
+            report.commentReportType
           );
-          blockSuccess = true;
-          alert("계정 차단이 성공적으로 처리되었습니다.");
+          openModal("계정 차단이 성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("계정 차단 중 오류가 발생했습니다.", error);
-          alert("계정 차단 처리 중 오류가 발생했습니다.");
+          openModal("계정 차단 처리 중 오류가 발생했습니다.");
         }
       }
 
@@ -78,103 +99,74 @@ const CommentReportList = () => {
           await processDeleteComment(
             report.commentReportId,
             adminId,
-            report.commentNo // commentNo를 전달
+            report.commentNo
           );
-          deleteSuccess = true;
-          alert("댓글 삭제가 성공적으로 처리되었습니다.");
+          openModal("댓글 삭제가 성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("댓글 삭제 중 오류가 발생했습니다.", error);
-          alert("댓글 삭제 처리 중 오류가 발생했습니다.");
+          openModal("댓글 삭제 처리 중 오류가 발생했습니다.");
         }
       }
 
       if (!block && !del) {
-        alert("처리할 작업을 선택하세요.");
+        await processComplete(report.commentReportId, adminId);
+        openModal("처리되었습니다.");
       }
 
-      console.log(
-        "처리 완료:",
-        report.commentReportId,
-        block,
-        del,
-        blockSuccess,
-        deleteSuccess
-      );
+      await fetchReports();
     } catch (error) {
       console.error("처리 중 오류가 발생했습니다.", error);
-      alert("처리 중 오류가 발생했습니다.");
+      openModal("처리 중 오류가 발생했습니다.");
     }
   };
 
   const itemsPerPage = 20;
-  let filteredReports = [...reports];
 
-  if (showUnprocessedOnly) {
-    filteredReports = filteredReports.filter(
-      (report) => report.commentReportHandledYN !== "Y"
-    );
-  }
-
-  if (searchQuery) {
-    filteredReports = filteredReports.filter((report) => {
+  const filteredReports = reports
+    .filter(
+      (report) => !showUnprocessedOnly || report.commentReportHandledYN !== "Y"
+    )
+    .filter((report) => {
       const searchRegex = new RegExp(searchQuery, "i");
       return (
         searchRegex.test(report.communityReportMemberEmail) ||
         searchRegex.test(report.communityReportMemberName) ||
         searchRegex.test(report.communityReportAdminName)
       );
-    });
-  }
-
-  if (reportStartDate || reportEndDate) {
-    filteredReports = filteredReports.filter((report) => {
+    })
+    .filter((report) => {
       const reportDate = new Date(report.communityReportDate);
-      if (reportStartDate && reportEndDate) {
-        return reportDate >= reportStartDate && reportDate <= reportEndDate;
-      } else if (reportStartDate) {
-        return reportDate >= reportStartDate;
-      } else if (reportEndDate) {
-        return reportDate <= reportEndDate;
-      }
-      return true;
-    });
-  }
+      const handledDate = report.communityReportHandledDate
+        ? new Date(report.communityReportHandledDate)
+        : null;
 
-  if (handledStartDate || handledEndDate) {
-    filteredReports = filteredReports.filter((report) => {
-      if (!report.communityReportHandledDate) return false;
-      const handledDate = new Date(report.communityReportHandledDate);
-      if (handledStartDate && handledEndDate) {
-        return handledDate >= handledStartDate && handledDate <= handledEndDate;
-      } else if (handledStartDate) {
-        return handledDate >= handledStartDate;
-      } else if (handledEndDate) {
-        return handledDate <= handledEndDate;
-      }
-      return true;
+      return (
+        (!reportStartDate || reportDate >= reportStartDate) &&
+        (!reportEndDate || reportDate <= reportEndDate) &&
+        (!handledStartDate ||
+          (handledDate && handledDate >= handledStartDate)) &&
+        (!handledEndDate || (handledDate && handledDate <= handledEndDate))
+      );
     });
-  }
 
-  let sortedReports = [...filteredReports];
-
-  if (sortConfig.key) {
-    sortedReports.sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === "ascending" ? -1 : 1;
-      }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === "ascending" ? 1 : -1;
-      }
-      return 0;
-    });
-  }
+  const sortedReports = filteredReports.sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === "ascending" ? 1 : -1;
+    }
+    return 0;
+  });
 
   const handleSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    }));
   };
 
   const handlePageChange = (newPage) => {
@@ -276,8 +268,19 @@ const CommentReportList = () => {
                       <div className={styles.detailRow}>
                         <div className={styles.detailColumn}>
                           <span>
-                            <strong>신고사유:</strong>{" "}
-                            {report.commentReportType}
+                            <strong>신고사유:</strong>
+                            <ul>
+                              {reportCounts
+                                .filter(
+                                  (count) =>
+                                    count.commentNo === report.commentNo
+                                )
+                                .map((count, index) => (
+                                  <li key={index}>
+                                    {count.reportType} :{count.reportCount}건
+                                  </li>
+                                ))}
+                            </ul>
                           </span>
                         </div>
                         <div className={styles.detailColumn}>
@@ -295,44 +298,53 @@ const CommentReportList = () => {
                           </span>
                         </div>
                       </div>
-                      <div className={styles.checkboxContainer}>
-                        <label className={styles.customCheckbox}>
-                          계정차단
-                          <input
-                            type="checkbox"
-                            checked={
-                              blockAccount[report.commentReportId] || false
-                            }
-                            onChange={() =>
-                              handleCheckboxChange(
-                                report.commentReportId,
-                                "block"
-                              )
-                            }
-                          />
-                        </label>
-                        <label className={styles.customCheckbox}>
-                          댓글삭제
-                          <input
-                            type="checkbox"
-                            checked={
-                              deletePost[report.commentReportId] || false
-                            }
-                            onChange={() =>
-                              handleCheckboxChange(
-                                report.commentReportId,
-                                "delete"
-                              )
-                            }
-                          />
-                        </label>
-                      </div>
-                      <button
-                        className={styles.processButton}
-                        onClick={() => handleProcess(report)}
-                      >
-                        처리
-                      </button>
+
+                      {report.commentReportHandledYN !== "Y" && (
+                        <div className={styles.checkboxContainer}>
+                          <label className={styles.customCheckbox}>
+                            계정차단
+                            <input
+                              type="checkbox"
+                              checked={
+                                blockAccount[report.commentReportId] || false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  report.commentReportId,
+                                  "block"
+                                )
+                              }
+                            />
+                          </label>
+                          <label className={styles.customCheckbox}>
+                            댓글삭제
+                            <input
+                              type="checkbox"
+                              checked={
+                                deletePost[report.commentReportId] || false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  report.commentReportId,
+                                  "delete"
+                                )
+                              }
+                            />
+                          </label>
+                        </div>
+                      )}
+                      {report.commentReportHandledYN === "Y" ? (
+                        <p className={styles.processedText}>
+                          이미 처리되었습니다.
+                        </p>
+                      ) : (
+                        <button
+                          className={styles.processButton}
+                          onClick={() => handleProcess(report)}
+                        >
+                          처리
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -357,6 +369,15 @@ const CommentReportList = () => {
           )
         )}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        content={<p>{modalContent}</p>}
+        buttonLabel="닫기"
+        buttonColor="#77aaad"
+        buttonSize="16px"
+        modalSize={{ width: "350px", height: "150px" }}
+      />
     </div>
   );
 };

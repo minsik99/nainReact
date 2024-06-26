@@ -11,6 +11,26 @@ import {
   removeAdminStatus,
 } from "../../api/adminManager";
 
+const CustomFloatingFilter = (props) => {
+  const [filterValue, setFilterValue] = useState("");
+
+  const onFilterChange = (e) => {
+    setFilterValue(e.target.value);
+    props.parentFilterInstance((instance) => {
+      instance.onFloatingFilterChanged("contains", e.target.value);
+    });
+  };
+
+  return (
+    <input
+      type="text"
+      value={filterValue}
+      onChange={onFilterChange}
+      className={styles.customFloatingFilterInput}
+    />
+  );
+};
+
 const AdminGrid = () => {
   const [rowData, setRowData] = useState([]);
   const [newRow, setNewRow] = useState({ email: "", name: "", nickname: "" });
@@ -52,6 +72,7 @@ const AdminGrid = () => {
       floatingFilterComponentParams: {
         suppressFilterButton: true,
       },
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "이름",
@@ -61,6 +82,7 @@ const AdminGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "닉네임",
@@ -70,6 +92,7 @@ const AdminGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
+      floatingFilterComponent: CustomFloatingFilter,
     },
   ];
 
