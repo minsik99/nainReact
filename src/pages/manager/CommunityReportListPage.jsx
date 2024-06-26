@@ -9,7 +9,7 @@ const CommunityReportListPage = ({ initialReports }) => {
         <Sidebar />
       </div>
       <div className="reportList">
-        <div className="selectbutton">
+        <div className="reportSelectbutton">
           <a
             style={{
               borderBottom: "4px solid #9dc3c1",

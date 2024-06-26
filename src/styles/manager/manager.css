@@ -63,8 +63,14 @@ body,
   justify-content: center;
 }
 
-.selectbutton {
+.ManagerSelectbutton {
   margin: 15px 0px 30px 70px;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.reportSelectbutton {
+  margin: 15px 0px 30px 140px;
   font-weight: 900;
   font-size: 18px;
 }

@@ -10,7 +10,7 @@ const AdminManagement = () => {
       </div>
 
       <div className="userManagement">
-        <div className="selectbutton">
+        <div className="ManagerSelectbutton">
           <a className="selectUserManager" href="/manager/UserManagement">
             회원
           </a>

@@ -32,9 +32,19 @@ export const getCommentReport = async () => {
   }
 };
 
+export const getCommentReportCount = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/commentcount`);
+    return response.data;
+  } catch (error) {
+    console.error("댓글 신고사유를 가져오지 못했습니다.", error);
+    throw error;
+  }
+};
+
 export const processDeletePost = async (reportId, adminId, communityNo) => {
   try {
-    const response = await axios.post(`${BASE_URL}/deletePost`, {
+    const response = await axios.post(`${BASE_URL}/community/delete`, {
       reportId,
       adminId,
       communityNo,
@@ -52,7 +62,7 @@ export const processBlockAccountCommnity = async (
   blockReason
 ) => {
   try {
-    const response = await axios.post(`${BASE_URL}/blockAccount`, {
+    const response = await axios.post(`${BASE_URL}/community/blockaccount`, {
       reportId,
       adminId,
       blockReason,
@@ -65,7 +75,7 @@ export const processBlockAccountCommnity = async (
 };
 
 export const processDeleteComment = async (reportId, adminId, commentNo) => {
-  const response = await axios.post(`${BASE_URL}/deleteComment`, {
+  const response = await axios.post(`${BASE_URL}/comment/delete`, {
     reportId,
     adminId,
     commentNo,
@@ -78,10 +88,18 @@ export const processBlockAccountComment = async (
   adminId,
   blockReason
 ) => {
-  const response = await axios.post(`${BASE_URL}/blockAccount`, {
+  const response = await axios.post(`${BASE_URL}/comment/blockaccount`, {
     reportId,
     adminId,
     blockReason,
+  });
+  return response.data;
+};
+
+export const processComplete = async (reportId, adminId) => {
+  const response = await asiox.post(`${BASE_URL}/complete`, {
+    reportId,
+    adminId,
   });
   return response.data;
 };

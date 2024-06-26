@@ -11,6 +11,26 @@ import {
 import RadiusButton from "../designTool/RadiusButton";
 import Modal from "../designTool/modal";
 
+const CustomFloatingFilter = (props) => {
+  const [filterValue, setFilterValue] = useState("");
+
+  const onFilterChange = (e) => {
+    setFilterValue(e.target.value);
+    props.parentFilterInstance((instance) => {
+      instance.onFloatingFilterChanged("contains", e.target.value);
+    });
+  };
+
+  return (
+    <input
+      type="text"
+      value={filterValue}
+      onChange={onFilterChange}
+      className={styles.customFloatingFilterInput}
+    />
+  );
+};
+
 const UserGrid = () => {
   const [rowData, setRowData] = useState([]);
   const gridApi = useRef(null);
@@ -47,9 +67,7 @@ const UserGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
-      floatingFilterComponentParams: {
-        suppressFilterButton: true,
-      },
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "이름",
@@ -59,9 +77,7 @@ const UserGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
-      floatingFilterComponentParams: {
-        suppressFilterButton: true,
-      },
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "닉네임",
@@ -71,9 +87,7 @@ const UserGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
-      floatingFilterComponentParams: {
-        suppressFilterButton: true,
-      },
+      floatingFilterComponent: CustomFloatingFilter,
     },
     {
       headerName: "구독여부",
@@ -107,9 +121,7 @@ const UserGrid = () => {
       floatingFilter: true,
       headerClass: styles.customHeader,
       cellClass: styles.customCell,
-      floatingFilterComponentParams: {
-        suppressFilterButton: true,
-      },
+      floatingFilterComponent: CustomFloatingFilter,
     },
   ];
 
@@ -227,9 +239,8 @@ const UserGrid = () => {
               floatingFilter: true,
               floatingFilterComponentParams: {
                 suppressFilterButton: true,
-                filterPlaceholder: "검색...",
               },
-              headerClass: "customHeader",
+              headerClass: styles.customHeader,
               floatingFilterComponent: "customFloatingFilter",
             }}
             onGridReady={onGridReady}

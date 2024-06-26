@@ -4,10 +4,12 @@ import {
   getCommunityReport,
   getCommunityReportCount,
   processDeletePost,
-  processBlockAccount,
+  processBlockAccountCommnity,
 } from "../../api/ReportAxios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal from "../designTool/modal";
+import { authStore } from "../../stores/authStore";
 
 const CommunityReportList = () => {
   const [reports, setReports] = useState([]);
@@ -26,6 +28,16 @@ const CommunityReportList = () => {
   const [reportEndDate, setReportEndDate] = useState(null);
   const [handledStartDate, setHandledStartDate] = useState(null);
   const [handledEndDate, setHandledEndDate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+
+  const openModal = (content) => {
+    setModalContent(content);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     fetchReports();
@@ -67,18 +79,17 @@ const CommunityReportList = () => {
       const adminId = 1; // 실제 admin ID 사용
       const block = blockAccount[report.communityReportId] || false;
       const del = deletePost[report.communityReportId] || false;
-
       if (block) {
         try {
-          await processBlockAccount(
+          await processBlockAccountCommnity(
             report.communityReportId,
             adminId,
-            "차단 사유를 여기에 입력하세요"
+            report.communityReportType
           );
-          alert("계정 차단이 성공적으로 처리되었습니다.");
+          openModal("계정 차단이 성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("계정 차단 중 오류가 발생했습니다.", error);
-          alert("계정 차단 처리 중 오류가 발생했습니다.");
+          openModal("계정 차단 처리 중 오류가 발생했습니다.");
         }
       }
 
@@ -89,16 +100,16 @@ const CommunityReportList = () => {
             adminId,
             report.communityNo
           );
-          alert("글 삭제가 성공적으로 처리되었습니다.");
+          openModal("글 삭제가 성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("글 삭제 중 오류가 발생했습니다.", error);
-          alert("글 삭제 처리 중 오류가 발생했습니다.");
+          openModal("글 삭제 처리 중 오류가 발생했습니다.");
         }
       }
 
       // 글 삭제나 계정 차단을 하지 않더라도 처리 상태 업데이트
       if (!block && !del) {
-        await processBlockAccount(
+        await processBlockAccountCommnity(
           report.communityReportId,
           adminId,
           "처리 사유를 여기에 입력하세요"
@@ -110,7 +121,7 @@ const CommunityReportList = () => {
       await fetchReportCounts();
     } catch (error) {
       console.error("처리 중 오류가 발생했습니다.", error);
-      alert("처리 중 오류가 발생했습니다.");
+      openModal("처리 중 오류가 발생했습니다.");
     }
   };
 
@@ -315,44 +326,52 @@ const CommunityReportList = () => {
                         </div>
                       </div>
 
-                      <div className={styles.checkboxContainer}>
-                        <label className={styles.customCheckbox}>
-                          계정차단
-                          <input
-                            type="checkbox"
-                            checked={
-                              blockAccount[report.communityReportId] || false
-                            }
-                            onChange={() =>
-                              handleCheckboxChange(
-                                report.communityReportId,
-                                "block"
-                              )
-                            }
-                          />
-                        </label>
-                        <label className={styles.customCheckbox}>
-                          글삭제
-                          <input
-                            type="checkbox"
-                            checked={
-                              deletePost[report.communityReportId] || false
-                            }
-                            onChange={() =>
-                              handleCheckboxChange(
-                                report.communityReportId,
-                                "delete"
-                              )
-                            }
-                          />
-                        </label>
-                      </div>
-                      <button
-                        className={styles.processButton}
-                        onClick={() => handleProcess(report)}
-                      >
-                        처리
-                      </button>
+                      {report.communityReportHandledYN !== "Y" && (
+                        <div className={styles.checkboxContainer}>
+                          <label className={styles.customCheckbox}>
+                            계정차단
+                            <input
+                              type="checkbox"
+                              checked={
+                                blockAccount[report.communityReportId] || false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  report.communityReportId,
+                                  "block"
+                                )
+                              }
+                            />
+                          </label>
+                          <label className={styles.customCheckbox}>
+                            글삭제
+                            <input
+                              type="checkbox"
+                              checked={
+                                deletePost[report.communityReportId] || false
+                              }
+                              onChange={() =>
+                                handleCheckboxChange(
+                                  report.communityReportId,
+                                  "delete"
+                                )
+                              }
+                            />
+                          </label>
+                        </div>
+                      )}
+                      {report.communityReportHandledYN === "Y" ? (
+                        <p className={styles.processedText}>
+                          이미 처리되었습니다.
+                        </p>
+                      ) : (
+                        <button
+                          className={styles.processButton}
+                          onClick={() => handleProcess(report)}
+                        >
+                          처리
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -377,6 +396,15 @@ const CommunityReportList = () => {
           )
         )}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        content={<p>{modalContent}</p>}
+        buttonLabel="닫기"
+        buttonColor="#77aaad"
+        buttonSize="16px"
+        modalSize={{ width: "350px", height: "150px" }}
+      />
     </div>
   );
 };
