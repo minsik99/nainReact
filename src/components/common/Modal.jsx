@@ -4,7 +4,7 @@ import RadiusButton from '../designTool/RadiusButton';
 import useClickOutside from '../hook/useClickOutside';
 import { useState, useEffect } from 'react';
 import CustomDropdown from '../designTool/CustomDropdown';
-import NotButtonModal from '../interview/NotButtonModal';
+
 
 
 const DefaultModal = ({ data, closeModal, onConfirm }) => {
@@ -68,17 +68,13 @@ const Modal = ({ isOpened, type, closeModal, data }) => {
 
   const wrapperRef = useClickOutside(closeModal);
   return (
-    <div className={styles.modalContainer}>
-      <div className={styles.modalBody} ref={wrapperRef}>
-          {type === 'custom' ? (
-          <CustomModal onConfirm={data.onConfirm} closeModal={closeModal} data={data} />
-        ) : type === 'default' ? (
-          <DefaultModal onConfirm={data.onConfirm} data={data} closeModal={closeModal} />
-        ) : (
-          <div className={styles.notStyle}>
-          <NotButtonModal data={data} closeModal={closeModal}/>
-          </div>
-        )}
+    <div className={styles.modalContainer} ref={wrapperRef}>
+      <div className={styles.modalBody} >
+      { type === 'custom' ? (
+        <CustomModal onConfirm={data.onConfirm} closeModal={closeModal} data={data} />
+      ) : (
+        <DefaultModal onConfirm={data.onConfirm} data={data} closeModal={closeModal} />
+      )}
       </div>
     </div>
   );
