@@ -8,13 +8,8 @@ const MEMBER_URL = "/member";
 
 const MemberAxios = {
 
-    //회원 조회
-    getCheckMember(memberNo){
-
-        return instance.get(MEMBER_URL + '/member', {
-            params : {memberNo: memberNo}
-        });
-    },
+    //내 정보 수정
+   
 
 
 }
