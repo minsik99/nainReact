@@ -1,4 +1,5 @@
 import axios from "axios";
+import instance from "./axiosApi";
 
 const BASE_URL = "http://localhost:9999/report";
 
@@ -97,9 +98,29 @@ export const processBlockAccountComment = async (
 };
 
 export const processComplete = async (reportId, adminId) => {
-  const response = await asiox.post(`${BASE_URL}/complete`, {
+  const response = await axios.post(`${BASE_URL}/complete`, {
     reportId,
     adminId,
   });
   return response.data;
 };
+
+export const reportCommunity = async (rCommunity) => {
+  try{
+    const response = await instance.post(`${BASE_URL}/community`, rCommunity);
+    return response.data;
+  }catch(error){
+    console.error("신고 실패", error);
+    throw error;
+  }
+};
+
+export const reportComment = async (rComment) => {
+  try{
+    const response = await instance.post(`${BASE_URL}/comment`, rComment);
+    return response.data;
+  }catch(error){
+    console.error("신고 실패", error);
+    throw error;
+  }
+}
