@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../../components/manager/Sidebar";
 import CommunityReportList from "../../components/manager/CommunityReportList";
 
-const CommunityReportListPage = ({ initialReports }) => {
+const CommunityReportListPage = () => {
   return (
     <>
       <div className="sidebar">

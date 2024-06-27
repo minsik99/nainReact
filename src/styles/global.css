@@ -130,11 +130,11 @@
 }
 
 .navigation-container li:hover .submenu {
-  max-height: 320px;
+  max-height: 260px;
 }
 
 .navbar:hover .menu-background {
-  height: 230px;
+  height: 180px;
 }
 
 .submenu a {
@@ -145,12 +145,7 @@
   color: #ffffff;
 }
 .navigation-container:hover .submenu {
-  max-height: 300px; /* navigation-container에 마우스를 올렸을 때 슬라이드 메뉴의 높이 설정 */
-}
-
-.subback {
-  background: red;
-  width: 10000px;
+  max-height: 260px; /* navigation-container에 마우스를 올렸을 때 슬라이드 메뉴의 높이 설정 */
 }
 
 .navigation-container:hover {
@@ -178,7 +173,7 @@
 
 .slider1_left {
   width: 50%;
-  height: 200px;
+  height: 160px;
   float: left;
   text-align: right;
   margin-top: 60px;
@@ -222,8 +217,9 @@
 
 .resume_word {
   float: right;
-  width: 50%;
+  width: 45%;
   margin-top: 40px;
+  margin-left: 40px;
 }
 
 .interview_image {
