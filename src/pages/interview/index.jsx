@@ -1,14 +1,20 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { observer } from "mobx-react";
 import InterviewListComponent from "../../components/interview/InterviewlistComponent";
 import styles from '../../styles/interview/interviewComponent.module.css';
 import PathText from "../../components/interview/PathText";
-import { authStore } from "../../stores/authStore";
+
 const InterviewListForm = observer(()=>{
-    // const memberNo = authStore.memberNo;
-    const memberNo = authStore.memberNo;
+    const [memberNo, setMemberNo] = useState(null);
     const [selectedButton, setSelectedButton] = useState('voice');
     const [sortKey, setSortKey] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const memberNo = window.localStorage.getItem("memberNo");
+            setMemberNo(memberNo);
+        }
+    }, []);
 
     const paths = [
         { name: '메인', link: '/' },

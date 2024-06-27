@@ -40,7 +40,7 @@ const LoginForm = ({styles}) => {
     };
 
     const handleSignupClick = () => {
-        router.push('/member/signUpForm');
+        router.push('/member/terms');
     }
 
     return (

@@ -14,7 +14,7 @@ const NewBoard = () => {
     const parsedBoard = primalBoard ? JSON.parse(primalBoard) : null;
     const [noticeTitle, setNoticeTitle] = useState(parsedBoard? parsedBoard.noticeTitle : '');
     const [noticeContent, setNoticeContent] = useState(parsedBoard? parsedBoard.noticeContent : ''); 
-    const [uploadedFile, setUploadedFile] = useState(parsedBoard? parsedBoard.noticeFileName : '');
+    const [uploadedFile, setUploadedFile] = useState(parsedBoard? parsedBoard.noticeFile : '');
     const [file, setFile] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
@@ -73,8 +73,8 @@ const NewBoard = () => {
             noticeNo: parsedBoard.noticeNo,
             noticeTitle: noticeTitle,
             noticeContent: noticeContent,
-            fileUpload: file && file[0] ? file[0].name : null,
-            fileModified: '',
+            noticeFile: file && file[0] ? file[0].name : null,
+            noticeMFile: '',
             noticeDate: parsedBoard.noticeDate,
             noticeReadCount: parsedBoard.noticeReadCount,
           };
@@ -87,7 +87,7 @@ const NewBoard = () => {
         
               // 파일 업로드 비동기 처리
               const fileUploadResponse = await noticeAxios.insertFile(formData);
-              notice.fileModified = fileUploadResponse.data;
+              notice.noticeMFile = fileUploadResponse.data;
               console.log("파일 저장명 : ", fileUploadResponse.data);
           } catch (error) {
             alert("파일 업로드 실패");
@@ -96,7 +96,7 @@ const NewBoard = () => {
           }}
         
           // console.log(notice);
-          // console.log(notice.fileModified);
+          // console.log(notice.noticeMFile);
         
           try {
             // 글 수정 비동기 처리
@@ -119,8 +119,8 @@ const NewBoard = () => {
           const notice = {
           noticeTitle: noticeTitle,
           noticeContent: noticeContent,
-          fileUpload: file[0] ? file[0].name : null,
-          fileModified: '',
+          noticeFile: file[0] ? file[0].name : null,
+          noticeMFile: '',
           };
 
         try {
@@ -130,10 +130,10 @@ const NewBoard = () => {
       
             // 파일 업로드 비동기 처리
             const fileUploadResponse = await noticeAxios.insertFile(formData);
-            notice.fileModified = fileUploadResponse.data;
+            notice.noticeMFile = fileUploadResponse.data;
             console.log("파일 저장명 : ", fileUploadResponse.data);
           } else {
-            notice.fileModified = uploadedFile;
+            notice.noticeMFile = uploadedFile;
           }
         } catch (error) {
           alert("파일 업로드 실패");
@@ -142,7 +142,7 @@ const NewBoard = () => {
         }
       
         // console.log("notice : ", notice);
-        // console.log(notice.fileModified);
+        // console.log(notice.noticeMFile);
       
         try {
           // 글 작성 비동기 처리
@@ -164,11 +164,11 @@ const NewBoard = () => {
       };
 
       const downloadFile = () => {
-        noticeAxios.getFile(parsedBoard.fileModified).then(res => {
+        noticeAxios.getFile(parsedBoard.noticeMFile).then(res => {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', board.fileName); // 다운로드 파일의 이름 설정
+            link.setAttribute('download', board.noticeFile); // 다운로드 파일의 이름 설정
             document.body.appendChild(link);
             link.click();
         });
@@ -213,7 +213,7 @@ const NewBoard = () => {
               }}
             />
               {uploadedFile && (
-                <div className={styles.fileName}>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{uploadedFile}</a>
+                <div className={styles.noticeFile}>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{uploadedFile}</a>
                   &nbsp; <img className={styles.delete} src="../../../image/pngegg11.png" onClick={delFile}></img>
                   <h6>※ 파일 업로드는 1개만, 최대 50MB까지 가능합니다.</h6>
                 </div>

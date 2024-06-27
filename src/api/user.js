@@ -23,9 +23,8 @@ export const login = (loginData) => {
                 window.localStorage.setItem("refresh", response.data.refresh);
                 window.localStorage.setItem("memberNo", response.data.memberNo);
                 authStore.setIsAdmin(response.data.isAdmin);
-                authStore.setMemberNo(response.data.memberNo);
-               
-                authStore.checkLoggedIn()
+                authStore.setMemberNo(response.data.memberNo);              
+                authStore.checkLoggedIn();
                 
             }
             return response;
@@ -52,8 +51,9 @@ export const logout = () =>{
 };
 
 // 이메일 유효성 검사 API 호출 함수 추가
-export const checkEmail = (emailData) => {
-    return axios.post(baseUrl + "/check-email", emailData), then(res => {
+export const checkEmail = (memberEmail) => {
+    return axios.post(baseUrl + "/member/checkemail", memberEmail ).then(res => {
+        console.log(memberEmail);
         return res.data;
     }).catch(error => {
         console.error("이메일 유효성 검사 오류:", error.response ? error.response.data : error.message);
@@ -63,14 +63,28 @@ export const checkEmail = (emailData) => {
 
 // 내정보 불러오기 
 export const myinfo = (memberNo) => {
-    console.log("memberNo: ", memberNo);
+    console.log("memberNo:", memberNo);
 
-    return axios.get(baseUrl + "/myinfo", {
-        params: {memberNo}
-    }).then(res => {
+    return axios.post(baseUrl + "/myinfo/user", null, {
+        params: {memberNo},
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+  
+       }).then(res => {
         return res.data;
     }).catch(error => {
         console.error("회원정보 불러오기 오류", error.res ? error.res.data : error.message);
         throw error;
     });
+};
+
+// 내정보 수정하기
+export const updateMyinfo = async (memberNo, updateMyinfoData) => {
+    return await axios.put(baseUrl + `/updateMyinfo/${memberNo}`, updateMyinfoData), {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+        
+    } 
 };

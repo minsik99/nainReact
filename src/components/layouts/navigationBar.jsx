@@ -69,11 +69,11 @@ const NavigationBar = observer(() => {
                     </Link>
                     <br />
 
-                    <Link href="/chat" legacyBehavior>
-                      <a className="subword">채팅방</a>
-                    </Link>
-                    <br />
-                    <Link href="/resume/AcceptedKeyword" passHref legacyBehavior>
+                    <Link
+                      href="/resume/AcceptedKeyword"
+                      passHref
+                      legacyBehavior
+                    >
                       <a className="subword">합격자 키워드 분석</a>
                     </Link>
                     <br />
@@ -108,6 +108,16 @@ const NavigationBar = observer(() => {
                   <Link href="/community" passHref legacyBehavior>
                     <a>커뮤니티</a>
                   </Link>
+                  <div className="submenu">
+                    <Link href="/community" legacyBehavior>
+                      <a className="subword">게시판</a>
+                    </Link>
+                    <br />
+                    <Link href="/chat" legacyBehavior>
+                      <a className="subword">채팅방</a>
+                    </Link>
+                    <br />
+                  </div>
                 </li>
                 <li>
                   <Link href="/notice" passHref legacyBehavior>

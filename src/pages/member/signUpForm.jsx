@@ -4,10 +4,13 @@ import { useRouter } from 'next/router';
 import {handleAxiosError} from "../../api/errorAxiosHandle";
 import KakaoSignup from "../../components/member/KakaoSignup";
 import styles from "../../styles/member/memberSignup.module.css"
+import { checkEmail } from '../../api/user';
 
 
 const SignUpForm = () => {
     const router = useRouter();
+
+    const [isReadOnly, setIsReadOnly] = useState(false);
     
     const [formData, setFormData] = useState({
         memberEmail: '',
@@ -25,6 +28,10 @@ const SignUpForm = () => {
             ...formData,
             [name]: value,
         });
+        if(name === 'memberEmail'){
+            setEmailError('');
+            setEmailValid(null);
+        }
     };
 
     const validateEmail = (email) => {
@@ -33,6 +40,18 @@ const SignUpForm = () => {
     };
 
     const handleEmailCheck = async () => {
+<<<<<<< HEAD
+=======
+
+
+        if(!formData.memberEmail.trim() && formData.memberEmail.trim() == ''){
+            console.log("memberEmail", formData.memberEmail);
+            setEmailError('이메일을 입력해주세요.');
+            setEmailValid(false);
+            return;
+        }
+
+>>>>>>> ad29abe39a0b3398655a9ca805eac90b41152f62
         if (!validateEmail(formData.memberEmail)) {
             setEmailError('유효한 이메일 주소를 입력해주세요.')
             setEmailValid(false);
@@ -40,14 +59,18 @@ const SignUpForm = () => {
         }
 
         try {
-            const res = await checkEmail({ email: formData.memberEmail });
-            if (res.data.isAvailable){
-                setEmailError('');
-                setEmailValid(true);
-            }else {
-                setEmailError('이미 사용 중인 이메일입니다.');
-                setEmailValid(false);
-            }
+            const emailChecking = await checkEmail(formData.memberEmail).then(res => {
+                console.log(res);
+                if (res == "Valid email"){
+                    setEmailError('');
+                    setEmailValid(true);
+                    setIsReadOnly(true);
+                }else {
+                    setEmailError('이미 사용 중인 이메일입니다.');
+                    setEmailValid(false);
+                }
+            });
+
         }catch(error){
             handleAxiosError(error);
         }
@@ -64,13 +87,18 @@ const SignUpForm = () => {
             return;
         }
 
+        if (emailValid !== true){
+            alert('이메일 확인을 완료해주세요.');
+            return;
+        }
+
         if (memberPwd !== confirmPassword) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
 
         const signUpData = {
-            memberEmail: memberEmail,
+            memberEmail: memberEmail.trim(),
             memberPwd: memberPwd,
             memberName: memberName,
         };
@@ -93,11 +121,12 @@ const SignUpForm = () => {
                             name="memberEmail" 
                             value={formData.memberEmail} 
                             onChange={handleInputChange} 
-                            required 
+                            required
+                            readOnly={isReadOnly}
                         />
                         <button type="button" onClick={handleEmailCheck}>이메일 확인</button>
                         {emailError && <p className={styles.error}>{emailError}</p>}
-                        {emailError && <p className={styles.success}>사용 가능한 이메일입니다.</p>}
+                        {emailValid && <p className={styles.success}>사용 가능한 이메일입니다.</p>}
                 </div>
                 <div className={styles.formGroup}>
                     <label htmlFor="password">비밀번호:</label>
