@@ -1,15 +1,19 @@
-import React, {useRef, useState, useEffect, useContext, useCallback} from 'react';
+import React, {useRef, useState, useEffect, useCallback} from 'react';
 import styles from '../../styles/interview/interviewListComponent.module.css';
 import InterviewCard from './InterviewCard';
-import { getInterviewList, getInterview } from '../../api/interview/interview';
+import { getInterviewList, deleteInterview, addInterview } from '../../api/interview/interview';
 import useInfiniteScroll from '../hook/useInfiniteScroll';
 import InterviewResultComponent from './InterviewResult';
 import useDropdown from '../../components/hook/useDropdown';
 import CustomDropdown from '../../components/designTool/CustomDropdown';
 import useClickOutside from '../hook/useClickOutside';
+import { useRouter } from 'next/router';
+import { useModal } from '../hook/useModal';
+import Modal from '../common/Modal';
 
 
 const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton, handleSelected, sort}) => {
+    const router = useRouter();
     const containerRef = useRef(null);
     const [interviewList, setInterviewList] = useState([]);
     const [selectedInterview, setSelectedInterview] = useState(null);
@@ -18,7 +22,8 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
     const { isDropdownVisible, toggleDropdown } = useDropdown();
     const size = 3;
     const wrapperRef = useClickOutside(toggleDropdown);
-
+    const deleteModal = useModal();
+    const titleModal = useModal();
     const buttons = [
         { text: 'Voice', id: 'voice' },
         { text: 'Video', id: 'video' },
@@ -43,7 +48,6 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
     };
 
     const handleSelectInterview = useCallback((id) => {
-        console.log("확인용::::", id)
         setSelectedInterview(id);
     });
 
@@ -51,8 +55,47 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
         setSortKey(item ? item.Accessor : null);
         toggleDropdown();
     };
-
-
+    
+    const startInterview = async () => {
+        titleModal.openModal({
+            title: '타이틀을 입력해주세요.',
+            columns: selectedInterview,           
+            onConfirm: async (title) => {
+              try {
+                const res = await addInterview(memberNo, title);
+                router.push({pathname:"/interview/test",
+                    query: {itvNo: res.itvNo,
+                        memberNo: memberNo
+                    }
+                });
+              } catch (error) {
+                console.error("면접 추가 실패", error);
+              } finally {
+                titleModal.closeModal();
+              }
+          },
+      }); 
+        
+    }
+    
+    const handleOpenModal = () => {
+        deleteModal.openModal({
+          title: '    ',
+          content: '삭제하시겠습니까?',
+          columns: selectedInterview,
+          onConfirm: (selectedInterview) => {
+            try {
+                console.log(selectedInterview);
+               deleteInterview(selectedInterview);
+            } catch (error) {
+              console.error("면접 삭제 실패", error);
+            } finally {
+              deleteModal.closeModal();
+            }
+        },
+    }); 
+    };
+      
     useEffect(() => {
         if (memberNo !== null) {
             const fetchInterviews = async () => {
@@ -96,7 +139,7 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
                 </div>
                 <h2 className={styles.title}>AI 면접 분석 History</h2>
                 <div className={styles.cardContainer} ref={containerRef}>
-                    <div className={styles.addBlock}><img className={styles.img} src="/image/add.png"/></div>
+                    <div className={styles.addBlock}><img className={styles.img} onClick={startInterview} src="/image/add.png"/></div>
                     {interviewList.map(interview => {
                         if (!interview.itvNo) {
                             console.error('itvNo is undefined for interview:', interview);
@@ -111,10 +154,14 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
                                 description={interview.itvDate}
                                 onSelect={handleSelectInterview}
                                 isSelected={selectedInterview === interview.itvNo}
+                                deleteInterviewOne={handleOpenModal}
                             /> 
+                            
                         </div>
                         );
                     })}
+                    <Modal isOpened={deleteModal.isOpened} type='default' closeModal={deleteModal.closeModal} data={deleteModal.modalData} />
+                    <Modal isOpened={titleModal.isOpened} type='' closeModal={titleModal.closeModal} data={titleModal.modalData} />
                     <div className={styles.buttonBox}>
                         {hasMore && (
                         <img onClick={loadMore} src="/image/arrowbutton.png" className={styles.icon} />
