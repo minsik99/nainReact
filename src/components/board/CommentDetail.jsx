@@ -3,6 +3,7 @@ import RadiusButton from '../designTool/RadiusButton';
 import CommunityAxios from "../../api/CommunityAxios";
 import Modal from '../../components/common/Modal';
 import {useModal} from '../../components/hook/useModal';
+import { reportComment } from '../../api/ReportAxios';
 
 const CommentDetail = ({ comment, styles }) => {
     const [showInput, setShowInput] = useState(false);
@@ -66,14 +67,25 @@ const CommentDetail = ({ comment, styles }) => {
     };
 
 
-    const handleOpenReport = (comment) => {
+    const handleOpenReport = () => {
        reportModal.openModal({
           title: '댓글 신고', //제목 추가 가능
           content: '신고 사유', //모달안 내용(현재는 드롭다운만 구현상태)
           columns: [{'Header':'욕설 및 비방'}, {'Header':'광고'}, {'Header':'도배'}],
     //신고하기 대신 원하는 문구 삽입, 처음 들어가는 문장이 기본값
           onConfirm: (selectedItem) => {
-            console.log('Selected item:', selectedItem);
+            const rComment = {
+                commentNo: comment.commentNo,
+                reportType: selectedItem['Header'],
+                handledYN: 'N',
+            };
+            console.log('Selected item:', rComment);
+            reportComment(rComment).then(res => {
+                alert("신고되었습니다.");
+                console.log("성공");
+            }).catch(error => {
+                console.log(error);
+            });
             reportModal.closeModal();
           },
     //드롭다운 선택시 안에 들어있는 값가지고 옴
