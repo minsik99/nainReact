@@ -52,7 +52,7 @@ export const logout = () =>{
 
 // 이메일 유효성 검사 API 호출 함수 추가
 export const checkEmail = (memberEmail) => {
-    return axios.post(baseUrl + "/member/checkemail", memberEmail).then(res => {
+    return axios.post(baseUrl + "/member/checkemail", memberEmail ).then(res => {
         console.log(memberEmail);
         return res.data;
     }).catch(error => {
@@ -77,4 +77,14 @@ export const myinfo = (memberNo) => {
         console.error("회원정보 불러오기 오류", error.res ? error.res.data : error.message);
         throw error;
     });
+};
+
+// 내정보 수정하기
+export const updateMyinfo = async (memberNo, updateMyinfoData) => {
+    return await axios.put(baseUrl + `/updateMyinfo/${memberNo}`, updateMyinfoData), {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+        
+    } 
 };

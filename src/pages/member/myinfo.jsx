@@ -5,18 +5,20 @@ import axios from "axios";
 import { authStore } from "../../stores/authStore";
 import styles from "../../styles/member/memberMyinfo.module.css";
 import { myinfo } from "../../api/user";
+import { updateMyinfo } from "../../api/user";
 
 const Myinfo = () => {
 
     const router = useRouter();
     const [memberNo, setMemberNo] = useState(null)
+    const [isReadOnly, setIsReadOnly] = useState(false); //readOnly 상태 관리
     const [formData, setFormData] = useState({
         memberEmail:'',
         memberPwd: '',
         confirmPwd: '',
         memberName: '',
         memberNickName: '',
-        subscribe: 'true'
+        subscribeYN: 'Y'
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -30,7 +32,9 @@ const Myinfo = () => {
                 memberEmail: res.memberEmail,
                 memberName: res.memberName,
                 memberNickName: res.memberNickName,
-                subscribe: res.subscribe
+                subscribeYN: res.subscribeYN === 'Y' ? 'Y' : 'N',
+                memberPwd: '',
+                confirmPwd: ''
             });
             console.log(formData);
         } catch(error) {
@@ -58,7 +62,7 @@ const Myinfo = () => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: value,
+            [name]: name === 'subscribeYN' ? value === 'true' : value.trim(),  //모든 입력값에서 공백 제거
         });
     };
 
@@ -68,24 +72,21 @@ const Myinfo = () => {
             alert("비밀번호가 일치하지않습니다.");
             return;
         }
+        formData.subscribeYN = formData.subscribeYN === 'true' ? 'Y' : 'N';
+        console.log("Submitting form data:", formData); 
         updateMyinfoMutation.mutate(formData);
     };
 
     const updateMyinfoMutation = useMutation(
-        async(myinfoData) => {
-            const res = await axios.put('/updateMyinfo', myinfoData,{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            return res.data;
+        async (updateMyinfoData) => {
+            console.log("수정 데이터:", updateMyinfoData);
+            return await updateMyinfo(memberNo, updateMyinfoData); //memberNo 를 포함하여 데이터를 보냄
         },
-
-
         {
             onSuccess: () => {
                 alert("정보가 성공적으로 업데이트되었습니다.");
-                router.push("/main") // 정보수정 후 이동할 페이지를 설정
+                setIsReadOnly(true); //수정이 완료되면 readOnly 상태로 설정
+                router.push("/member/myinfo"); // 정보수정 후 이동할 페이지를 설정
             },
             onError: (error) => {
                 console.error(error);
@@ -119,7 +120,7 @@ const Myinfo = () => {
                         name="memberEmail" 
                         value={formData.memberEmail} 
                         onChange={handleInputChange} 
-                        disabled 
+                        readOnly={true} //항상 readOnly
                         />
                 </div>
                 <div className={styles.formGroup}>
@@ -128,9 +129,9 @@ const Myinfo = () => {
                         type="password"
                         id="password"
                         name="memberPwd"
-                        value={formData.confirmPwd}
+                        value={formData.memberPwd}
                         onChange={handleInputChange}
-                        required
+                        readOnly={isReadOnly} //상태에 따라 변경
                         />
                 </div>
                 <div className={styles.formGroup}>
@@ -141,7 +142,7 @@ const Myinfo = () => {
                         name="confirmPwd"
                         value={formData.confirmPwd}
                         onChange={handleInputChange}
-                        required
+                        readOnly={isReadOnly} //상태에 따라 변경
                         />
                 </div>
                 <div className={styles.formGroup}>
@@ -152,7 +153,7 @@ const Myinfo = () => {
                         name="memberName"
                         value={formData.memberName}
                         onChange={handleInputChange}
-                        disabled
+                        readOnly={true}
                         />
                 </div>
                 <div className={styles.formGroup}>
@@ -163,17 +164,17 @@ const Myinfo = () => {
                         name="memberNickName"
                         value={formData.memberNickName}
                         onChange={handleInputChange}
-                        required
+                        readOnly={isReadOnly} //상태에 따라 변경
                         />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="subscribe">구독 여부:</label>
+                    <label htmlFor="subscribeYN">구독 여부:</label>
                     <select
-                        id="subscribe"
-                        name="subscribe"
-                        value={formData.subscribe}
+                        id="subscribeYN"
+                        name="subscribeYN"
+                        value={formData.subscribeYN}
                         onChange={handleInputChange}
-                        required
+                        readOnly={isReadOnly} //상태에 따라 변경
                     >
                         <option value="true">구독</option>
                         <option value="false">구독 취소</option>
@@ -185,7 +186,7 @@ const Myinfo = () => {
                         <p>수정 중...</p>
                     ) : (
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
-                        <button type="submit">수정</button>
+                        <button type="submit" disabled={isReadOnly}>수정</button>
                     )}
                         <button type="button" id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
                 </div>
