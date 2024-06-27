@@ -24,7 +24,7 @@ const InterviewListForm = observer(()=>{
 
     const sort = [
         { Header: '타이틀순', Accessor: 'title' },
-        { Header: '최신순', Accessor: 'itvDate' }
+        { Header: '최신순', Accessor: 'itvDateInfo' }
     ];
 
     const handleSelected = (button) => {

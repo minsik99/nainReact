@@ -33,12 +33,13 @@ export const deleteInterview = async (itvNo) => {
   }
 };
 
-export const addInterview = async (memberNo, title) => {
+export const addInterview = async (memberNo, title, info) => {
   try {
-    const response = await instance.post(BASE_URL + "/" , {params: {memberNo, title}});
-    return response.data;
+    console.log("res::::", info);
+    const response = await instance.post(`${BASE_URL}?memberNo=${memberNo}&title=${title}&category=${info}`);
+    console.log("response::", response);
+    return response;
   } catch (error) {
     console.error("인터뷰 추가 실패", error);
-    console.debug("에러 위치>>");
   }
 };

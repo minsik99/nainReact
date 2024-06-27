@@ -4,21 +4,38 @@ import ButtonContainer from "./ButtonContainer";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import LineChart from "./LineChart";
 import DoughnutChart from "./DoughnutChart";
+import { useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
     LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
+import { useMutation } from "react-query";
+import { getInterview } from "../../api/interview/interview";
 
 
 const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, handleSelected}) => {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, 
-        Title, Tooltip, Legend, ArcElement, ChartDataLabels);     
-    const lineData = {
+        Title, Tooltip, Legend, ArcElement, ChartDataLabels);  
+        const [dataSet, setDataSet] = useState([]);
+        const mutation = useMutation((itvNo) => getInterview(itvNo),
+           {
+                onSuccess: (response) => {
+                    setDataSet(response.data);
+                },
+                onError: (error) => {
+                    console.error('Error fetching data:', error);
+                }
+            }
+            
+        );
+    
+    
+        const lineData = {
         labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         datasets: [
             {
                 label: 'Voice',
                 backgroundColor: 'rgba(75,192,192,0.2)',
                 borderColor: 'rgba(75,192,192,1)',
-                data: [65, 59, 80, 81, 56, 55, 40],
+                data: dataSet,
             },
         ],
     };
@@ -31,7 +48,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 label: 'Video',
                 backgroundColor: 'rgba(75,192,192,0.2)',
                 borderColor: 'rgba(26, 7, 248, 1)',
-                data: [65, 59, 80, 81, 56, 55, 40],
+                data: dataSet,
             },
         ],
     };
@@ -43,7 +60,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 label: 'total',
                 backgroundColor: 'rgba(128, 128, 128, 0.5)',
                 borderColor: 'rgba(26, 7, 248, 1)',
-                data: [65, 59, 80, 81, 56, 55, 40, 23, 43, 78],
+                data: dataSet,
             },
         ],
     };
@@ -98,6 +115,8 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
             />
             {selectedButton == 'video' &&
             <div className={styles.resultContainer}>
+                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                 <div className={styles.chartRow}>
                     <LineChart data={lineData} title="답변수치" />
                     <LineChart data={lineData} title="자세분석" />
@@ -111,13 +130,16 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
             {selectedButton == 'total' &&
             <div className={styles.resultContainer}>
                 <div className={styles.textRow}>
-                    {/* 이후 authsore 요소에 들어오면 쓸 예정 */}
                     <div className={styles.resultText}>
+                    {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                    {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                         <div className={styles.leftText}>{memberNo} 님의 면접 결과</div>
                         <div className={styles.rightText}>예시용 문장입니다 예시용 문장입니다 예시용 문장입니다 예시용 문장입니다</div>
                     </div>
                 </div>
                 <div className={styles.totalContainer}>
+                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                     <div className={styles.totalV}>
                     <LineChart data={lineData} title="음성분석결과" />
                     <LineChart data={lineData2} title="영상분석결과" />
