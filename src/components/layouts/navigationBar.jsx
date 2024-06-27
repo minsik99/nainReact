@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Navbar,
-  Nav,
-  Container,
-  NavDropdown,
-  Button,
-  Modal,
-} from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { authStore } from "../../stores/authStore";
@@ -17,6 +10,7 @@ const NavigationBar = observer(() => {
   const loggedIn = authStore.loggedIn;
   const { handleLogoutClick } = useLogoutHandler();
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부 상태
 
   const handleSignUpClick = () => {
     router.push("/member/terms");
@@ -25,6 +19,12 @@ const NavigationBar = observer(() => {
   useEffect(() => {
     authStore.checkLoggedIn();
   }, []);
+
+  useEffect(() => {
+    // localStorage에서 isAdmin 값을 가져와 설정합니다.
+    const adminStatus = localStorage.getItem("isAdmin") === "true";
+    setIsAdmin(adminStatus);
+  }, [loggedIn]);
 
   const [hovered, setHovered] = useState(false);
 
@@ -124,41 +124,35 @@ const NavigationBar = observer(() => {
                     <a>공지사항</a>
                   </Link>
                 </li>
-                <li>
-                  <Link href="/manager/Dashboard" passHref legacyBehavior>
-                    <a>관리자</a>
-                  </Link>
-                  <div className="submenu">
+                {isAdmin && (
+                  <li>
                     <Link href="/manager/Dashboard" passHref legacyBehavior>
-                      <a className="subword">대시보드</a>
+                      <a>관리자</a>
                     </Link>
-                    <br />
-                    <Link
-                      href="/manager/UserManagement"
-                      passHref
-                      legacyBehavior
-                    >
-                      <a className="subword">회원리스트</a>
-                    </Link>
-                    <br />
-                    <Link
-                      href="/manager/AdminManagement"
-                      passHref
-                      legacyBehavior
-                    >
-                      <a className="subword">관리자리스트</a>
-                    </Link>
-                    <br />
-                    <Link
-                      href="/manager/CommunityReportListPage"
-                      passHref
-                      legacyBehavior
-                    >
-                      <a className="subword">신고리스트</a>
-                    </Link>
-                    <br />
-                  </div>
-                </li>
+                    <div className="submenu">
+                      <Link href="/manager/Dashboard" passHref legacyBehavior>
+                        <a className="subword">대시보드</a>
+                      </Link>
+                      <br />
+                      <Link
+                        href="/manager/UserManagement"
+                        passHref
+                        legacyBehavior
+                      >
+                        <a className="subword">회원</a>
+                      </Link>
+                      <br />
+                      <Link
+                        href="/manager/CommunityReportListPage"
+                        passHref
+                        legacyBehavior
+                      >
+                        <a className="subword">신고리스트</a>
+                      </Link>
+                      <br />
+                    </div>
+                  </li>
+                )}
               </ul>
             </nav>
             <div

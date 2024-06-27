@@ -30,6 +30,7 @@ const CommunityReportList = () => {
   const [handledEndDate, setHandledEndDate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [memberNo, setMemberNo] = useState(0);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -42,6 +43,13 @@ const CommunityReportList = () => {
   useEffect(() => {
     fetchReports();
     fetchReportCounts();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const memberNo = window.localStorage.getItem("memberNo");
+      setMemberNo(memberNo);
+    }
   }, []);
 
   const fetchReports = async () => {
@@ -76,7 +84,8 @@ const CommunityReportList = () => {
 
   const handleProcess = async (report) => {
     try {
-      const adminId = 1; // 실제 admin ID 사용
+      const adminId = memberNo; // 실제 admin ID 사용
+      console.log(`Processing report with adminId: ${adminId}`); // 확인용 콘솔 로그
       const block = blockAccount[report.communityReportId] || false;
       const del = deletePost[report.communityReportId] || false;
       if (block) {
