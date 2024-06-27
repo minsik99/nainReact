@@ -10,9 +10,8 @@ import useClickOutside from '../hook/useClickOutside';
 import { useRouter } from 'next/router';
 import { useModal } from '../hook/useModal';
 import Modal from '../common/Modal';
-
-
-const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton, handleSelected, sort}) => {
+import { observer } from 'mobx-react';
+const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, selectedButton, handleSelected, sort}) => {
     const router = useRouter();
     const containerRef = useRef(null);
     const [interviewList, setInterviewList] = useState([]);
@@ -24,6 +23,7 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
     const wrapperRef = useClickOutside(toggleDropdown);
     const deleteModal = useModal();
     const titleModal = useModal();
+    const categoryModal = useModal();
     const buttons = [
         { text: 'Voice', id: 'voice' },
         { text: 'Video', id: 'video' },
@@ -40,8 +40,8 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
         return [...data].sort((a, b) => {
             if (key === 'title') {
                 return a.title.localeCompare(b.title);
-            } else if (key === 'itvDate') {
-                return new Date(b.itvDate) - new Date(a.itvDate);
+            } else if (key === 'itvDateInfo') {
+                return new Date(b.itvDateInfo) - new Date(a.itvDateInfo);
             }
             return data;
         });
@@ -55,29 +55,82 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
         setSortKey(item ? item.Accessor : null);
         toggleDropdown();
     };
-    
+
     const startInterview = async () => {
-        titleModal.openModal({
-            title: '타이틀을 입력해주세요.',
-            columns: selectedInterview,           
-            onConfirm: async (title) => {
-              try {
-                const res = await addInterview(memberNo, title);
-                router.push({pathname:"/interview/test",
-                    query: {itvNo: res.itvNo,
-                        memberNo: memberNo
+        try {
+        let title = null;
+        await new Promise((resolve, reject) => {
+            titleModal.openModal({
+                title: '타이틀을 입력해주세요.',
+                columns: selectedInterview,
+                onConfirm: (inputTitle) => {
+                    title = inputTitle;
+                    titleModal.closeModal();
+                    resolve();
+                },
+                onCancel: () => {
+                    titleModal.closeModal();
+                    reject(new Error('타이틀 입력이 취소되었습니다.'));
+                },
+            });
+        })
+        await new Promise((resolve, reject) => {
+            categoryModal.openModal({
+                title: '카테고리를 선택해주세요.',
+                content: '직무',
+                columns: [
+                    { 'Header': '웹개발' },
+                    { 'Header': '엔지니어' },
+                    { 'Header': '프론트엔드' },
+                    { 'Header': '데브옵스' },
+                    { 'Header': '프로덕트매니저' },
+                    { 'Header': '빅데이터' },
+                    { 'Header': '백엔드' },
+                    { 'Header': '앱개발' }
+                ],
+                onConfirm: async (selectedItem) => {
+                    let res = null;
+                    try {
+                        const info = selectedItem['Header']
+                        res = await addInterview(memberNo, title, info);
+                        console.log(res);
+                        resolve();
+                    } catch (error) {
+                        console.error("면접 추가 실패", error);
+                        reject(error);
+                    } finally {
+                        if(res && res.data) {
+                            try {
+                                await router.push({
+                                    pathname: "/interview/test",
+                                    query: {
+                                        itvNo: res.data.ivtNo,
+                                        question: res.data.question,
+                                        memberNo: memberNo
+                                    }
+                                });
+                                console.log('페이지 이동 성공');
+                            } catch (pushError) {
+                                console.error('페이지 이동 실패', pushError);
+                            } finally {
+                                categoryModal.closeModal();
+                            }
+                        } else {
+                            console.error("응답 데이터가 없습니다.");
+                        }
                     }
-                });
-              } catch (error) {
-                console.error("면접 추가 실패", error);
-              } finally {
-                titleModal.closeModal();
-              }
-          },
-      }); 
-        
+                },
+                onCancel: () => {
+                    categoryModal.closeModal();
+                    reject(new Error('카테고리 선택이 취소되었습니다.'));
+                }
+            });
+        });
+    } catch (error) {
+        console.error('면접 시작 중 오류 발생:', error);
     }
-    
+};
+
     const handleOpenModal = () => {
         deleteModal.openModal({
           title: '    ',
@@ -140,6 +193,8 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
                 <h2 className={styles.title}>AI 면접 분석 History</h2>
                 <div className={styles.cardContainer} ref={containerRef}>
                     <div className={styles.addBlock}><img className={styles.img} onClick={startInterview} src="/image/add.png"/></div>
+                    <Modal isOpened={titleModal.isOpened} type='' closeModal={titleModal.closeModal} data={titleModal.modalData} />
+                    <Modal isOpened={categoryModal.isOpened} type='custom' closeModal={categoryModal.closeModal} data={categoryModal.modalData} />
                     {interviewList.map(interview => {
                         if (!interview.itvNo) {
                             console.error('itvNo is undefined for interview:', interview);
@@ -151,7 +206,7 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
                                 key={interview.itvNo}
                                 id={interview.itvNo}
                                 title={interview.title}
-                                description={interview.itvDate}
+                                description={interview.itvDateInfo}
                                 onSelect={handleSelectInterview}
                                 isSelected={selectedInterview === interview.itvNo}
                                 deleteInterviewOne={handleOpenModal}
@@ -161,7 +216,6 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
                         );
                     })}
                     <Modal isOpened={deleteModal.isOpened} type='default' closeModal={deleteModal.closeModal} data={deleteModal.modalData} />
-                    <Modal isOpened={titleModal.isOpened} type='' closeModal={titleModal.closeModal} data={titleModal.modalData} />
                     <div className={styles.buttonBox}>
                         {hasMore && (
                         <img onClick={loadMore} src="/image/arrowbutton.png" className={styles.icon} />
@@ -174,7 +228,7 @@ const InterviewListComponent = ({ memberNo, sortKey, setSortKey, selectedButton,
                 </div>
             </div>
     );
-};
+});
 
 export default InterviewListComponent;
 

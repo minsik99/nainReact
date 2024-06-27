@@ -6,6 +6,7 @@ import styles from '../../styles/board/boardDetail.module.css';
 import Comment from '../../components/board/Comment';
 import Modal from '../../components/common/Modal';
 import {useModal} from '../../components/hook/useModal';
+import { reportCommunity } from '../../api/ReportAxios';
 
 const BoardDetail = () => {
     const router = useRouter();
@@ -96,7 +97,18 @@ const BoardDetail = () => {
           columns: [{'Header':'욕설 및 비방'}, {'Header':'광고'}, {'Header':'도배'}],
     //신고하기 대신 원하는 문구 삽입, 처음 들어가는 문장이 기본값
           onConfirm: (selectedItem) => {
-            console.log('Selected item:', selectedItem);
+            const rCommunity = {
+                communityNo: board.communityNo,
+                reportType: selectedItem['Header'],
+                handledYN: 'N',
+            };
+            console.log('Selected item:', rCommunity);
+            reportCommunity(rCommunity).then(res => {
+                alert("신고되었습니다.");
+                console.log("성공");
+            }).catch(error => {
+                console.log(error);
+            });
             reportModal.closeModal();
           },
     //드롭다운 선택시 안에 들어있는 값가지고 옴

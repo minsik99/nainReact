@@ -1,12 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import RadiusButton from "../designTool/RadiusButton";
 import { useRouter } from "next/router";
-
 import ChatbotModal from "../../components/common/ChatbotModal";
-import { observer } from "mobx-react-lite";
 import { authStore } from "../../stores/authStore";
 
 const MainComponent = () => {
@@ -278,9 +276,9 @@ const MainComponent = () => {
             padding="8px 30px"
             fontSize="18px"
             color="#9dc3c1"
-            text="결제하기"
+            text="구독하기"
             borderRadius="30px"
-            onClick={() => router.push("/subscribe")}
+            onClick={() => router.push("/payment")}
           />
         </div>
       </div>

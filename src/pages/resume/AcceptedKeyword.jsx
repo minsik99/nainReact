@@ -25,7 +25,7 @@ ChartJS.register(
 const AcceptedKeyword = () => {
   const [selectedJob, setSelectedJob] = useState('웹 개발자');
   const [jobKeywords, setJobKeywords] = useState([]);
-  const jobOptions = ['웹 개발자', '프론트엔드 개발자', '서버 개발자', '서비스 기획자', 'PM/PO'];
+  const jobOptions = ['웹 개발자', '프론트엔드 개발자', '서버 개발자', '서비스 기획자', 'PM'];
 
   useEffect(() => {
     if (selectedJob) {
@@ -42,10 +42,10 @@ const AcceptedKeyword = () => {
     }
   };
 
-  // 상위 5개 사용 빈도 키워드만 추출
+  // 상위 10개 사용 빈도 키워드만 추출
   const topKeywords = jobKeywords
     .sort((a, b) => b.frequency - a.frequency)
-    .slice(0, 5);
+    .slice(0, 10);
 
   const data = {
     labels: topKeywords.map(keyword => keyword.acceptKeyword), // 동적 라벨 설정
@@ -74,47 +74,54 @@ const AcceptedKeyword = () => {
           font: {
             size: 20,
           },
+          // padding: 20
         },
       },
     },
   };
 
   return (
-    <div className={styles.acceptedKeywordContainer}>
-      <h1>합격 키워드</h1>
-      <div className={styles.acceptedKeywordJobSelection}>
-        {jobOptions.map((job) => (
-          <button
-            key={job}
-            className={
-              selectedJob === job
-                ? styles.acceptedKeywordSelected
-                : ''
-            }
-            onClick={() => setSelectedJob(job)}
-          >
-            {job}
-          </button>
-        ))}
+      <div className={styles.acceptedKeywordContainer}>
+      <div className={styles.keywordtitle}>
+        직무 키워드
       </div>
-      <div className={styles.acceptedKeywordContent}>
-        <div className={styles.acceptedKeywordKeywords}>
-          <label>
-            <h2>{selectedJob}</h2>
-            <ul>
-              {jobKeywords.map((keyword) => (
-                <li key={keyword.keywordNo}>
-                  * {keyword.acceptKeyword} : 사용빈도  {keyword.frequency}%
-                </li>
-              ))}
-            </ul>
-          </label>
+        <div className={styles.acceptedKeywordJobSelection}>
+          {jobOptions.map((job) => (
+            <button
+              key={job}
+              className={
+                selectedJob === job
+                  ? styles.acceptedKeywordSelected
+                  : ''
+              }
+              onClick={() => setSelectedJob(job)}
+            >
+              {job}
+            </button>
+          ))}
         </div>
-        <div className={styles.acceptedKeywordChart}>
-          <Radar data={data} options={chartOptions} height={700} width={700}/>
+        <div className={styles.acceptedKeywordContent}>
+          <div className={styles.acceptedKeywordKeywords}>
+            <label>
+              <h4>{selectedJob}</h4>
+              <ul>
+                {topKeywords.map((keyword) => (
+                  <li key={keyword.keywordNo}>
+                    * {keyword.acceptKeyword} : 사용빈도 {keyword.frequency}%
+                  </li>
+                ))}
+              </ul>
+            </label>
+            <div className={styles.acceptKeywordInformation}>
+              <img src="/image/InformationIcon.png" alt="데이터 정보" className={styles.informationIcon} />
+              {selectedJob} 공고 1,000개 분석 / 2024-06-27 기준
+            </div>
+          </div>
+          <div className={styles.acceptedKeywordChart}>
+            <Radar data={data} options={chartOptions} height={1000} width={1000} />
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
