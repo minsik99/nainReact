@@ -36,7 +36,7 @@ export const deleteInterview = async (itvNo) => {
 export const addInterview = async (memberNo, title, info) => {
   try {
     console.log("res::::", info);
-    const response = await instance.post(`${BASE_URL}?memberNo=${memberNo}&title=${title}&category=${info}`);
+    const response = await instance.get(`${BASE_URL}?memberNo=${memberNo}&title=${title}&category=${info}`);
     console.log("response::", response);
     return response;
   } catch (error) {
