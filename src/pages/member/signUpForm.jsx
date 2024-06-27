@@ -41,7 +41,8 @@ const SignUpForm = () => {
 
     const handleEmailCheck = async () => {
 
-        if(!formData.memberEmail && formData.memberEmail == ''){
+
+        if(!formData.memberEmail.trim() && formData.memberEmail.trim() == ''){
             console.log("memberEmail", formData.memberEmail);
             setEmailError('이메일을 입력해주세요.');
             setEmailValid(false);
@@ -55,7 +56,7 @@ const SignUpForm = () => {
         }
 
         try {
-            const emailChecking = await checkEmail({ memberEmail: formData.memberEmail }).then(res => {
+            const emailChecking = await checkEmail(formData.memberEmail).then(res => {
                 console.log(res);
                 if (res == "Valid email"){
                     setEmailError('');
@@ -94,7 +95,7 @@ const SignUpForm = () => {
         }
 
         const signUpData = {
-            memberEmail: memberEmail,
+            memberEmail: memberEmail.trim(),
             memberPwd: memberPwd,
             memberName: memberName,
         };
