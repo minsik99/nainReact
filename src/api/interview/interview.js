@@ -24,16 +24,18 @@ export const getInterview = async (itvNo) => {
 
 export const deleteInterview = async (itvNo) => {
   try {
-    return instance.delete(BASE_URL + "/list/" + itvNo);
+    console.log(itvNo);
+    const res = instance.delete(BASE_URL + "/list", {params: {itvNo}});
+    return res
   } catch (error) {
     console.error("면접삭제 실패", error);
     console.debug("에러 위치>>");
   }
 };
 
-export const addInterview = async (memberNo) => {
+export const addInterview = async (memberNo, title) => {
   try {
-    const response = await instance.post(BASE_URL + "/" + memberNo);
+    const response = await instance.post(BASE_URL + "/" , {params: {memberNo, title}});
     return response.data;
   } catch (error) {
     console.error("인터뷰 추가 실패", error);

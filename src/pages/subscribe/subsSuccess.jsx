@@ -5,7 +5,7 @@ import { AuthContext } from '../../api/authContext';
 import styles from "../../styles/member/member.module.css";
 
 
-const LoginSuccess = () => {
+const subsSuccess = () => {
     const router = useRouter();
    
     useEffect(() => {
@@ -40,4 +40,4 @@ const LoginSuccess = () => {
     );
 };
 
-export default LoginSuccess;
+export default subsSuccess;
