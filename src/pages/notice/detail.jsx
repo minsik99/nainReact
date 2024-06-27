@@ -3,6 +3,8 @@ import noticeAxios from "../../api/noticeAxios";
 import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/board/boardDetail.module.css';
+import Modal from '../../components/common/Modal';
+import {useModal} from '../../components/hook/useModal';
 
 const noticeDetail = () => {
     const router = useRouter();
@@ -53,17 +55,17 @@ const noticeDetail = () => {
     }, [noticeNo]);
 
     const downloadFile = () => {
-        noticeAxios.getFile(board.fileModified).then(res => {
+        noticeAxios.getFile(board.noticeMFile).then(res => {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', board.noticeFileName); // 다운로드되는 파일의 이름 설정
+            link.setAttribute('download', board.noticeFileName); // 다운로드 파일 이름 설정
             document.body.appendChild(link);
             link.click();
         });
     };
 
-    const handleReload = () => {
+    const handleReload = () => {    
         // 공지사항 목록 페이지로 이동
         router.push('/notice');
     };
