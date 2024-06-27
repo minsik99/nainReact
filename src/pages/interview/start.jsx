@@ -3,6 +3,7 @@ import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/interview/interviewComponent.module.css';
 import { observer } from "mobx-react";
 import { saveOneVideo } from '../../api/interview/video';
+import {addInterview} from '../../api/interview/interview';
 import Loading from '../../components/designTool/Loading';
 import PathText from '../../components/interview/PathText';
 import {useModal} from '../../components/hook/useModal';
@@ -10,25 +11,31 @@ import NotButtonModal from '../../components/interview/NotButtonModal';
 import { useRouter } from 'next/router';
 
 //파이썬으로 영상보내기
-const InterviewComponent = observer(() => {
+const InterviewStartComponent = observer(() => {
+    const [memberNo, setMemberNo] = useState(null);
     const router = useRouter();
-    const { itvNo, memberNo } = router.query;
+    
     const { isOpened, modalData, openModal, closeModal } = useModal();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+    
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [stream, setStream] = useState(null);
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [downChunks, setDownChunks] = useState([]);
     const [mediaRecorder, setMediaRecorder] = useState(null);
+    const [itvNo, setItvNo] = useState(null);
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
-    // useEffect(() => {
-    //     if (typeof window !== "undefined") {
-    //         const memberNo = window.localStorage.getItem("memberNo");
-    //         setMemberNo(memberNo);
-    //     }
-    // }, []);
+    
+    
+    
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const memberNo = window.localStorage.getItem("memberNo");
+            setMemberNo(memberNo);
+        }
+    }, []);
 
     useEffect(() => {
         if (itvNo !== null && isRecording) {
@@ -190,10 +197,15 @@ const InterviewComponent = observer(() => {
             stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: true });
             console.log("카메라 stream:::", stream);
             
+            // itvNo 상태를 다시 확인하여 두 번 호출되지 않도록 함
             if (itvNo === null && memberNo) {
                 try {
+                    const res = await addInterview(memberNo)
+                    setItvNo(res);
+                    
                     setIsCameraOn(true);
                     
+                
                     if (videoRef.current) {
                         videoRef.current.srcObject = stream;
                     }
@@ -235,7 +247,8 @@ const InterviewComponent = observer(() => {
         setRecordedChunks([]);
         setDownChunks([]);
         setFileIndex(0);
-        setStream(null);
+        setStream(null);      
+        setItvNo(null);
         setIsCameraOn(false);
         router.push("/interview");
     };
@@ -297,53 +310,4 @@ const InterviewComponent = observer(() => {
     );
 });
 
-export default InterviewComponent;
-          
-
-
-// useEffect(() => {
-    //     if (!isCameraOn && videoRef.current) {
-    //         startCamera();
-    //     }
-    // }, [isCameraOn, videoRef]);
-    
-    
-    // useEffect(() => {
-    //     if (isCameraOn) {
-    //         startCamera();
-    //     }
-    //     return () => {
-    //         if (videoRef.current && videoRef.current.srcObject) {
-    //             videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-    //         }
-    //     };
-    // }, [isCameraOn]);
-
-    // 컴포넌트 언마운트 시 스트림 정리
-    
-
-    // 프레임을 서버로 전송
-    // const sendFramesToServer = () => {
-    //     const captureFrame = () => {
-    //         const context = canvasRef.current.getContext('2d');
-    //         if(videoRef.current && context) {
-    //             if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
-    //                 canvasRef.current.width = videoRef.current.videoWidth;
-    //                 canvasRef.current.height = videoRef.current.videoHeight;
-    //                 context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-    //                 const frame = canvasRef.current.toDataURL('image/jpeg', 0.7); // 70% 품질로 압축
-
-    //                 try {
-    //                     const response = realTimeAnaly(frame);
-    //                 } catch (err) {
-    //                     console.error("Error sending frame to server: ", err);
-    //                 }
-    //             }
-    //     } else {
-    //         <Loading text="Loading..." />
-    //     }
-    //     };
-    //     const frameRate = 10;
-    //     const id = setInterval(captureFrame, 1000 / frameRate); // frameRate에 따라 프레임 전송
-    //     setIntervalId(id);
-    // };
+export default InterviewStartComponent;
