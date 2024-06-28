@@ -121,7 +121,9 @@ const SignUpForm = () => {
                             required
                             readOnly={isReadOnly}
                         />
+                        <div className={styles.checkButton}>
                         <button type="button" onClick={handleEmailCheck}>이메일 확인</button>
+                        </div>
                         {emailError && <p className={styles.error}>{emailError}</p>}
                         {emailValid && <p className={styles.success}>사용 가능한 이메일입니다.</p>}
                 </div>

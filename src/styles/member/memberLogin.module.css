@@ -84,4 +84,10 @@
     background-color: #6E7783;
 }
 
+.form error {
+    color: red;
+    margin-top: 10px;
+}
+
+
 
