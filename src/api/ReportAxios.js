@@ -108,6 +108,7 @@ export const processComplete = async (reportId, adminId) => {
 export const reportCommunity = async (rCommunity) => {
   try{
     const response = await instance.post(`${BASE_URL}/community`, rCommunity);
+    console.log(response.data);
     return response.data;
   }catch(error){
     console.error("신고 실패", error);

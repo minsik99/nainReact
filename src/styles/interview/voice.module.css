@@ -1,0 +1,26 @@
+.base {
+    display: flex;
+    width: 50rem;
+}
+
+.contentContainer {
+    width: 100%;
+}
+
+.sentences {
+    display: inline-block;
+}
+
+.positive{
+    cursor: pointer;
+}
+
+.resultContainer {
+    display: flex;
+    height: 90%;
+    border-radius: 8px;
+    border: 2px solid #77AAAD;
+    margin:1rem;
+    padding: 1rem;
+    height: 95%;
+}

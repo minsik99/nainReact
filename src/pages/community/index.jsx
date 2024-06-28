@@ -17,15 +17,27 @@ const Community = observer(() => {
     const [type, setType] = useState('title');
     const [myInfo, setMyInfo] = useState('');
     const router = useRouter();
+    const [loginState, setLoginState] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const memberNo = window.localStorage.getItem("memberNo");
+            if(memberNo){
+                setLoginState(true);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         CommunityAxios.searchCommunity(type, searchKeyword, currentPage, limit, sort).then(res => {
             setBoards(res.data.list);
             setPaging(res.data.pg);
         });
-        CommunityAxios.myInfo().then(res => {
-            setMyInfo(res.data);
-        });
+        if(loginState){
+            CommunityAxios.myInfo().then(res => {
+                setMyInfo(res.data);
+            });
+        }
     }, [currentPage, sort]);
 
     const boardList = boards.map(board => (
@@ -110,7 +122,10 @@ const Community = observer(() => {
         <div className={styles.controls}>
             <div className={styles.controlItem}>
                 <RadiusButton color="#77AAAD" text="전체 목록" onClick={reload} />
-                <RadiusButton color="#77AAAD" text="내 글" onClick={myBoard} />
+                {loginState ? <RadiusButton color="#77AAAD" text="내 글" onClick={myBoard}/>
+                : <p/>
+                }
+                
             </div>
             <div className={styles.controlItem}>
                 <div className={styles.searchContainer}>
@@ -150,7 +165,7 @@ const Community = observer(() => {
         <div className={styles.actionBar}>
         <div />
         <Paging className={styles.page} paging={paging} setCurrentPage={setCurrentPage} />
-        <RadiusButton color="#77AAAD" text="글쓰기" onClick={createBoard} />
+        {loginState ? <RadiusButton color="#77AAAD" text="글쓰기" onClick={createBoard} /> : <div/>} 
         </div>
     </div>
     );

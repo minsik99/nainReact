@@ -10,6 +10,7 @@ const CommentDetail = ({ comment, styles }) => {
     const [isParent, setIsParent] = useState(true);
     const [content, setContent] = useState('');
     const [isMine, setIsMine] = useState(false);
+    const [loginState, setLoginStat] = useState(false);
     const [date, setDate] = useState('');
     const reportModal = useModal();
     const delModal = useModal();
@@ -27,6 +28,9 @@ const CommentDetail = ({ comment, styles }) => {
         if (typeof window !== "undefined") {
             const memberNo = window.localStorage.getItem("memberNo");
             console.log("멤버의 memberNo", memberNo);
+            if(memberNo){
+                setLoginStat(true);
+            }
             if(comment.memberDto.memberNo = memberNo){
                 setIsMine(true);
             }
@@ -51,9 +55,9 @@ const CommentDetail = ({ comment, styles }) => {
         };
         if (content) {
             CommunityAxios.createComment(childComment).then(res => {
-                setContent(''); // 입력창 비우기
-                setShowInput(false); // 입력 상자 닫기
-                window.location.reload(); // 페이지 새로고침 대신 상태 업데이트 필요
+                setContent(''); 
+                setShowInput(false);
+                window.location.reload();
             }).catch(error => {
                 console.error('Error creating child comment:', error);
             });
@@ -68,28 +72,30 @@ const CommentDetail = ({ comment, styles }) => {
 
 
     const handleOpenReport = () => {
-       reportModal.openModal({
-          title: '댓글 신고', //제목 추가 가능
-          content: '신고 사유', //모달안 내용(현재는 드롭다운만 구현상태)
-          columns: [{'Header':'욕설 및 비방'}, {'Header':'광고'}, {'Header':'도배'}],
-    //신고하기 대신 원하는 문구 삽입, 처음 들어가는 문장이 기본값
-          onConfirm: (selectedItem) => {
-            const rComment = {
-                commentNo: comment.commentNo,
-                reportType: selectedItem['Header'],
-                handledYN: 'N',
-            };
-            console.log('Selected item:', rComment);
-            reportComment(rComment).then(res => {
-                alert("신고되었습니다.");
-                console.log("성공");
-            }).catch(error => {
-                console.log(error);
-            });
-            reportModal.closeModal();
-          },
-    //드롭다운 선택시 안에 들어있는 값가지고 옴
-        });
+        if(loginState){
+            reportModal.openModal({
+                title: '댓글 신고',
+                content: '신고 사유',
+                columns: [{'Header':'욕설 및 비방'}, {'Header':'광고'}, {'Header':'도배'}],
+                onConfirm: (selectedItem) => {
+                    const rComment = {
+                        commentNo: comment.commentNo,
+                        reportType: selectedItem['Header'],
+                        handledYN: 'N',
+                    };
+                    console.log('Selected item:', rComment);
+                    reportComment(rComment).then(res => {
+                        console.log("신고 결과", res);
+                        alert(res);
+                    }).catch(error => {
+                        console.log(error);
+                    });
+                    reportModal.closeModal();
+                },
+                });
+        }else{
+            alert("로그인이 필요합니다.");
+        }
       };
 
       const handleOpenDelete = () => {
@@ -100,10 +106,11 @@ const CommentDetail = ({ comment, styles }) => {
           onConfirm: (commentNo) => {
             console.log(commentDetail);
             CommunityAxios.deleteComment(commentNo, commentDetail).then(res => {
+                alert("댓글이 삭제되었습니다.");
                 window.location.reload();
             })
             .catch(error => {
-                alert('게시글 삭제 오류');
+                alert('댓글 삭제 오류');
             })
             delModal.closeModal();
           },

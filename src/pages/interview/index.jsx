@@ -32,7 +32,7 @@ const InterviewListForm = observer(()=>{
     };
 
     return (
-        <div className="mapDiv">
+        <div className={styles.base}>
             <div className={styles.path}> <PathText paths={paths} /></div>
             <InterviewListComponent  memberNo={memberNo} selectedButton={selectedButton}
                     handleSelected={handleSelected} sortKey={sortKey} sort={sort} setSortKey={setSortKey}/>

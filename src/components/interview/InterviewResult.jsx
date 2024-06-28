@@ -9,6 +9,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
     LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
 import { useMutation } from "react-query";
 import { getInterview } from "../../api/interview/interview";
+import Voice from "../../components/interview/Voice";
 
 
 const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, handleSelected}) => {
@@ -113,6 +114,13 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 selectedButton={selectedButton}
                 handleSelected={handleSelected}
             />
+            {selectedButton == 'voice' &&
+            <div className={styles.resultContainer}>
+                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
+                <Voice itvNo={itvNo}></Voice>
+            </div>
+            }
             {selectedButton == 'video' &&
             <div className={styles.resultContainer}>
                 {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
