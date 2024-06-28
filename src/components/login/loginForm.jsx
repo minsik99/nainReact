@@ -13,6 +13,8 @@ const LoginForm = ({styles}) => {
         memberPwd: '',
     });
 
+    const [error, setError] = useState('');
+
     const loginMutation = useMutation(loginData => login(loginData), {
         onSuccess: (data) => {
             // 로그인 성공 후의 동작을 정의합니다.
@@ -32,10 +34,23 @@ const LoginForm = ({styles}) => {
             ...formData,
             [name]: value,
         });
+        setError(''); //입력값 변경 시 에러 메시지 초기화
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("로그인 버튼 클릭됨");
+        if(!formData.memberEmail){
+            setError('아이디를 입력하세요.');
+            return;
+        }
+
+        if(!formData.memberPwd){
+            setError('비밀번호를 입력하세요.');
+            return;
+        }
+
+        console.log("로그인 요청 중");
         loginMutation.mutate(formData); // mutate 함수로 로그인 요청을 보냅니다.
     };
 
@@ -69,6 +84,7 @@ const LoginForm = ({styles}) => {
                         required
                     />
                 </div>
+                {error && <p className={styles.error}>{error}</p>}
                 <div className={styles.buttonContainer}>
                     {loginMutation.isLoading ? (
                         // 로그인 중일 때는 로딩 텍스트를 표시합니다.

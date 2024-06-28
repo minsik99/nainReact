@@ -75,3 +75,13 @@
     background-color: #6E7783;
 }
 
+/* 기존 스타일들 위에 추가합니다. */
+.form input[readonly] {
+    color: blue;
+}
+
+/* select 요소의 스타일 */
+.form select[readonly] {
+    color: blue;
+    pointer-events: none; /* 선택 불가로 설정 */
+}
