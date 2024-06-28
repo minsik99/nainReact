@@ -1,0 +1,71 @@
+.chatListContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+  
+.chatList {
+    width: 50%;
+    max-width: 600px;
+}
+  
+.chatRoomDetailContainer {
+    width: 50%;
+    max-width: 600px;
+    padding-left: 20px;
+}
+  
+.searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+  
+.chatRoomList {
+    margin-bottom: 20px;
+}
+  
+.chatRoomItem {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    position: relative; /* position 추가 */
+}
+  
+.chatRoomIcon {
+    margin-right: 10px;
+}
+  
+.chatRoomIcon img {
+    width: 30px;
+    height: 30px;
+}
+  
+.chatRoomInfo p {
+    margin: 0;
+    padding: 0;
+}
+  
+.createRoomButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #66b2b2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+  
+.createRoomButton:hover {
+    background-color: #549999;
+}
+
