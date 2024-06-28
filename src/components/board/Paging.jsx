@@ -16,7 +16,7 @@ const Paging = ({paging, setCurrentPage}) => {
         console.log(pageNums);
     
         return (pageNums.map((page) =>
-            <li className={`page-item ${paging.currentPage === page ? styles.activePage : ''}`} key={page.toString()} >
+            <li className={`page-item ${paging.currentPage === page ? styles.activePage : styles.pageBtn}`} key={page.toString()} >
               <a className="page-link" onClick = {() => listBoard(page)}>
                 <div className={styles.pages}>{page}</div>
               </a>
@@ -27,7 +27,7 @@ const Paging = ({paging, setCurrentPage}) => {
       const nextGroup = () => {
         if(paging.maxPage > 10){
           return(
-              <li className="page-item">
+              <li className={`page-item ${styles.pageBtn}`}>
                 <a className="page-link" onClick={() => listBoard(paging.startPage + 10)}>
                   <div className={styles.arrow}>
                   〉
@@ -40,7 +40,7 @@ const Paging = ({paging, setCurrentPage}) => {
       const prevGroup = () => {
         if(paging.currentPage > 10){
           return(
-            <li className="page-item">
+            <li className={`page-item ${styles.pageBtn}`}>
               <a className="page-link" onClick={() => listBoard(paging.startPage - 10)}>
                 <div className={styles.arrow}>
                   〈
@@ -53,7 +53,7 @@ const Paging = ({paging, setCurrentPage}) => {
       const firstPage = () => {
         if(paging.currentPage > 1){
           return(
-            <li className="page-item">
+            <li className={`page-item ${styles.pageBtn}`}>
               <a className="page-link" onClick={() => listBoard(1)}>
                 <div className={styles.arrow}>
                   《
@@ -66,7 +66,7 @@ const Paging = ({paging, setCurrentPage}) => {
       const lastPage = () => {
         if(paging.currentPage < paging.maxPage){
           return(
-            <li className="page-item">
+            <li className={`page-item ${styles.pageBtn}`}>
               <a className="page-link" onClick={() => listBoard(paging.maxPage)}>
                 <div className={styles.arrow}>
                   》

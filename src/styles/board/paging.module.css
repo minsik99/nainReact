@@ -1,6 +1,7 @@
 .pages {
     color: black;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .arrow {
@@ -12,4 +13,9 @@
 .activePage {
     font-weight: bold;
     color: #77AAAD;
+    
+}
+
+.pageBtn {
+    cursor: pointer;
 }
