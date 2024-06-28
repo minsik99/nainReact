@@ -100,16 +100,20 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
                         reject(error);
                     } finally {
                         if(res && res.data) {
+                            let itvNo = res.data.itvNo
+                            let question = res.data.question
                             try {
                                 await router.push({
                                     pathname: "/interview/test",
                                     query: {
-                                        itvNo: res.data.ivtNo,
-                                        question: res.data.question,
+                                        itvNo: itvNo,
+                                       question: encodeURIComponent(JSON.stringify(question)),
                                         memberNo: memberNo
-                                    }
-                                });
-                                console.log('페이지 이동 성공');
+                                    },
+                                    
+                                },
+                                `/interview/test`
+                            );
                             } catch (pushError) {
                                 console.error('페이지 이동 실패', pushError);
                             } finally {

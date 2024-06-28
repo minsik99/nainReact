@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 //파이썬으로 영상보내기
 const InterviewComponent = observer(() => {
     const router = useRouter();
-    const { itvNo, memberNo } = router.query;
+    const { itvNo, question, memberNo } = router.query;
     const { isOpened, modalData, openModal, closeModal } = useModal();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -23,19 +23,13 @@ const InterviewComponent = observer(() => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
-    // useEffect(() => {
-    //     if (typeof window !== "undefined") {
-    //         const memberNo = window.localStorage.getItem("memberNo");
-    //         setMemberNo(memberNo);
-    //     }
-    // }, []);
-
+    const [count, setcount] = useState(-1);
+    
     useEffect(() => {
-        if (itvNo !== null && isRecording) {
-            startRecording(stream);
-        }
-    }, [itvNo, isRecording]);
-
+        if(!router.isReady) return;
+        console.log(itvNo, memberNo, decodeURIComponent(question));
+     }, [router.isReady])
+    
     const paths = [
         { name: '메인', link: '/' },
         { name: 'AI history', link: '/interview' },
@@ -44,33 +38,49 @@ const InterviewComponent = observer(() => {
 
     const handleStartRecording = async () => {
         console.log("handleStartRecording 시작");
-        console.log("현재 isRecording:", isRecording);
-        console.log("현재 인터뷰 번호", itvNo);
-        
-        if (isRecording) {
-            await saveVideo().then(()=> {
-            setRecordedChunks([]);
-            startRecording(stream)})
-        } else {
-            if (itvNo !== null) {
-                startRecording(stream)
-            }
+        console.log("count", count);
+        if(count == -1) {
+            startRecording();
+            setcount((preCount)=> preCount + 1);
+        } else if (!isRecording) {
+            setIsRecording(prevState => !prevState); 
         }
+        setcount((preCount)=> preCount + 1);
     };
+
+    useEffect(() => {
+        console.log("isRecording 상태가 변경됨:", isRecording);
+        if(isRecording) {
+            saveVideo();
+        } else { 
+            startRecording();
+        } 
+    }, [isRecording]);
     
+
     // 녹화 시작
-    const startRecording = (stream) => {
+    const startRecording = () => {
         try {
-            console.log("레코드 시작전 stream", stream)
-            let options = null;
+            console.log("레코드 시작전 stream", stream);
+            // if (!stream || !stream.active) {
+            //     const newStream = await navigator.mediaDevices.getUserMedia({
+            //         video: { width: 1280, height: 720 },
+            //         audio: true
+            //     });
+            //     setStream(newStream);
+            //     videoRef.current.srcObject = newStream;
+            // }
+
+            let options = { mimeType: 'video/webm; codecs=vp8,opus' };
             let recorder = null;
-    
-            if (stream && stream.active && memberNo) {
+           
+            if (stream && stream.active && !isRecording) {
+                console.log("스트림 존재함 레코딩 시작");
+                videoRef.current.srcObject = stream;
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
                 }
     
-                options = { mimeType: 'video/webm; codecs=vp8,opus' };
                 if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                     console.warn(`${options.mimeType} is not supported, using default MIME type`);
                     delete options.mimeType;
@@ -79,30 +89,28 @@ const InterviewComponent = observer(() => {
                 recorder = new MediaRecorder(stream, options);
                 console.log("MediaRecorder 생성됨", recorder);
 
-                recorder.start();
-                setMediaRecorder(recorder);
                 console.log("레코더 사용 여부", recorder.ondataavailable);
                 recorder.ondataavailable = event => {
                     if (event.data.size > 0) {
-                        if(fileIndex !== 0) {
-                        setDownChunks(prev => [...prev, event.data]);
-                        console.log(downChunks)
-                        }
-                        setRecordedChunks(prev => [...prev, event.data]);
-                        console.log("Data available:", event.data);
+                        setRecordedChunks(prev => {
+                            const newRecordedChunks = [...prev, event.data];
+                            console.log("RecordedChunks:", newRecordedChunks);
+                            return newRecordedChunks;
+                        }); 
+                        
                     } else {
                         console.log("No data available");
                     }
                 };
-                setIsRecording(true);
-                videoRef.current.srcObject = stream; // 녹화 중인 영상을 화면에 표시
+
+                
+                recorder.start(1000);
+                setMediaRecorder(recorder);
             } else {
                 if (!stream) {
                     console.error("No stream available for recording.");
                 } else if (!stream.active) {
                     console.error("Stream is not active.");
-                } else if (!memberNo) {
-                    console.error("Member number is not defined.");
                 }
             }
         } catch (error) {
@@ -113,20 +121,21 @@ const InterviewComponent = observer(() => {
     
     // 녹화 중지
     const stopRecording = async () => {
-        
         if (mediaRecorder) {
             mediaRecorder.onstop = () => {
                 console.log("Recorder stopped");
             };
             mediaRecorder.stop();
-            return;
-        }
+                }
     };
 
-    const saveVideo2 = () => {
-        return new Promise((resolve, reject) => {
-            if (downChunks.length) {
-                const blob = new Blob(downChunks, { type: 'video/webm' });
+    const saveVideo2 = async () => {
+        return await new Promise((resolve, reject) => {
+            if (downChunks.length || recordedChunks.length) {
+                setDownChunks(prevD => {
+                    const newDownChunks = [...prevD, ...recordedChunks];
+                    console.log("downChunks:", newDownChunks);      
+                const blob = new Blob(newDownChunks, { type: 'video/webm' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.style.display = 'none';
@@ -139,30 +148,29 @@ const InterviewComponent = observer(() => {
                     window.URL.revokeObjectURL(url);
                     resolve();
                 }, 100);
+            });
             } else {
                 reject(new Error('No recorded chunks to save.'));
             }
         });
     };
-    
+
     
     // 녹화된 비디오 저장 및 서버로 전송
     const saveVideo = async () => {
-        try {
+        try {            
             console.log("저장할 itvNo", itvNo);
-            if (recordedChunks.length > 0 || itvNo !== null) {
-                console.log(recordedChunks);
+            if (recordedChunks.length > 0) {
+                console.log("저장할 청크::::", recordedChunks);
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
                 const formData = new FormData();
                 formData.append('video', blob, `${fileIndex}.webm`);
                 formData.append('itvNo', itvNo);
                 console.log("FormData prepared:", formData);
+                await stopRecording();
+                const response = await saveOneVideo(formData);
+                console.log("서버까지 갔다옴", isRecording, JSON.stringify(response.data));
 
-                const response = await saveOneVideo(formData)
-                console.log('Server response:', response.data);
-                setIsRecording(false);
-                stopRecording();
-                
                 setFileIndex(prevIndex => {
                     if (prevIndex < 10) {
                         return prevIndex + 1;
@@ -171,16 +179,23 @@ const InterviewComponent = observer(() => {
                         return 0;
                     }
                 });
-           
+
+                setDownChunks(prev => {
+                    const newDownChunks = [...prev, ...recordedChunks];
+                    console.log("downChunks:", newDownChunks);
+                    return newDownChunks});
+
+                console.log("저장후 청크 비우기");
+                setRecordedChunks([]);
+                setIsRecording(false);
             } else {
-                console.log("No recorded chunks to save.");
+                console.log("저장할 chunk가 없음");
             }
         } catch (err) {
             console.error("Error sending video to server: ", err);
         }
     };
-    
-    // 카메라 시작
+
     const startCamera = async () => {
         if (isCameraOn) {
             return;
@@ -189,11 +204,11 @@ const InterviewComponent = observer(() => {
         try {
             stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 }, audio: true });
             console.log("카메라 stream:::", stream);
-            
-            if (itvNo === null && memberNo) {
+
+            if (memberNo) {
                 try {
                     setIsCameraOn(true);
-                    
+
                     if (videoRef.current) {
                         videoRef.current.srcObject = stream;
                     }
@@ -201,42 +216,60 @@ const InterviewComponent = observer(() => {
                     handleOpenModal();
                     startRecording(stream);
                 } catch (err) {
-                    console.error("인터뷰 추가 실패" , err);
+                    console.error("인터뷰 추가 실패", err);
                 }
             } else {
-                // itvNo가 이미 설정되어 있는 경우, 카메라와 스트림 유지
                 setIsCameraOn(true);
-                setStream(stream);
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                 }
-                
-                startRecording(stream);
+                startRecording();
             }
         } catch (err) {
             console.error("카메라 시작 실패", err);
-            if(stream) {
-                stream.getTracks.forEach(track => track.stop());
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
             }
         }
     };
-    
-    // 카메라 중지
-    const stopCamera = async() => {
+
+    const handleInterviewEnd = () => {
+        alert("면접이 종료되었습니다.");
+        router.push('/interview');
+    };
+
+    const stopCamera = async () => {
         if (videoRef.current) {
             videoRef.current.srcObject = null;
         }
         if (stream) {
             stream.getTracks().forEach(track => track.stop());
         }
+
+        try {
+            if (downChunks.length > 0) {
+                await saveVideo2();
+                setDownChunks([]);
+            }
+        } catch (err) {
+            console.error("영상 저장 실패", err);
+        }
+
+        try {
+            if (recordedChunks.length > 0) {
+                await saveVideo();
+                setRecordedChunks([]);
+            }
+        } catch (err) {
+            console.error("영상 저장 실패", err);
+        }
+
         
-        await saveVideo();
-        saveVideo2();
-        setRecordedChunks([]);
-        setDownChunks([]);
+
         setFileIndex(0);
         setStream(null);
         setIsCameraOn(false);
+
         router.push("/interview");
     };
 
@@ -254,7 +287,9 @@ const InterviewComponent = observer(() => {
             }
         };
     }, []);
-    
+
+    const que = JSON.parse(decodeURIComponent(question));
+
     return (
         <>
         <div className={styles.path}> <PathText paths={paths} /></div>
@@ -262,7 +297,15 @@ const InterviewComponent = observer(() => {
                 <div className={styles.videoContainer}>
                     <div className={styles.header}>
                         <div></div>
-                        <span>Q : 질문이 나오는 칸입니다.</span>
+                        { !isCameraOn || count < 0 && fileIndex == 0? 
+                        (<span>Q : 질문이 나오는 칸입니다.</span>
+                        ) : (
+                            count == 10 ?
+                            (
+                                handleInterviewEnd
+                        ) :
+                            <span>Q : {que[count].qcontent}</span> 
+                        )}
                         <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
                     </div>
                         <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
@@ -278,16 +321,16 @@ const InterviewComponent = observer(() => {
                                 fontSize="14px"
                                 padding="0.5rem 1rem"
                                 onClick={isCameraOn ? stopCamera : startCamera }
-                                text={isCameraOn ? '중단' : '실시간 면접 테스트'}
+                                text={isCameraOn ? '중단' : '면접 시작하기'}
                             />
-                            <RadiusButton
+                            {/* <RadiusButton
                                 color="#77AAAD"
                                 fontSize="14px"
                                 padding="0.5rem 1rem"
                                 onClick={stopCamera}
                                 disabled={!isCameraOn}
                                 text="테스트 중지"
-                            />
+                            /> */}
                         </div>
                     </div>
                 </div>
