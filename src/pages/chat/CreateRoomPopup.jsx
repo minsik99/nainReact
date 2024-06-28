@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 const CreateRoomPopup = ({ onClose, onSubmit }) => {
   const [form, setForm] = useState({
     name: '',
-    description: '',
-    category: ''
   });
 
   const handleChange = (e) => {
@@ -27,14 +25,6 @@ const CreateRoomPopup = ({ onClose, onSubmit }) => {
             채팅방 이름
             <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="ex) IT 취업 준비방" required />
           </label>
-          <label>
-            채팅방 설명
-            <input type="text" name="description" value={form.description} onChange={handleChange} placeholder="ex) 서류 준비, 면접 준비, 코딩 테스트 준비" required />
-          </label>
-          <label>
-            채팅방 카테고리
-            <input type="text" name="category" value={form.category} onChange={handleChange} placeholder="ex) 기획, 개발, 엔지니어, PM" required />
-          </label>
           <button type="submit" className="submit-button">채팅방 만들기</button>
         </form>
       </div>
@@ -49,6 +39,7 @@ const CreateRoomPopup = ({ onClose, onSubmit }) => {
           display: flex;
           justify-content: center;
           align-items: center;
+          z-index: 1000;
         }
         .popup {
           background: white;
