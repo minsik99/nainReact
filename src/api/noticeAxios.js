@@ -52,7 +52,14 @@ const noticeAxios = {
         return instance.put(NOTICE_URL + `/modify/${noticeNo}`, notice);
     },
 
-    //게시글 삭제
+
+    //게시글 삭제(숨김)
+    hiddenNotice(noticeNo, notice) {
+    return instance.put(NOTICE_URL + `/del/${noticeNo}`, notice);
+    },
+
+
+    //DB 삭제
     deleteNotice(noticeNo){
         return instance.delete(NOTICE_URL + '/delete',{
             params : {noticeNo: noticeNo}

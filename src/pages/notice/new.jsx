@@ -174,10 +174,10 @@ const NewBoard = () => {
         });
       };
       
-      const delFile =()=>{
-        setUploadedFile(null);
-        setFile(null);
-      };
+      // const delFile =()=>{
+      //   setUploadedFile(null);
+      //   setFile(null);
+      // };
 
       const reload = () => {
         router.push("/notice");
@@ -195,7 +195,7 @@ const NewBoard = () => {
            
         <div className={styles.editor}>
               <input
-              className={styles.noticeTitle}
+              className={styles.title}
               type="text"
               value={noticeTitle}
               onChange={(e) => setNoticeTitle(e.target.value)}
@@ -213,7 +213,7 @@ const NewBoard = () => {
               }}
             />
               {uploadedFile && (
-                <div className={styles.noticeFile}>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{uploadedFile}</a>
+                <div className={styles.file}>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{uploadedFile}</a>
                   &nbsp; <img className={styles.delete} src="../../../image/pngegg11.png" onClick={delFile}></img>
                   <h6>※ 파일 업로드는 1개만, 최대 50MB까지 가능합니다.</h6>
                 </div>

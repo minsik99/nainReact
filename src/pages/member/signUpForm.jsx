@@ -40,8 +40,6 @@ const SignUpForm = () => {
     };
 
     const handleEmailCheck = async () => {
-<<<<<<< HEAD
-=======
 
 
         if(!formData.memberEmail.trim() && formData.memberEmail.trim() == ''){
@@ -51,7 +49,6 @@ const SignUpForm = () => {
             return;
         }
 
->>>>>>> ad29abe39a0b3398655a9ca805eac90b41152f62
         if (!validateEmail(formData.memberEmail)) {
             setEmailError('유효한 이메일 주소를 입력해주세요.')
             setEmailValid(false);

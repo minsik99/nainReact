@@ -60,6 +60,9 @@ const noticeList = observer((props) => {
       <td><a href="#" onClick={() => detailBoard(board.noticeNo)}>{board.noticeTitle} </a></td>
       <td>{board.noticeWriter}</td>
       <td>{board.noticeReadCount}</td>
+      <td>
+        {board.noticeDelete ? '삭제됨' : ''}
+      </td>
     </tr>
   ));
 

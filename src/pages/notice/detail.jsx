@@ -72,7 +72,7 @@ const noticeDetail = () => {
 
     const handleDeleteBoard = () => {
         // 글 삭제
-        noticeAxios.deleteNotice(board.noticeNo, board).then(res => {
+        noticeAxios.hiddenNotice(board.noticeNo, board).then(res => {
             setShowModal(true); // 성공 모달 열기
             setTimeout(() => {
               setShowModal(false); // 모달 닫기
@@ -115,7 +115,7 @@ const noticeDetail = () => {
                         )}
                         </span>
                     </div>
-                    <div className={styles.noticeContent} dangerouslySetInnerHTML={{ __html: board.noticeContent }} />
+                    <div className={styles.content} dangerouslySetInnerHTML={{ __html: board.noticeContent }} />
                 {board.noticeFileName && (
                         <div>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{board.noticeFileName}</a></div>
                     )}
