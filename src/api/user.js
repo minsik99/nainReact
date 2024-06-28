@@ -88,3 +88,12 @@ export const updateMyinfo = async (memberNo, updateMyinfoData) => {
         
     } 
 };
+
+//회원 탈퇴
+export const deleteMember = async (memberNo, deleteMeberData) => {
+    return await axios.put(baseUrl+ `/deleteMember/${memberNo}`, deleteMeberData), {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    }
+}

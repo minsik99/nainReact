@@ -70,3 +70,29 @@
     margin-bottom: 10px;
     cursor: pointer;
 }
+
+.checkButton button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 30px;
+    background-color: #77AAAD;
+    color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.checkButton button:hover{
+    background-color: #6E7783;
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+}
+
+.success {
+    color: green;
+    margin-top: 5px;
+}

@@ -5,7 +5,7 @@ import axios from "axios";
 import { authStore } from "../../stores/authStore";
 import styles from "../../styles/member/memberMyinfo.module.css";
 import { myinfo } from "../../api/user";
-import { updateMyinfo } from "../../api/user";
+import { updateMyinfo, deleteMember } from "../../api/user";
 
 const Myinfo = () => {
 
@@ -30,6 +30,7 @@ const Myinfo = () => {
             console.log(res);
             setFormData({
                 memberEmail: res.memberEmail,
+                
                 memberName: res.memberName,
                 memberNickName: res.memberNickName,
                 subscribeYN: res.subscribeYN === 'Y' ? 'Y' : 'N',
@@ -94,6 +95,29 @@ const Myinfo = () => {
             }
         }
     );
+
+    const deleteMember = useMutation(
+        async () => {
+            return await deleteMember(memberNo);
+        },
+        {
+            onSuccess: () => {
+                alert("회원탈퇴가 성공적으로 완료되었습니다.");
+                authStore.logout();
+                router.push("/main");
+            },
+            onError: (error) => {
+                console.error(error);
+                alert("회원탈퇴 중 오류가 발생했습니다.");
+            }
+        }
+    );
+
+    const handleDeleteAccount = () => {
+        if(confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+            deleteMember.mutate();
+        }
+    }
 
     const goToMain = () => {
         router.push("/main");
@@ -189,6 +213,7 @@ const Myinfo = () => {
                         <button type="submit" disabled={isReadOnly}>수정</button>
                     )}
                         <button type="button" id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
+                        <button type="buootn" id="deleteButton" onClick={handleDeleteAccount} disabled={isReadOnly}>회원탈퇴</button>
                 </div>
             </form>
         </div>
