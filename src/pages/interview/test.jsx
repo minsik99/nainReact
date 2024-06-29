@@ -159,9 +159,7 @@ const InterviewComponent = observer(() => {
     // 녹화된 비디오 저장 및 서버로 전송
     const saveVideo = async () => {
         try {            
-            console.log("저장할 itvNo", itvNo);
             if (recordedChunks.length > 0) {
-                console.log("저장할 청크::::", recordedChunks);
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
                 const formData = new FormData();
                 formData.append('video', blob, `${fileIndex}.webm`);
@@ -169,7 +167,6 @@ const InterviewComponent = observer(() => {
                 console.log("FormData prepared:", formData);
                 await stopRecording();
                 const response = await saveOneVideo(formData);
-                console.log("서버까지 갔다옴", isRecording, JSON.stringify(response.data));
 
                 setFileIndex(prevIndex => {
                     if (prevIndex < 10) {
@@ -321,16 +318,8 @@ const InterviewComponent = observer(() => {
                                 fontSize="14px"
                                 padding="0.5rem 1rem"
                                 onClick={isCameraOn ? stopCamera : startCamera }
-                                text={isCameraOn ? '중단' : '면접 시작하기'}
+                                text={isCameraOn ? '면접 중단' : '면접 시작하기'}
                             />
-                            {/* <RadiusButton
-                                color="#77AAAD"
-                                fontSize="14px"
-                                padding="0.5rem 1rem"
-                                onClick={stopCamera}
-                                disabled={!isCameraOn}
-                                text="테스트 중지"
-                            /> */}
                         </div>
                     </div>
                 </div>
@@ -343,50 +332,3 @@ const InterviewComponent = observer(() => {
 export default InterviewComponent;
           
 
-
-// useEffect(() => {
-    //     if (!isCameraOn && videoRef.current) {
-    //         startCamera();
-    //     }
-    // }, [isCameraOn, videoRef]);
-    
-    
-    // useEffect(() => {
-    //     if (isCameraOn) {
-    //         startCamera();
-    //     }
-    //     return () => {
-    //         if (videoRef.current && videoRef.current.srcObject) {
-    //             videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-    //         }
-    //     };
-    // }, [isCameraOn]);
-
-    // 컴포넌트 언마운트 시 스트림 정리
-    
-
-    // 프레임을 서버로 전송
-    // const sendFramesToServer = () => {
-    //     const captureFrame = () => {
-    //         const context = canvasRef.current.getContext('2d');
-    //         if(videoRef.current && context) {
-    //             if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
-    //                 canvasRef.current.width = videoRef.current.videoWidth;
-    //                 canvasRef.current.height = videoRef.current.videoHeight;
-    //                 context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-    //                 const frame = canvasRef.current.toDataURL('image/jpeg', 0.7); // 70% 품질로 압축
-
-    //                 try {
-    //                     const response = realTimeAnaly(frame);
-    //                 } catch (err) {
-    //                     console.error("Error sending frame to server: ", err);
-    //                 }
-    //             }
-    //     } else {
-    //         <Loading text="Loading..." />
-    //     }
-    //     };
-    //     const frameRate = 10;
-    //     const id = setInterval(captureFrame, 1000 / frameRate); // frameRate에 따라 프레임 전송
-    //     setIntervalId(id);
-    // };
