@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import { useInView } from "react-intersection-observer";
+import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/router";
 import styles from "../../styles/search/article.module.css";
+import Loading from "../designTool/Loading";
 
 const ArticleComponent = () => {
   const [articles, setArticles] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [ref, inView] = useInView();
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const searchData = async (reset = false) => {
     if (keyword === "") return;
+
+    setLoading(true);
 
     try {
       const response = await axios.post("http://127.0.0.1:8080/data", {
@@ -30,6 +34,8 @@ const ArticleComponent = () => {
       }
     } catch (err) {
       console.error("Error searching data from server: ", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,10 +47,6 @@ const ArticleComponent = () => {
     event.preventDefault();
     setPage(1);
     searchData(true);
-  };
-
-  const onRouteChat = () => {
-    router.push('/chat');
   };
 
   const scrollToTop = () => {
@@ -63,40 +65,40 @@ const ArticleComponent = () => {
   return (
     <div className={styles.container}>
       <h1>네이버 IT 기사</h1>
-      <button onClick={onRouteChat}>채팅하기</button>
-      <form onSubmit={onSearch}>
-        <input value={keyword} onChange={onInputChange} /> &nbsp;
-        <button type="submit" className={styles["search-button"]}>
+      <form onSubmit={onSearch} className={styles.searchForm}>
+        <input value={keyword} onChange={onInputChange} className={styles.searchInput} placeholder="검색어를 입력하세요" />
+        <button type="submit" className={styles.searchButton}>
           검색
         </button>
       </form>
-      <ul className={styles["article-list"]}>
+      <ul className={styles.articleList}>
         {articles.map((article, index) => (
-          <li key={index} className={styles["article-item"]}>
+          <li key={index} className={styles.articleItem}>
             <a
               href={article.link}
               target="_blank"
               rel="noreferrer"
-              className={styles["article-link"]}
+              className={styles.articleLink}
             >
-              <div className={styles["image-container"]}>
+              <div className={styles.imageContainer}>
                 <img
                   src={article.image}
                   alt="image"
-                  className={styles["article-image"]}
+                  className={styles.articleImage}
                 />
               </div>
-              <div className={styles["article-info"]}>
-                <h3 className={styles["article-title"]}>{article.title}</h3>
-                <p className={styles["article-content"]}>내용: {article.content}</p>
-                <p className={styles["article-time"]}>시간: {article.time}</p>
-                <p className={styles["article-source"]}>출처: {article.source}</p>
+              <div className={styles.articleInfo}>
+                <h3 className={styles.articleTitle}>{article.title}</h3>
+                <p className={styles.articleContent}>내용: {article.content}</p>
+                <p className={styles.articleTime}>시간: {article.time}</p>
+                <p className={styles.articleSource}>출처: {article.source}</p>
               </div>
             </a>
           </li>
         ))}
       </ul>
-      <button className={styles["scroll-to-top"]} onClick={scrollToTop}>맨 위로</button>
+      {loading && <Loading loading={loading} text="로딩 중..." />}
+      <button className={styles.scrollToTop} onClick={scrollToTop}>맨 위로</button>
       <div ref={ref}></div>
     </div>
   );
