@@ -157,6 +157,7 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
         if (memberNo !== null) {
             const fetchInterviews = async () => {
                 try {
+                    console.log("page변화", page)
                     const data = await getInterviewList(page, size, memberNo);
                     const interviews = data.content;
 
@@ -171,6 +172,11 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
                             )
                         );
                         const updatedList = [...prev, ...newInterviews];
+
+                        if (updatedList.length > 0 && !selectedInterview) {
+                            setSelectedInterview(updatedList[0].itvNo);
+                        }
+
                         return sortKey ? sortData(updatedList, sortKey) : updatedList;
                     });
                 } catch (err) {

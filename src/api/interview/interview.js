@@ -43,3 +43,14 @@ export const addInterview = async (memberNo, title, info) => {
     console.error("인터뷰 추가 실패", error);
   }
 };
+
+export const analsisText = async (score, itvNo) => {
+  try {
+    console.log(score, itvNo);
+    const res = instance.get(BASE_URL + "/analysis", {  params: { score: score, itvNo:itvNo }});
+    return res
+  } catch (error) {
+    console.error("면접분석멘트 조회성공", error);
+    
+  }
+};
