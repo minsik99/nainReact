@@ -100,7 +100,15 @@ const CompanyComponent = observer(()=> {
                         selectHeader={selectHeader} comparisonValue={comparisonValue} canIndex={canIndex}
                             selectAccesor={selectAccesor}/>
                     </div>
-                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                {mutation.isLoading &&
+                <div className={styles.tableContainer}>
+                    <Loading loading={mutation.isLoading} text="Loading..." />                    
+                    <Table
+                            columns={columns}
+                            data={dataSet}
+                        />
+                    </div>
+                }
                 {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                 {mutation.isSuccess && mutation.data && mutation.data.data && (
                 <div className={styles.tableContainer}>
