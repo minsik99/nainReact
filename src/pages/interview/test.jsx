@@ -288,7 +288,7 @@ const InterviewComponent = observer(() => {
     const que = JSON.parse(decodeURIComponent(question));
 
     return (
-        <>
+        <div className={styles.base}>
         <div className={styles.path}> <PathText paths={paths} /></div>
             <div className={styles.interviewContainer}>
                 <div className={styles.videoContainer}>
@@ -325,7 +325,7 @@ const InterviewComponent = observer(() => {
                 </div>
             </div>
             <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-        </>
+        </div>
     );
 });
 

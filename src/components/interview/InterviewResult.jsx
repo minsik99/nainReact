@@ -3,19 +3,260 @@ import styles from "../../styles/interview/interviewResult.module.css";
 import ButtonContainer from "./ButtonContainer";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import LineChart from "./LineChart";
-import DoughnutChart from "./DoughnutChart";
-import { useState } from "react";
+import PieChart from "./PieChart";
+import { useState,useEffect } from "react";
+import { emotionAnaly, PosEyeAnaly, videoTotal, totalVideo  } from "../../api/interview/video";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
-    LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
+    BarElement, LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
 import { useMutation } from "react-query";
-import { getInterview } from "../../api/interview/interview";
+import { getInterview, analsisText } from "../../api/interview/interview";
 import Voice from "../../components/interview/Voice";
+import BarChart from "./BarChart";
 
 
 const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, handleSelected}) => {
-    ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, 
+    ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement,
         Title, Tooltip, Legend, ArcElement, ChartDataLabels);  
         const [dataSet, setDataSet] = useState([]);
+        const [posData, setPosData] = useState(null);
+        const [eyeData, setEyeData] = useState(null);
+        const [videoScore, setVideoScore] = useState({labels: [], datasets: []});
+        const [vscore, setVscore] = useState(null);
+        const [videoTotalData, setVideoTotalData] = useState(null);
+        const [emotionData, setEmotionData] = useState({ labels: [], datasets: [] });
+        const [analyText, setAnalyText] = useState(null);
+        const totalScore = 80
+        
+        const fetchEmoData = async () => {
+            try {
+                const response = await emotionAnaly(itvNo);
+                if (response) {
+                    const labels = Object.keys(response).map(label => {
+                        switch (label) {
+                            case 'happy':
+                                return '행복';
+                            case 'neutral':
+                                return '중립';
+                            case 'sad':
+                                return '슬픔';
+                            case 'surprise':
+                                return '놀람';
+                            default:
+                                return label;
+                            }
+                        })
+                    const values = Object.values(response);
+                
+                    const backgroundColors = labels.map(label => {
+                        switch (label) {
+                            case '행복':
+                                return 'rgba(255, 206, 86, 0.2)'; // 노란색
+                            case '중립':
+                                return 'rgba(201, 203, 207, 0.2)'; // 회색
+                            case '슬픔':
+                                return 'rgba(54, 162, 235, 0.2)'; // 파란색
+                            case '놀람':
+                                return 'rgba(255, 99, 132, 0.2)'; // 빨간색
+                            default:
+                                return 'rgba(75, 192, 192, 0.2)'; // 기본 색상
+                        }
+                    });
+    
+                    const borderColors = labels.map(label => {
+                        switch (label) {
+                            case '행복':
+                                return 'rgba(255, 206, 86, 1)'; // 노란색
+                            case '중립':
+                                return 'rgba(201, 203, 207, 1)'; // 회색
+                            case '슬픔':
+                                return 'rgba(54, 162, 235, 1)'; // 파란색
+                            case '놀람':
+                                return 'rgba(255, 99, 132, 1)'; // 빨간색
+                            default:
+                                return 'rgba(75, 192, 192, 1)'; // 기본 색상
+                        }
+                    });
+    
+                    setEmotionData({
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Emotion Averages',
+                                data: values,
+                                backgroundColor: backgroundColors,
+                                borderColor: borderColors,
+                                borderWidth: 1,
+                            },
+                        ],
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching emotion data:', error);
+            }
+        };
+
+        const fetchAnalyText = async () => {
+            const textData = await analsisText(totalScore, itvNo);
+            if(textData) {
+                console.log("text", textData);
+                setAnalyText(textData.data);
+            }
+        }
+
+        const fetchTotalData = async () => {
+            try {
+                const videoData = await fetchVideoTotalData();
+                const audioData = await fetchAudioTotalData();
+        
+                if (videoData && audioData) {
+                    const labels = videoData.labels.map((_, index) => `${index + 1}`);
+                    const values = videoData.values.map((videoValue, index) => {
+                        const audioValue = audioData.values[index] || 0;
+                        return (videoValue + audioValue) / 2;
+                    });
+        
+                    setVideoTotalData({
+                        labels,
+                        datasets: [
+                            {
+                                label: '총 평균',
+                                data: values,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1,
+                                fill: false,
+                            },
+                        ],
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching total data:', error);
+            }
+        };
+            
+
+        const fetchTotalVideo = async () => {
+            try {
+                const response = await totalVideo(itvNo);
+                if (response) {
+                    const labels = ['점수'];
+                    const data = [response]; 
+                    setVideoScore({
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: '영상/음성 결과',
+                                data: data,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1,
+                                fill: false,
+                            },
+                        ],
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching video total data:', error);
+            }
+        };
+
+
+
+
+        const fetchVideoTotalData = async () => {
+            try {
+                const response = await videoTotal(itvNo);
+
+                console.log('Response:', response); 
+                const labels = Object.keys(response);
+                const values = Object.values(response);
+                
+                console.log('Labels:', labels); // labels의 값을 로그로 출력하여 확인
+                console.log('Values:', values)
+                
+                if (response) {
+                    const labels = Object.keys(response)
+                    const values = Object.values(response)
+                    setVideoTotalData({
+                        labels: labels.map((_, index) => `${index + 1}`),
+                        datasets: [
+                            {
+                                label: '영상',
+                                data: values,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1,
+                                fill: false,
+                            },
+                        ],
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching video total data:', error);
+            }
+        };
+
+
+        const fetchPosEyeData = async () => {
+            try {
+                const response = await PosEyeAnaly(itvNo);
+                if (response) {
+                    const posData = response.POS || [];
+                    const eyeData = response.EYE || [];
+
+                    setPosData({
+                        labels: posData.map((_, index) => `${index + 1}`),
+                        datasets: [
+                            {
+                                label: '자세',
+                                data: posData,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1,
+                                fill: false,
+                            },
+                        ],
+                    });
+
+                    setEyeData({
+                        labels: eyeData.map((_, index) => `${index + 1}`),
+                        datasets: [
+                            {
+                                label: '시선',
+                                data: eyeData,
+                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1,
+                                fill: false,
+                            },
+                        ],
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching emotion data:', error);
+            }
+        };
+        
+        useEffect(() => {
+            const setting = async () =>{
+                try {
+                    if(itvNo) {
+                    await fetchEmoData();
+                    await fetchPosEyeData();
+                    await fetchVideoTotalData();
+                    await fetchTotalVideo();
+                    await fetchAnalyText();
+                }   
+                } catch (error) {
+                    console.error("데이터 불러오기 중 오류 발생:", error);
+                }
+            }
+            
+            setting()
+        }, [itvNo]);
+
+       
+        
         const mutation = useMutation((itvNo) => getInterview(itvNo),
            {
                 onSuccess: (response) => {
@@ -28,7 +269,6 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
             
         );
     
-    
         const lineData = {
         labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         datasets: [
@@ -37,72 +277,6 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 backgroundColor: 'rgba(75,192,192,0.2)',
                 borderColor: 'rgba(75,192,192,1)',
                 data: dataSet,
-            },
-        ],
-    };
-
-
-    const lineData2 = {
-        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-        datasets: [
-            {
-                label: 'Video',
-                backgroundColor: 'rgba(75,192,192,0.2)',
-                borderColor: 'rgba(26, 7, 248, 1)',
-                data: dataSet,
-            },
-        ],
-    };
-
-    const lineData3 = {
-        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-        datasets: [
-            {
-                label: 'total',
-                backgroundColor: 'rgba(128, 128, 128, 0.5)',
-                borderColor: 'rgba(26, 7, 248, 1)',
-                data: dataSet,
-            },
-        ],
-    };
-
-    const doughnutOptions = {
-        cutout: '0%',
-        plugins: {
-            datalabels: {
-                anchor: 'end',
-                align: 'end',
-                offset: 10,
-                formatter: (value, context) => {
-                    return context.chart.data.labels[context.dataIndex];
-                },
-                color: '#000',
-                font: {
-                    weight: 'bold',
-                },
-            },
-        },
-    };
-    
-    const legendOptions = {
-        plugins: {
-            legend: {
-                display: true,
-                position: 'right', // 범례를 차트의 오른쪽으로 이동
-                labels: {
-                    boxWidth: 20,
-                    padding: 20,
-                },
-            },
-        },
-    };
-    const doughnutData = {
-        labels: ['중립', '놀람', '기쁨'],
-        datasets: [
-            {
-                data: [300, 50, 100],
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
             },
         ],
     };
@@ -126,12 +300,12 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
                 {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                 <div className={styles.chartRow}>
-                    <LineChart data={lineData} title="답변수치" />
-                    <LineChart data={lineData} title="자세분석" />
+                    <LineChart data={videoTotalData} title="영상분석결과" />
+                    <LineChart data={posData} title="자세분석" />
                 </div>
-                <div className={styles.chartRow}>
-                    <DoughnutChart data={doughnutData} options={{ ...doughnutOptions, ...legendOptions }} title="감정 분석" />
-                    <LineChart data={lineData} title="시선 감지" />
+                <div className={styles.chartRow}> 
+                    <PieChart data={emotionData} title="감정 분석" />
+                    <LineChart data={eyeData} title="시선 감지" />
                 </div>
             </div>
             }
@@ -141,19 +315,17 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                     <div className={styles.resultText}>
                     {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
                     {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                        <div className={styles.leftText}>{memberNo} 님의 면접 결과</div>
-                        <div className={styles.rightText}>예시용 문장입니다 예시용 문장입니다 예시용 문장입니다 예시용 문장입니다</div>
+                        <div className={styles.leftText}>{memberNo} 님의 <br/> 면접 결과</div>
+                        <div className={styles.rightText}>{analyText}                         
+                        </div>
                     </div>
                 </div>
                 <div className={styles.totalContainer}>
                 {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
                 {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                    <div className={styles.totalV}>
-                    <LineChart data={lineData} title="음성분석결과" />
-                    <LineChart data={lineData2} title="영상분석결과" />
-                    </div>
-                    <div className={styles.totalBox}>
-                        <LineChart data={lineData3} title="총분석결과" />
+                <div className={styles.totalBox}>
+                    <BarChart data={videoScore}  title="음성/영상분석결과"/>
+                    <LineChart data={videoTotalData} title="총분석결과" />
                     </div>
                 </div>
             </div>
