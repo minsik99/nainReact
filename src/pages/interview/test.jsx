@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/interview/interviewComponent.module.css';
 import { observer } from "mobx-react";
-import { saveOneVideo } from '../../api/interview/video';
+import { saveOneVideo, upTotalVideo  } from '../../api/interview/video';
 import Loading from '../../components/designTool/Loading';
 import PathText from '../../components/interview/PathText';
 import {useModal} from '../../components/hook/useModal';
@@ -165,19 +165,29 @@ const InterviewComponent = observer(() => {
                 const formData = new FormData();
                 formData.append('video', blob, `${fileIndex}.webm`);
                 formData.append('itvNo', itvNo);
-                formData.append('qNo', que[fileIndex].qNo);
+                formData.append('qNo', que[fileIndex].qno);
                 console.log("FormData prepared:", formData);
                 await stopRecording();
-                const response = await saveOneVideo(formData);
+                await saveOneVideo(formData);
 
                 setFileIndex(prevIndex => {
-                    if (prevIndex < 10) {
-                        return prevIndex + 1;
-                    } else {
+                    const newIndex = prevIndex < 10 ? prevIndex + 1 : 0;
+                    console.log("Updated fileIndex:", newIndex);
+                    if (newIndex === 0) {
                         stopCamera();
-                        return 0;
                     }
+                    return newIndex;
                 });
+    
+
+                // setFileIndex(prevIndex => {
+                //     if (prevIndex < 10) {
+                //         return prevIndex + 1;
+                //     } else {
+                //         stopCamera();
+                //         return 0;
+                //     }
+                // });
 
                 setDownChunks(prev => {
                     const newDownChunks = [...prev, ...recordedChunks];
@@ -237,6 +247,8 @@ const InterviewComponent = observer(() => {
         router.push('/interview');
     };
 
+    
+
     const stopCamera = async () => {
         if (videoRef.current) {
             videoRef.current.srcObject = null;
@@ -257,18 +269,17 @@ const InterviewComponent = observer(() => {
         try {
             if (recordedChunks.length > 0) {
                 await saveVideo();
+                
                 setRecordedChunks([]);
             }
         } catch (err) {
             console.error("영상 저장 실패", err);
         }
 
-        
-
         setFileIndex(0);
         setStream(null);
         setIsCameraOn(false);
-
+        await upTotalVideo();
         router.push("/interview");
     };
 
@@ -299,7 +310,7 @@ const InterviewComponent = observer(() => {
                         { !isCameraOn || count < 0 && fileIndex == 0? 
                         (<span>Q : 질문이 나오는 칸입니다.</span>
                         ) : (
-                            count == 10 ?
+                            count === 10 ?
                             (
                                 handleInterviewEnd
                         ) :

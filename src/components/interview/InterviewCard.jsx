@@ -12,9 +12,9 @@ const InterviewCard = ({ id, title, description, onSelect, isSelected, deleteInt
             <p className={`${styles.interviewTime} ${isSelected ? styles.selectedText : ''}`}>{description}</p>
             <img 
                 className={styles.trash} onClick={(e) => {e.stopPropagation();
-                    deleteInterviewOne();
+                    deleteInterviewOne(id);
                 }}
-                src={isSelected ? "/image/colorTrash.png" : "/image/trash.png"} 
+                src={!isSelected ? "/image/colorTrash.png" : "/image/trash.png"} 
             />
         </div>
     );
