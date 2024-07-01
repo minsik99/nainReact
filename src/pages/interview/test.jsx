@@ -24,6 +24,7 @@ const InterviewComponent = observer(() => {
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
     const [count, setcount] = useState(-1);
+    const que = JSON.parse(decodeURIComponent(question));
     
     useEffect(() => {
         if(!router.isReady) return;
@@ -164,6 +165,7 @@ const InterviewComponent = observer(() => {
                 const formData = new FormData();
                 formData.append('video', blob, `${fileIndex}.webm`);
                 formData.append('itvNo', itvNo);
+                formData.append('qNo', que[fileIndex].qNo);
                 console.log("FormData prepared:", formData);
                 await stopRecording();
                 const response = await saveOneVideo(formData);
@@ -285,7 +287,7 @@ const InterviewComponent = observer(() => {
         };
     }, []);
 
-    const que = JSON.parse(decodeURIComponent(question));
+    
 
     return (
         <div className={styles.base}>
