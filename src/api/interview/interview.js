@@ -22,6 +22,26 @@ export const getInterview = async (itvNo) => {
   }
 };
 
+export const getInterviewScore = async () => {
+  try {
+    const response = await instance.get(BASE_URL + "/score");
+    return response;
+  } catch (error) {
+    console.error("면접 총점수 가져오기 실패", error);
+    throw error;
+  }
+};
+
+export const totalVoice = async (itvNo) => {
+  try {
+    console.log(itvNo)
+    const response = await instance.get(BASE_URL + "/totalVoice", {params: { itvNo: itvNo }});
+    return response.data;
+  } catch (error) {
+    console.error(" 분석결과점수 불러오기 실패", error);
+    throw error;
+  }
+}
 export const deleteInterview = async (itvNo) => {
   try {
     console.log(itvNo);

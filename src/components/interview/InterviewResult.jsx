@@ -9,7 +9,7 @@ import { emotionAnaly, PosEyeAnaly, videoTotal, totalVideo  } from "../../api/in
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
     BarElement, LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
 import { useMutation } from "react-query";
-import { getInterview, analsisText } from "../../api/interview/interview";
+import { getInterview, analsisText, totalVoice, getInterviewScore } from "../../api/interview/interview";
 import Voice from "../../components/interview/Voice";
 import BarChart from "./BarChart";
 
@@ -21,8 +21,8 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
         const [posData, setPosData] = useState(null);
         const [eyeData, setEyeData] = useState(null);
         const [videoScore, setVideoScore] = useState({labels: [], datasets: []});
-        const [vscore, setVscore] = useState(null);
         const [videoTotalData, setVideoTotalData] = useState(null);
+        const [totalData, setTotalData] = useState({labels: [], datasets: []});
         const [emotionData, setEmotionData] = useState({ labels: [], datasets: [] });
         const [analyText, setAnalyText] = useState(null);
         const totalScore = 80
@@ -105,30 +105,25 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
 
         const fetchTotalData = async () => {
             try {
-                const videoData = await fetchVideoTotalData();
-                const audioData = await fetchAudioTotalData();
-        
-                if (videoData && audioData) {
-                    const labels = videoData.labels.map((_, index) => `${index + 1}`);
-                    const values = videoData.values.map((videoValue, index) => {
-                        const audioValue = audioData.values[index] || 0;
-                        return (videoValue + audioValue) / 2;
-                    });
-        
-                    setVideoTotalData({
-                        labels,
+                const [videoResponse, voiceResponse] = await Promise.all([totalVideo(itvNo), totalVoice(itvNo)]);
+                const totalData = await getInterviewScore();
+                const data = [(videoResponse + voiceResponse) / 2, totalData.data]
+                if (totalData) {
+                    const labels = ['나의 점수', '평균'];
+                    setTotalData({
+                        labels: labels,
                         datasets: [
                             {
-                                label: '총 평균',
-                                data: values,
+                                label: '총분석 결과',
+                                data: data,
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1,
                                 fill: false,
                             },
                         ],
-                    });
-                }
+                })
+            }
             } catch (error) {
                 console.error('Error fetching total data:', error);
             }
@@ -137,10 +132,11 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
 
         const fetchTotalVideo = async () => {
             try {
-                const response = await totalVideo(itvNo);
-                if (response) {
-                    const labels = ['점수'];
-                    const data = [response]; 
+                const [videoResponse, voiceResponse] = await Promise.all([totalVideo(itvNo), totalVoice(itvNo)]);
+
+                if (videoResponse && voiceResponse) {
+                    const labels = ['영상', '음성'];
+                    const data = [videoResponse, voiceResponse]; 
                     setVideoScore({
                         labels: labels,
                         datasets: [
@@ -246,6 +242,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                     await fetchVideoTotalData();
                     await fetchTotalVideo();
                     await fetchAnalyText();
+                    await fetchTotalData();
                 }   
                 } catch (error) {
                     console.error("데이터 불러오기 중 오류 발생:", error);
@@ -325,7 +322,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                 <div className={styles.totalBox}>
                     <BarChart data={videoScore}  title="음성/영상분석결과"/>
-                    <LineChart data={videoTotalData} title="총분석결과" />
+                    <BarChart data={totalData} title="총분석결과" />
                     </div>
                 </div>
             </div>
