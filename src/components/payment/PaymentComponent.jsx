@@ -103,7 +103,7 @@ export function PaymentComponent() {
         customerEmail: "customer123@gmail.com",
         customerMobilePhone: "01012341234",
         successUrl: `${window.location.origin}/payment/SuccessPage`,
-        failUrl: `${window.location.origin}/fail`,
+        failUrl: `${window.location.origin}/payment/FailPage`,
       });
     } catch (error) {
       console.error("Error requesting payment:", error);

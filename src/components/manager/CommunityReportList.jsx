@@ -9,7 +9,6 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Modal from "../designTool/modal";
-import { authStore } from "../../stores/authStore";
 
 const CommunityReportList = () => {
   const [reports, setReports] = useState([]);
@@ -95,7 +94,7 @@ const CommunityReportList = () => {
             adminId,
             report.communityReportType
           );
-          openModal("계정 차단이 성공적으로 처리되었습니다.");
+          openModal("성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("계정 차단 중 오류가 발생했습니다.", error);
           openModal("계정 차단 처리 중 오류가 발생했습니다.");
@@ -109,7 +108,7 @@ const CommunityReportList = () => {
             adminId,
             report.communityNo
           );
-          openModal("글 삭제가 성공적으로 처리되었습니다.");
+          openModal("성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("글 삭제 중 오류가 발생했습니다.", error);
           openModal("글 삭제 처리 중 오류가 발생했습니다.");
@@ -326,11 +325,14 @@ const CommunityReportList = () => {
                               ? new Date(
                                   report.communityReportHandledDate
                                 ).toLocaleDateString()
-                              : "없음"}
+                              : "미처리"}
                           </span>
                           <span>
                             <strong>처리자:</strong>{" "}
-                            {report.communityReportAdminName}
+                            {report.communityReportAdminName
+                              ? report.communityReportAdminName
+                              : (console.log("처리자 값 없음", report),
+                                "미처리")}
                           </span>
                         </div>
                       </div>
