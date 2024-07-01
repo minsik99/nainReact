@@ -2,8 +2,8 @@ import axios from "axios";
 import instance from "../axiosApi";
 
 const python_url ='http://127.0.0.1:8080';
-
 const boot_url ='/video';
+
 //문제는 여기임 cors
 export const saveOneVideo = async (formData) => {
     try {
@@ -60,7 +60,18 @@ export const totalVideo = async (itvNo) => {
     console.error("영상 분석결과점수 불러오기 실패", error);
     throw error;
   }
-  
+}
+
+  export const upTotalVideo = async (itvNo) => {
+    try {
+      const finalScore = await instance.get(boot_url + "/totalVideo", {params: { itvNo: itvNo }});
+      const response = await instance.get(boot_url + "/updateTotalVideo", {params: { itvNo: itvNo, finalScore:finalScore }});
+      return response.data;
+    } catch (error) {
+      console.error("영상 분석결과점수 불러오기 실패", error);
+      return;
+    }
+    
   
 
 }

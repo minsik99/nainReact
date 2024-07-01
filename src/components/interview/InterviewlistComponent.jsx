@@ -135,7 +135,7 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
     }
 };
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (selectedInterview) => {
         deleteModal.openModal({
           title: '    ',
           content: '삭제하시겠습니까?',
@@ -144,6 +144,8 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
             try {
                 console.log(selectedInterview);
                deleteInterview(selectedInterview);
+               setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
+               setPage(1);
             } catch (error) {
               console.error("면접 삭제 실패", error);
             } finally {
