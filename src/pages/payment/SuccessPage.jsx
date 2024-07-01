@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import RadiusButton from "../../components/designTool/RadiusButton";
 
 export function SuccessPage() {
   const router = useRouter();
@@ -34,13 +35,22 @@ export function SuccessPage() {
     }
   }, [orderId, amount, paymentKey, router]);
 
+  const handleNavigateToPayment = () => {
+    router.push("/payment");
+  };
+
   return (
     <div className="result wrapper">
       <div className="box_section">
-        <h2>결제 성공</h2>
+        <h2 style={{ marginTop: "23px" }}>구독 성공</h2>
         <p>{`주문번호: ${orderId}`}</p>
         <p>{`결제 금액: ${Number(amount).toLocaleString()}원`}</p>
-        <p>{`paymentKey: ${paymentKey}`}</p>
+        <RadiusButton
+          padding="5px 20px"
+          color="#9dc3c1"
+          text="돌아가기"
+          onClick={handleNavigateToPayment}
+        ></RadiusButton>
       </div>
     </div>
   );

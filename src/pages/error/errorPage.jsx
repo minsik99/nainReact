@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React from "react";
+import { useRouter } from "next/router"; // Next.js의 useRouter 훅을 불러옵니다.
 import RadiusButton from "../../components/designTool/RadiusButton";
 
 const FailPage = () => {
-  const router = useRouter();
-  const [message, setMessage] = useState("");
-  const [code, setCode] = useState("");
-
-  useEffect(() => {
-    if (router.query.message) {
-      setMessage(router.query.message);
-    }
-    if (router.query.code) {
-      setCode(router.query.code);
-    }
-  }, [router.query]);
+  const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 가져옵니다.
 
   const handleNavigateToPayment = () => {
-    router.push("/payment");
+    router.push("/main");
   };
 
   return (
@@ -27,9 +16,7 @@ const FailPage = () => {
           src="/image/caution.png"
           style={{ width: "150px", marginBottom: "60px" }}
         ></img>
-        <h2>결제를 실패했어요</h2>
-        <p>{`오류 메시지: ${message}`}</p>
-        <p>{`오류 코드: ${code}`}</p>
+        <h2>접근권한이 없습니다</h2>
         <RadiusButton
           padding="5px 20px"
           color="#9dc3c1"
@@ -39,6 +26,10 @@ const FailPage = () => {
       </div>
     </div>
   );
+};
+
+FailPage.getInitialProps = ({ query }) => {
+  return { message: query.message, code: query.code };
 };
 
 export default FailPage;

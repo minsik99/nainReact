@@ -60,13 +60,15 @@ export const processDeletePost = async (reportId, adminId, communityNo) => {
 export const processBlockAccountCommnity = async (
   reportId,
   adminId,
-  blockReason
+  blockReason,
+  memberNo
 ) => {
   try {
     const response = await axios.post(`${BASE_URL}/community/blockaccount`, {
       reportId,
       adminId,
       blockReason,
+      memberNo,
     });
     return response.data;
   } catch (error) {
@@ -106,22 +108,22 @@ export const processComplete = async (reportId, adminId) => {
 };
 
 export const reportCommunity = async (rCommunity) => {
-  try{
+  try {
     const response = await instance.post(`${BASE_URL}/community`, rCommunity);
     console.log(response.data);
     return response.data;
-  }catch(error){
+  } catch (error) {
     console.error("신고 실패", error);
     throw error;
   }
 };
 
 export const reportComment = async (rComment) => {
-  try{
+  try {
     const response = await instance.post(`${BASE_URL}/comment`, rComment);
     return response.data;
-  }catch(error){
+  } catch (error) {
     console.error("신고 실패", error);
     throw error;
   }
-}
+};
