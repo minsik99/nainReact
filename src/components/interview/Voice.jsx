@@ -46,12 +46,13 @@ const Voice = observer(({itvNo}) => {
 
     return(
         <div className={styles.base}>
-            {page>0 && <img src="/image/leftArrow.png" onClick={pageLower}/>}
+            {page>0 ? <img className={styles.arrow} src="/image/leftArrow.png" onClick={pageLower}/>
+            : <img className={styles.startBar} src="/image/startBar.png"/>}
             <div className={styles.contentContainer}>
                 <VoiceAnswer sentences={sentences} question={question} styles={styles}/>
                 <VoiceAnalysis/>
             </div>
-            <img src="/image/rightArrow.png" onClick={pageUpper}/>
+            <img className={styles.arrow} src="/image/rightArrow.png" onClick={pageUpper}/>
         </div>
     );
 
