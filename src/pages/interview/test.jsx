@@ -8,6 +8,7 @@ import PathText from '../../components/interview/PathText';
 import {useModal} from '../../components/hook/useModal';
 import NotButtonModal from '../../components/interview/NotButtonModal';
 import { useRouter } from 'next/router';
+import { authStore } from '../../stores/authStore';
 
 //파이썬으로 영상보내기
 const InterviewComponent = observer(() => {
@@ -24,13 +25,25 @@ const InterviewComponent = observer(() => {
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
     const [count, setcount] = useState(0);
-    const que = JSON.parse(decodeURIComponent(question));
-    
     useEffect(() => {
         if(!router.isReady) return;
         console.log(itvNo, memberNo, decodeURIComponent(question));
+
+        if (!authStore.isSubscribe) {
+            console.log("구독여부", authStore.isSubscribe);
+            alert("구독이 필요한 서비스입니다.");
+            router.push('/payment');
+        }
+
      }, [router.isReady])
-    
+
+     try {
+        const que = JSON.parse(decodeURIComponent(question));
+        console.log(que);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+      
     const paths = [
         { name: '메인', link: '/' },
         { name: 'AI history', link: '/interview' },

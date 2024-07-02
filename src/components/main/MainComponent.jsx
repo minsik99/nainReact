@@ -6,11 +6,14 @@ import RadiusButton from "../designTool/RadiusButton";
 import { useRouter } from "next/router";
 import ChatbotModal from "../../components/common/ChatbotModal";
 import { authStore } from "../../stores/authStore";
+import { observer } from "mobx-react";
 
-const MainComponent = () => {
+const MainComponent = observer (()=>{
   useEffect(() => {
     console.log(authStore.isAdmin);
     console.log(authStore.memberNo);
+    console.log(authStore.loggedIn);
+
     if (authStore.isAdmin) {
       console.log(authStore.isAdmin);
     }
@@ -284,6 +287,6 @@ const MainComponent = () => {
       </div>
     </>
   );
-};
+});
 
 export default MainComponent;

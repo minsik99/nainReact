@@ -4,15 +4,16 @@ import { login } from '../../api/user';
 import { handleAxiosError } from '../../api/errorAxiosHandle';
 import { useRouter } from 'next/router';
 import KakaoLogin from '../member/KakaoLogin';
+import { authStore } from '../../stores/authStore';
+import { observer } from "mobx-react";
 
-
-const LoginForm = ({styles}) => {
+const LoginForm = observer (({styles}) => {
     const router = useRouter();
     const [formData, setFormData] = useState({
         memberEmail: '',
         memberPwd: '',
     });
-
+   
     const [error, setError] = useState('');
 
     const loginMutation = useMutation(loginData => login(loginData), {
@@ -27,7 +28,8 @@ const LoginForm = ({styles}) => {
             handleAxiosError(error);
         },
     });
-
+    
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -102,6 +104,6 @@ const LoginForm = ({styles}) => {
             </form>
        
     );
-};
+});
 
 export default LoginForm;

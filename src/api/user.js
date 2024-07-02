@@ -11,7 +11,7 @@ export const signUp = (signUpData) => { axios.post(baseUrl + "/member/signup",si
 };
 
 
-export const login = (loginData) => {
+export const login =  (loginData) => {
     return axios.post("/login", loginData)
         .then(response => {
             // 성공적인 응답 처리
@@ -21,9 +21,11 @@ export const login = (loginData) => {
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
                 window.localStorage.setItem("refresh", response.data.refresh);
+                window.localStorage.setItem("isSubscribe", response.data.subscribe);
                 window.localStorage.setItem("memberNo", response.data.memberNo);
                 authStore.setIsAdmin(response.data.isAdmin);
-                authStore.setMemberNo(response.data.memberNo);              
+                authStore.setMemberNo(response.data.memberNo);  
+                authStore.setIsSubscribe(response.data.subscribe);            
                 authStore.checkLoggedIn();
                 
             }
@@ -38,6 +40,7 @@ export const logout = () =>{
         window.localStorage.removeItem("isAdmin");
         window.localStorage.removeItem("refresh");
         window.localStorage.removeItem("memberNo");
+        window.localStorage.removeItem("isSubscribe");
         // authStore 상태 초기화
         authStore.setIsAdmin(false);
         authStore.checkLoggedIn();
