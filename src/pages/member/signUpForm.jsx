@@ -11,6 +11,7 @@ const SignUpForm = () => {
     const router = useRouter();
 
     const [isReadOnly, setIsReadOnly] = useState(false);
+    const [pwdChanged, setPwdChanged] = useState(null)
     
     const [formData, setFormData] = useState({
         memberEmail: '',
@@ -73,6 +74,14 @@ const SignUpForm = () => {
         }
     }
 
+    useEffect(() => {
+        if(formData.memberPwd !== formData.confirmPwd){
+            setPwdChanged(true);
+        }else{
+            setPwdChanged(false);
+        }
+    }, [formData]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -89,7 +98,7 @@ const SignUpForm = () => {
             return;
         }
 
-        if (memberPwd !== confirmPassword) {
+        if (formData.memberPwd !== formData.confirmPwd) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
@@ -111,6 +120,8 @@ const SignUpForm = () => {
     return (
         <div className={styles.centerDiv}>
             <form className={styles.form} onSubmit={handleSubmit}>
+                <h1> 회원가입 </h1><hr></hr><br></br>
+                
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input type="email" 
@@ -138,15 +149,16 @@ const SignUpForm = () => {
                         />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="confirmPassword">확인:</label>
+                    <label htmlFor="confirmPwd">비밀번호 확인:</label>
                     <input type="password" 
-                            id="confirmPassword" 
-                            name="confirmPassword" 
-                            value={formData.confirmPassword} 
+                            id="confirmPwd" 
+                            name="confirmPwd" 
+                            value={formData.confirmPwd} 
                             onChange={handleInputChange} 
                             required 
                         />
                 </div>
+                {pwdChanged && <p className={styles.confirmPwd}>비밀번호가 일치하지 않습니다.</p>}
                 <div className={styles.formGroup}>
                     <label htmlFor="name">이름:</label>
                     <input type="text" 

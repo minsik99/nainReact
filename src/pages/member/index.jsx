@@ -1,4 +1,4 @@
-import SignUpForm from "/src/components/member/signup";
+import SignUpForm from "./signUpForm";
 
 const Index = () => {
   return <SignUpForm />;
