@@ -28,8 +28,6 @@ const FailPage = () => {
           style={{ width: "150px", marginBottom: "60px" }}
         ></img>
         <h2>결제를 실패했어요</h2>
-        <p>{`오류 메시지: ${message}`}</p>
-        <p>{`오류 코드: ${code}`}</p>
         <RadiusButton
           padding="5px 20px"
           color="#9dc3c1"
