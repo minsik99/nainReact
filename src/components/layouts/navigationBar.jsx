@@ -11,6 +11,7 @@ const NavigationBar = observer(() => {
   const { handleLogoutClick } = useLogoutHandler();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부 상태
+  const isSubscribe = authStore.isSubscribe;
 
   const handleSignUpClick = () => {
     router.push("/member/terms");
@@ -25,6 +26,16 @@ const NavigationBar = observer(() => {
     const adminStatus = localStorage.getItem("isAdmin") === "true";
     setIsAdmin(adminStatus);
   }, [loggedIn]);
+
+  const handleSubscribeClick = () => {
+    alert(authStore.isSubscribe);
+    if (!authStore.isSubscribe) {
+      console.log("구독여부", isSubscribe);
+      alert("구독이 필요한 서비스입니다.");
+      router.push('/payment');
+  }
+  };
+
 
   const [hovered, setHovered] = useState(false);
 
@@ -82,20 +93,37 @@ const NavigationBar = observer(() => {
                   </div>
                 </li>
                 <li>
-                  <Link href="/interview" passHref legacyBehavior>
-                    <a style={{ fontWeight: "600" }}>AI 면접</a>
-                  </Link>
-                  <div className="submenu">
-                    <Link href="/interview/test" legacyBehavior>
-                      <a className="subword">모의면접</a>
-                    </Link>
-                    <br />
-                    <Link href="/interview" legacyBehavior>
-                      <a className="subword">면접 report</a>
-                    </Link>
-                    <br />
-                  </div>
-                </li>
+                  <a
+                    href="#"
+                    style={{ fontWeight: "600" }}
+                    onClick={isSubscribe ? () => (window.location.href = "/interview") : handleSubscribeClick}
+                  >
+                    AI 면접
+                  </a>
+                  {isSubscribe ? (
+                    <div className="submenu">
+                      <Link href="/interview/test" passHref legacyBehavior>
+                        <a className="subword">모의면접</a>
+                      </Link>
+                      <br />
+                      <Link href="/interview" passHref legacyBehavior>
+                        <a className="subword">면접 report</a>
+                      </Link>
+                      <br />
+                    </div>
+                  ) : (
+                    <div className="submenu">
+                      <a className="subword" onClick={handleSubscribeClick}>
+                        모의면접
+                      </a>
+                      <br />
+                      <a className="subword" onClick={handleSubscribeClick}>
+                        면접 report
+                      </a>
+                      <br />
+                    </div>
+                  )}
+                  </li>
                 <li>
                   <Link href="/search" passHref legacyBehavior>
                     <a style={{ fontWeight: "600" }}>AI 트랜드서칭</a>
