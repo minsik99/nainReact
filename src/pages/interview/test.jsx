@@ -23,7 +23,7 @@ const InterviewComponent = observer(() => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
-    const [count, setcount] = useState(-1);
+    const [count, setcount] = useState(0);
     const que = JSON.parse(decodeURIComponent(question));
     
     useEffect(() => {
@@ -40,9 +40,9 @@ const InterviewComponent = observer(() => {
     const handleStartRecording = async () => {
         console.log("handleStartRecording 시작");
         console.log("count", count);
-        if(count == -1) {
+        if(count == 0) {
             startRecording();
-            setcount((preCount)=> preCount + 1);
+            // setcount((preCount)=> preCount + 1);
         } else if (!isRecording) {
             setIsRecording(prevState => !prevState); 
         }
@@ -243,6 +243,7 @@ const InterviewComponent = observer(() => {
     };
 
     const handleInterviewEnd = () => {
+        stopCamera();
         alert("면접이 종료되었습니다.");
         router.push('/interview');
     };
@@ -307,14 +308,14 @@ const InterviewComponent = observer(() => {
                 <div className={styles.videoContainer}>
                     <div className={styles.header}>
                         <div></div>
-                        { !isCameraOn || count < 0 && fileIndex == 0? 
+                        { !isCameraOn || count == 0 && fileIndex == 0? 
                         (<span>Q : 질문이 나오는 칸입니다.</span>
                         ) : (
-                            count === 10 ?
+                            count > 10 ?
                             (
-                                handleInterviewEnd
+                                handleInterviewEnd()
                         ) :
-                            <span>Q : {que[count].qcontent}</span> 
+                            <span>Q : {que[count - 1].qcontent}</span> 
                         )}
                         <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
                     </div>
