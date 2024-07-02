@@ -4,8 +4,10 @@ import CommunityAxios from "../../api/CommunityAxios";
 import Modal from '../../components/common/Modal';
 import {useModal} from '../../components/hook/useModal';
 import { reportComment } from '../../api/ReportAxios';
+import { useRouter } from 'next/router';
 
 const CommentDetail = ({ comment, styles }) => {
+    const router = useRouter();
     const [showInput, setShowInput] = useState(false);
     const [isParent, setIsParent] = useState(true);
     const [content, setContent] = useState('');
@@ -53,19 +55,23 @@ const CommentDetail = ({ comment, styles }) => {
             writer: '',
             content: content,
         };
-        if (content) {
-            CommunityAxios.createComment(childComment).then(res => {
-                setContent(''); 
-                setShowInput(false);
-                window.location.reload();
-            }).catch(error => {
-                console.error('Error creating child comment:', error);
-            });
-        } else {
-            alert('내용을 입력해주세요.');
-        }
+        if(loginState){
+            if (content) {
+                CommunityAxios.createComment(childComment).then(res => {
+                    setContent(''); 
+                    setShowInput(false);
+                    window.location.reload();
+                }).catch(error => {
+                    console.error('Error creating child comment:', error);
+                });
+            } else {
+                alert('내용을 입력해주세요.');
+        }}else{
+            if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+                router.push("/member/login")
+            }
+        }    
     };
-
     const handleComment = (event) => {
         setContent(event.target.value);
     };
@@ -94,7 +100,9 @@ const CommentDetail = ({ comment, styles }) => {
                 },
                 });
         }else{
-            alert("로그인이 필요합니다.");
+            if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+                router.push("/member/login")
+            }
         }
       };
 
