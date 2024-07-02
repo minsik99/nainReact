@@ -7,6 +7,7 @@ import styles from '../../styles/member/memberLogin.module.css';
 const logintest = observer(() => {
     return (
         <div className={styles.centerDiv}>
+
             <LoginForm styles={styles} />
         </div>
     );

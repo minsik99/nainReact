@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { signUp } from '../../api/user';
 import styles from '../../styles/member/terms.module.css';
-import SignUpForm from './signUpForm';
-
+import SignUpTerms from '../../components/member/SignUpTerms';
 
 const Terms = () => {
     const router = useRouter();
@@ -13,13 +11,9 @@ const Terms = () => {
         term3: false,
     });
 
-    //전체 동의 체크 상태
     const [allTermsChecked, setAllTermsChecked] = useState(false);
-
-    // 모든 약관에 동의했는지 여부를 체크
     const allTermsAgreed = termsAgreed.term1 && termsAgreed.term2 && termsAgreed.term3;
 
-    // 전체 동의 체크박스가 변경될 때
     const handleAllTermsChange = (e) => {
         const checked = e.target.checked;
         setAllTermsChecked(checked);
@@ -30,18 +24,15 @@ const Terms = () => {
         });
     };
 
-    // 개별 약관 동의 체크박스가 변경될 때
     const handleCheckboxChange = (e) => {
-        const {name, checked} = e.target;
+        const { name, checked } = e.target;
         setTermsAgreed({
             ...termsAgreed,
             [name]: checked,
         });
-        // 개별 체크박스가 변경될 때 전체 동의 체크 여부 확인
         setAllTermsChecked(termsAgreed.term1 && termsAgreed.term2 && termsAgreed.term3);
     };
 
-    // 개별 약관 확인 버튼 클릭 시
     const handleAgreeTerm1 = () => {
         setTermsAgreed({
             ...termsAgreed,
@@ -63,68 +54,73 @@ const Terms = () => {
         });
     };
 
-    // 전체 동의 버튼 클릭 시
     const handleAgreeTerm4 = () => {
-        const newChekedStatus = !allTermsChecked;
-        setAllTermsChecked(newChekedStatus);
+        const newCheckedStatus = !allTermsChecked;
+        setAllTermsChecked(newCheckedStatus);
         setTermsAgreed({
-            term1: newChekedStatus,
-            term2: newChekedStatus,
-            term3: newChekedStatus,
+            term1: newCheckedStatus,
+            term2: newCheckedStatus,
+            term3: newCheckedStatus,
         });
     };
-    
-    //동의 버튼 클릭 시
+
     const handleAgree = async () => {
-        if(allTermsAgreed){
+        if (allTermsAgreed) {
             localStorage.setItem('termsAgreed', 'true');
 
-            try{
-                router.push('/member/signUpForm'); //회원가입 페이지로 이동
-            }catch(error){
+            try {
+                router.push('/member/signUpForm');
+            } catch (error) {
                 console.error('회원가입에 실패했습니다.', error);
-                // 에러 로직 추가 가능
             }
-        }else{
+        } else {
             alert('모든 약관에 동의해야 합니다.');
         }
     };
-    
-    //메인으로 돌아가기 버튼 클릭 시
+
     const handleGoBack = () => {
-        router.push("/"); //메인 페이지로 이동
+        router.push("/");
     }
 
-
-    return(
+    return (
         <div className={styles.termsContainer}>
             <h1>이용 약관</h1>
             <div className={styles.termCheckboxes}>
                 <div className={styles.termChecked}>
                     <input type='checkbox' name="term1" checked={termsAgreed.term1} onChange={handleCheckboxChange} />
-                    [필수] 이용약관 동의
+                    [필수] 서비스 이용 약관
+                </div>
+                <div className={styles.termContent}>
+                    <SignUpTerms termNo={1}/>
                 </div>
                 <button onClick={handleAgreeTerm1}>확인</button>
                 <br />
 
                 <div className={styles.termChecked}>
                     <input type='checkbox' name="term2" checked={termsAgreed.term2} onChange={handleCheckboxChange} />
-                    [필수] 개인정보 이용 수집 방침
+                    [필수] 유료 서비스 이용 약관
+                </div>
+                <div className={styles.termContent}>
+                    <SignUpTerms termNo={2}/>
                 </div>
                 <button onClick={handleAgreeTerm2}>확인</button>
                 <br />
 
                 <div className={styles.termChecked}>
                     <input type='checkbox' name="term3" checked={termsAgreed.term3} onChange={handleCheckboxChange} />
-                    [필수] 개인정보 제3자 제공 동의
+                    [필수] 커뮤니티 이용 약관
+                </div>
+                <div className={styles.termContent}>
+                    <SignUpTerms termNo={3}/>
                 </div>
                 <button onClick={handleAgreeTerm3}>확인</button>
+                <br />
+
                 <div className={styles.termChecked}>
                     <input type='checkbox' checked={allTermsChecked} onChange={handleAllTermsChange} />
                     이용약관 전체 동의
                 </div>
                 <button onClick={handleAgreeTerm4}>전체 동의</button>
-                
             </div>
             <div className={styles.buttonContainer}>
                 <button onClick={handleAgree} disabled={!allTermsAgreed}>동의합니다</button>

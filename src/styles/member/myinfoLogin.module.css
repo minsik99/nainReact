@@ -1,0 +1,88 @@
+
+.form {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    max-width: 500px;
+    
+    margin: 0 auto;
+    margin-top: 200px;
+    margin-bottom: 500px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.error {
+    margin-top: -12px;
+    margin-left: 5px;
+    font-size:12px;
+    color:red;
+}
+
+
+.formGroup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.formGroup input[type="email"],
+.formGroup input[type="password"],
+.formGroup input[type="text"],
+.formGroup select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.formGroup input[type="email"]:disabled,
+.formGroup input[type="text"]:disabled {
+    background-color: #f5f5f5;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column; /* 버튼들을 위아래로 배치 */
+    gap: 10px; /* 버튼들 사이에 간격 추가 */
+    align-items: center; /* 버튼들을 가운데 정렬 */
+}
+
+
+.buttonContainer button {
+    width: 80%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #77AAAD;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.buttonContainer button:hover {
+    background-color: #6E7783;
+}
+
+/* 기존 스타일들 위에 추가합니다. */
+.form input[readonly] {
+    color: blue;
+}
+
+/* select 요소의 스타일 */
+.form select[readonly] {
+    color: blue;
+    pointer-events: none; /* 선택 불가로 설정 */
+}
