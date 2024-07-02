@@ -11,7 +11,7 @@ const LoginSuccess = observer(() => {
   useEffect(() => {
     if (!router.isReady) return;
 
-    const { access, refresh, isAdmin, memberNo } = router.query;
+    const { access, refresh, isAdmin, memberNo, subscribe } = router.query;
     
 
     if (access && refresh && memberNo) {
