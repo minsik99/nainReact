@@ -182,7 +182,7 @@ const BoardDetail = () => {
                     </div>
                     )}
             <h4>댓글</h4>
-            <Comment comments={comments} communityNo={board.communityNo} styles={styles} />
+            <Comment comments={comments} communityNo={board.communityNo} styles={styles} loginState={loginState}/>
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useRouter } from 'next/router';
 
-const VoiceAnswer = ({sentences, question, styles}) => {
+const VoiceAnswer = ({page, sentences, question, styles}) => {
     const [isClicked, setIsClicked] = useState(false);
     const [detail, setDetail] = useState(null);
 
@@ -40,7 +40,7 @@ const VoiceAnswer = ({sentences, question, styles}) => {
 
     return(
         <div>
-            <div className={styles.questionContainer}>Q. {question}</div>
+            <div className={styles.questionContainer}>Q{page+1}. {question}</div>
             <div className={styles.sentences}>
                 <p>답변</p>
                 {answers}
