@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from "next/router";
-import axios from "axios";
-import { authStore } from "../../stores/authStore";
 import styles from "../../styles/member/memberMyinfo.module.css";
 import { myinfo } from "../../api/user";
 import { updateMyinfo } from "../../api/user";
 import { deleteMember } from "../../api/user";
 import { logout } from "../../api/user";
-import { set } from "date-fns";
 
 const Myinfo = () => {
 
@@ -25,7 +22,7 @@ const Myinfo = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [pwdChanged, setPwdChanged] = useState(null)
+    const [pwdChanged, setPwdChanged] = useState(null);
 
     const fetchUserMember = async (memberNo) => {
         try {
@@ -132,6 +129,12 @@ const Myinfo = () => {
         }
     }
 
+    const handleSubscribe = () => {
+        if(confirm("구독하기 결제 페이지로 이동하시겠습니까?")){
+            router.push("/payment");
+        }
+    }
+
     const goToMain = () => {
         router.push("/main");
     };
@@ -203,20 +206,9 @@ const Myinfo = () => {
                         readOnly={isReadOnly} //상태에 따라 변경
                         />
                 </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="subscribeYN">구독 여부:</label>
-                    <select
-                        id="subscribeYN"
-                        name="subscribeYN"
-                        value={formData.subscribeYN}
-                        onChange={handleInputChange}
-                        readOnly={isReadOnly} //상태에 따라 변경
-                    >
-                        <option value="true">구독</option>
-                        <option value="false">구독 취소</option>
-                    </select>
-                </div>
+
                 <div className={styles.buttonContainer}>
+                <button type="button" id="subscribeButton" onClick={handleSubscribe}>구독하기</button>
                     {updateMyinfoMutation.isLoading ? (
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
                         <p>수정 중...</p>
@@ -224,6 +216,7 @@ const Myinfo = () => {
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
                         <button type="submit" disabled={isReadOnly}>수정</button>
                     )}
+
                         <button type="button" id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
                         <button type="button" id="deleteButton" onClick={handleDeleteAccount} disabled={isReadOnly}>회원탈퇴</button>
                 </div>
