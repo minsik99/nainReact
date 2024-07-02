@@ -1,8 +1,12 @@
 
 import axios from "./axiosApi"
 import { authStore } from "../stores/authStore"
+import CryptoJS from 'crypto-js';
+import { headers } from "next/headers";
+import instance from "./axiosApi";
 
 const baseUrl = "/api/auth";
+const secretKey = 'your-secret-key'; // 비밀 키는 안전하게 관리해야 합니다.
 
 export const signUp = (signUpData) => { axios.post(baseUrl + "/member/signup",signUpData).then(res =>{
         console.log(signUpData)
@@ -64,6 +68,46 @@ export const checkEmail = (memberEmail) => {
     });
 };
 
+// 내 정보 입장 전 로그인 페이지 (이메일 가져오기)
+export const myinfoLogin = (memberNo) => {
+    console.log("memberNo:", memberNo);
+
+    return axios.post(baseUrl + "/member/myinfoLogin", null, {
+        params: {memberNo},
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+    }).then(res => {
+        console.log("memberNo", memberNo);
+        return res.data;
+    }).catch(error => {
+        console.error("이메일 가져오기 오류", error.res ? error.res.data : error.message);
+        throw error;  
+    })
+};
+
+// 내 정보 입장 전 로그인 페이지(패스워드)
+ export const myinfoLoginPwd = async (memberNo, memberPwd) => {
+    console.log("memberNo:", memberNo);
+    console.log("memberPwd:", memberPwd);
+    try {
+        const res = await axios.post(`${baseUrl}/member/myinfo/${memberNo}`, memberPwd,
+
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+            }
+        });
+        
+        return res.data;
+    }catch(error){
+        console.error('Error myinfoLogin:', error);
+        throw error;
+    }
+};
+
+
 // 내정보 불러오기 
 export const myinfo = (memberNo) => {
     console.log("memberNo:", memberNo);
@@ -84,19 +128,34 @@ export const myinfo = (memberNo) => {
 
 // 내정보 수정하기
 export const updateMyinfo = async (memberNo, updateMyinfoData) => {
-    return await axios.put(baseUrl + `/updateMyinfo/${memberNo}`, updateMyinfoData), {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-        
-    } 
+    try {
+        const response = await axios.put(`${baseUrl}/updateMyinfo/${memberNo}`, updateMyinfoData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error('Error updating member info:', error);
+        throw error;
+    }
 };
 
 //회원 탈퇴
-export const deleteMember = async (memberNo, deleteMeberData) => {
-    return await axios.put(baseUrl+ `/deleteMember/${memberNo}`, deleteMeberData), {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+export const deleteMember = async (memberNo) => {
+    console.log("memberNo:", memberNo);
+
+    try{
+        const response = await axios.put(`${baseUrl}/deletemember/${memberNo}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return response;
+    }catch(error){
+        console.error("Error deleteMember:", error);
+        throw error;
     }
-}
+};
