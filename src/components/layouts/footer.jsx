@@ -4,6 +4,7 @@ const Footer = observer(() => {
   return (
     <>
       <div>
+      <hr width={"100%"}/>
         <img
           className="pAioneer_Logo"
           src="/image/pAioneer_Logo.png"

@@ -2,7 +2,7 @@ import React from "react";
 
 const BoardList = (props) => {
   const {first, second, third, fourth, boardList, styles } = props; 
-
+  console.log(boardList);
   return (
     <div>
         <div>
@@ -15,9 +15,19 @@ const BoardList = (props) => {
                   <th>{fourth}</th>
                 </tr>
               </thead>
-              <tbody className={styles.tableRow}>
-                {boardList}
-              </tbody>
+              {boardList.length > 0 ? 
+                <tbody className={styles.tableRow}>
+                  {boardList}
+                </tbody>
+                :
+                <tbody>
+                  <tr className={styles.emptyRow}>
+                    <td></td> 
+                    <td className={styles.empty}>검색 결과가 없습니다.</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>}
             </table>
           </div>
     </div>

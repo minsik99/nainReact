@@ -1,7 +1,20 @@
 .tableContainer {
     width: 100%;
     border-collapse: collapse;
-  }
+}
+
+.emptyRow{
+  height: 42rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.empty{
+  width: 100%;
+  font-weight: bold;
+  color: #999999;
+  font-size: 25px;
+}
 
 .tableBox {
   display: flex;
@@ -35,6 +48,8 @@ text-align: center;
     color: black;
     text-decoration: none;
 }
+
+
 
 
 .tableContainer th:nth-child(1),

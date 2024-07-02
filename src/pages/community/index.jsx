@@ -24,6 +24,10 @@ const Community = observer(() => {
             const memberNo = window.localStorage.getItem("memberNo");
             if(memberNo){
                 setLoginState(true);
+                CommunityAxios.myInfo().then(res => {
+                    console.log("유저 닉네임", res.data);
+                    setMyInfo(res.data);
+                });
             }
         }
     }, []);
@@ -33,11 +37,6 @@ const Community = observer(() => {
             setBoards(res.data.list);
             setPaging(res.data.pg);
         });
-        if(loginState){
-            CommunityAxios.myInfo().then(res => {
-                setMyInfo(res.data);
-            });
-        }
     }, [currentPage, sort]);
 
     const boardList = boards.map(board => (
@@ -96,11 +95,11 @@ const Community = observer(() => {
     
     //내 글 보기
     const myBoard = () => {
+        setType('writer');
+        setSearchKeyword(myInfo);
         CommunityAxios.searchCommunity('writer', myInfo, currentPage, limit, sort).then(res=>{
             setBoards(res.data.list);
             setPaging(res.data.pg);
-            setType('writer');
-            setSearchKeyword(myInfo);
         });
     };
 

@@ -1,14 +1,13 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState, useRef, useMemo} from "react";
 import { observer } from "mobx-react";
 import axios from "axios";
-import React, {useRef ,useEffect, useState, useMemo } from 'react';
 import { useMutation } from "react-query";
 import styles from '../../styles/companylist/companylist.module.css';
-import Table from "../common/Table";
-import SearchBar from "../common/SearchBar";
-import Loading from "../designTool/Loading";
-import CustomDropdown from '../designTool/CustomDropdown';
-import SortComponent from "./SortComponent";
+import Table from "../../components/common/Table";
+import SearchBar from "../../components/common/SearchBar";
+import Loading from "../../components/designTool/Loading";
+import CustomDropdown from '../../components/designTool/CustomDropdown';
+import SortComponent from "../../components/companylist/SortComponent";
 
 const CompanyComponent = observer(()=> { 
     const columns = useMemo(() =>[{ Header: 'No', accessor: 'index' },
