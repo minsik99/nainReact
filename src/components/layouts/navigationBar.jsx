@@ -32,10 +32,9 @@ const NavigationBar = observer(() => {
     if (!authStore.isSubscribe) {
       console.log("구독여부", isSubscribe);
       alert("구독이 필요한 서비스입니다.");
-      router.push('/payment');
-  }
+      router.push("/payment");
+    }
   };
-
 
   const [hovered, setHovered] = useState(false);
 
@@ -96,7 +95,11 @@ const NavigationBar = observer(() => {
                   <a
                     href="#"
                     style={{ fontWeight: "600" }}
-                    onClick={isSubscribe ? () => (window.location.href = "/interview") : handleSubscribeClick}
+                    onClick={
+                      isSubscribe
+                        ? () => (window.location.href = "/interview")
+                        : handleSubscribeClick
+                    }
                   >
                     AI 면접
                   </a>
@@ -123,7 +126,7 @@ const NavigationBar = observer(() => {
                       <br />
                     </div>
                   )}
-                  </li>
+                </li>
                 <li>
                   <Link href="/search" passHref legacyBehavior>
                     <a style={{ fontWeight: "600" }}>AI 트랜드서칭</a>
@@ -201,8 +204,6 @@ const NavigationBar = observer(() => {
                 <Nav.Link style={{ fontWeight: "600" }} href={"/member/myinfo"}>
                   내 정보
                 </Nav.Link>
-                <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
-                <Nav.Link href={"/member/myinfoLogin"}>내 정보</Nav.Link>
               </Nav>
             ) : (
               <Nav>

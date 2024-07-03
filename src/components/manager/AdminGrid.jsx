@@ -11,6 +11,7 @@ import {
   removeAdminStatus,
 } from "../../api/adminManager";
 import { useRouter } from "next/router";
+import Loading from "../designTool/Loading";
 
 const CustomFloatingFilter = (props) => {
   const [filterValue, setFilterValue] = useState("");
@@ -37,6 +38,7 @@ const AdminGrid = () => {
   const [newRow, setNewRow] = useState({ email: "", name: "", nickname: "" });
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
   const [modalContent, setModalContent] = useState(""); // 모달 내용 상태 추가
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const gridApi = useRef(null);
   const gridColumnApi = useRef(null);
   const router = useRouter();
@@ -105,8 +107,9 @@ const AdminGrid = () => {
       router.push("/error/errorPage"); // memberNo가 1이 아닐 경우 리디렉션
     } else {
       setMemberNo(memberNo);
+      setLoading(false); // 로딩 완료 상태로 변경
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const fetchAdminList = async () => {
@@ -119,8 +122,10 @@ const AdminGrid = () => {
       }
     };
 
-    fetchAdminList();
-  }, []);
+    if (memberNo === "1") {
+      fetchAdminList();
+    }
+  }, [memberNo]);
 
   const onGridReady = (params) => {
     gridApi.current = params.api;
@@ -166,67 +171,73 @@ const AdminGrid = () => {
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
-      <div style={{ marginBottom: "10px", float: "right" }}>
-        <input
-          type="text"
-          name="email"
-          value={newRow.email}
-          placeholder="abc123@nain.io"
-          onChange={handleInputChange}
-          style={{ borderRadius: "5px", marginRight: "20px" }}
-        />
-        <RadiusButton
-          onClick={addAdmin}
-          padding="5px 18px"
-          color="#9dc3c1"
-          text="관리자 추가"
-        ></RadiusButton>
-      </div>
-      <div className="RadiusButton">
-        <RadiusButton
-          onClick={deleteAdmin}
-          padding="5px 18px"
-          color="#9dc3c1"
-          text="관리자 삭제"
-        ></RadiusButton>
-      </div>
-      <div
-        className={`ag-theme-balham ${styles.customGrid}`}
-        style={{ height: 1000, width: "100%", marginTop: "20px" }}
-      >
-        <AgGridReact
-          rowData={rowData}
-          columnDefs={columnDefs}
-          defaultColDef={{
-            flex: 1,
-            minWidth: 100,
-            filter: true,
-            sortable: true,
-            floatingFilter: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            headerClass: "customHeader",
-            floatingFilterComponent: "customFloatingFilter",
-          }}
-          onGridReady={onGridReady}
-          rowSelection="multiple"
-          pagination={true}
-          paginationPageSize={20}
-          rowHeight={50} // 행 높이 설정
-          headerHeight={50} // 타이틀 행 높이 설정
-          floatingFiltersHeight={50} // 검색 행 높이 설정
-        />
-      </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        content={<p>{modalContent}</p>}
-        buttonLabel="닫기"
-        buttonColor="#77aaad"
-        buttonSize="16px"
-        modalSize={{ width: "350px", height: "150px" }}
-      />
+      {loading ? (
+        <Loading loading={loading} text="로딩 중..." />
+      ) : (
+        <>
+          <div style={{ marginBottom: "10px", float: "right" }}>
+            <input
+              type="text"
+              name="email"
+              value={newRow.email}
+              placeholder="abc123@nain.io"
+              onChange={handleInputChange}
+              style={{ borderRadius: "5px", marginRight: "20px" }}
+            />
+            <RadiusButton
+              onClick={addAdmin}
+              padding="5px 18px"
+              color="#9dc3c1"
+              text="관리자 추가"
+            ></RadiusButton>
+          </div>
+          <div className="RadiusButton">
+            <RadiusButton
+              onClick={deleteAdmin}
+              padding="5px 18px"
+              color="#9dc3c1"
+              text="관리자 삭제"
+            ></RadiusButton>
+          </div>
+          <div
+            className={`ag-theme-balham ${styles.customGrid}`}
+            style={{ height: 1000, width: "100%", marginTop: "20px" }}
+          >
+            <AgGridReact
+              rowData={rowData}
+              columnDefs={columnDefs}
+              defaultColDef={{
+                flex: 1,
+                minWidth: 100,
+                filter: true,
+                sortable: true,
+                floatingFilter: true,
+                floatingFilterComponentParams: {
+                  suppressFilterButton: true,
+                },
+                headerClass: "customHeader",
+                floatingFilterComponent: "customFloatingFilter",
+              }}
+              onGridReady={onGridReady}
+              rowSelection="multiple"
+              pagination={true}
+              paginationPageSize={20}
+              rowHeight={50} // 행 높이 설정
+              headerHeight={50} // 타이틀 행 높이 설정
+              floatingFiltersHeight={50} // 검색 행 높이 설정
+            />
+          </div>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            content={<p>{modalContent}</p>}
+            buttonLabel="닫기"
+            buttonColor="#77aaad"
+            buttonSize="16px"
+            modalSize={{ width: "350px", height: "150px" }}
+          />
+        </>
+      )}
     </div>
   );
 };
