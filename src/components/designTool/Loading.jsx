@@ -17,7 +17,7 @@ const Loading = ({ loading, text }) => {
                 color: '#77AAAD',
                 fontWeight: '600',
             }}>
-                <h1>{text}</h1>
+                <h2>{text}</h2>
             </div>
         </div>
     );

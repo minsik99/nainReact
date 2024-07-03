@@ -105,10 +105,7 @@ const NavigationBar = observer(() => {
                   </a>
                   {isSubscribe ? (
                     <div className="submenu">
-                      <Link href="/interview/test" passHref legacyBehavior>
-                        <a className="subword">모의면접</a>
-                      </Link>
-                      <br />
+                      
                       <Link href="/interview" passHref legacyBehavior>
                         <a className="subword">면접 report</a>
                       </Link>
@@ -116,13 +113,11 @@ const NavigationBar = observer(() => {
                     </div>
                   ) : (
                     <div className="submenu">
-                      <a className="subword" onClick={handleSubscribeClick}>
-                        모의면접
-                      </a>
-                      <br />
+                      <Link href="/interview" passHref legacyBehavior>
                       <a className="subword" onClick={handleSubscribeClick}>
                         면접 report
                       </a>
+                      </Link>
                       <br />
                     </div>
                   )}

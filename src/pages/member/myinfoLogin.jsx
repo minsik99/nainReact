@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
-import styles from '../../styles/member/memberSignup.module.css';
+import styles from "../../styles/member/myinfoLogin.module.css";
 import { myinfoLogin } from "../../api/user";
 import { myinfoLoginPwd } from "../../api/user";
 
@@ -55,6 +55,7 @@ const MyinfoLogin = () => {
         e.preventDefault(); // 폼 제출의 기본 동작을 막습니다.
         try {
             const response = await myinfoLoginPwd(memberNo, formData.memberPwd);
+            console.log(formData.memberPwd);
             if (response === "Success") {
                 router.push("/member/myinfo");
             } else {
@@ -71,6 +72,8 @@ const MyinfoLogin = () => {
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
+            <h1>내 정보 확인</h1><hr></hr>
+            <br></br>
             <div className={styles.formGroup}>
                 <label htmlFor="email">이메일:</label>
                 <input

@@ -25,6 +25,8 @@ const InterviewComponent = observer(() => {
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
     const [count, setcount] = useState(0);
+    const [saved, setSaved] = useState(true);
+    let que = '';
     useEffect(() => {
         if(!router.isReady) return;
         console.log(itvNo, memberNo, decodeURIComponent(question));
@@ -35,10 +37,10 @@ const InterviewComponent = observer(() => {
             router.push('/payment');
         }
 
-     }, [router.isReady])
+     }, [router.isReady]);
 
      try {
-        const que = JSON.parse(decodeURIComponent(question));
+        que = JSON.parse(decodeURIComponent(question));
         console.log(que);
       } catch (error) {
         console.error('Error parsing JSON:', error);
@@ -57,7 +59,7 @@ const InterviewComponent = observer(() => {
             startRecording();
             // setcount((preCount)=> preCount + 1);
         } else if (!isRecording) {
-            setIsRecording(prevState => !prevState); 
+            setIsRecording(prevState => !prevState);
         }
         setcount((preCount)=> preCount + 1);
     };
@@ -88,7 +90,7 @@ const InterviewComponent = observer(() => {
             let options = { mimeType: 'video/webm; codecs=vp8,opus' };
             let recorder = null;
            
-            if (stream && stream.active && !isRecording) {
+            if (stream && stream.active && !isRecording && saved) {
                 console.log("스트림 존재함 레코딩 시작");
                 videoRef.current.srcObject = stream;
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
@@ -172,7 +174,8 @@ const InterviewComponent = observer(() => {
     
     // 녹화된 비디오 저장 및 서버로 전송
     const saveVideo = async () => {
-        try {            
+        try {
+            setSaved(false);
             if (recordedChunks.length > 0) {
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
                 const formData = new FormData();
@@ -181,7 +184,12 @@ const InterviewComponent = observer(() => {
                 formData.append('qNo', que[fileIndex].qno);
                 console.log("FormData prepared:", formData);
                 await stopRecording();
-                await saveOneVideo(formData);
+                await saveOneVideo(formData).then(res => {
+                    console.log("파이썬 res", res.success);
+                    if(res.success == "Analysis Succeed"){
+                        setSaved(true);
+                    }
+                });
 
                 setFileIndex(prevIndex => {
                     const newIndex = prevIndex < 10 ? prevIndex + 1 : 0;
@@ -316,42 +324,49 @@ const InterviewComponent = observer(() => {
 
     return (
         <div className={styles.base}>
-        <div className={styles.path}> <PathText paths={paths} /></div>
-            <div className={styles.interviewContainer}>
-                <div className={styles.videoContainer}>
-                    <div className={styles.header}>
-                        <div></div>
-                        { !isCameraOn || count == 0 && fileIndex == 0? 
-                        (<span>Q : 질문이 나오는 칸입니다.</span>
-                        ) : (
-                            count > 10 ?
-                            (
-                                handleInterviewEnd()
-                        ) :
-                            <span>Q : {que[count - 1].qcontent}</span> 
-                        )}
-                        <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
-                    </div>
-                        <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
-                        {isCameraOn ? (
-                            <video className={styles.video} ref={videoRef} autoPlay muted />
-                        ) : (
-                            <div className={styles.emptyScreen}><Loading text="Loading.." /></div>
-                        )}
-                    <div className={styles.emptyBottom}>
-                        <div className={styles.buttonBox}>
-                            <RadiusButton
-                                color="#77AAAD"
-                                fontSize="14px"
-                                padding="0.5rem 1rem"
-                                onClick={isCameraOn ? stopCamera : startCamera }
-                                text={isCameraOn ? '면접 중단' : '면접 시작하기'}
-                            />
+            <div className={styles.path}> <PathText paths={paths} /></div>
+            <div className={styles.testContainer}>
+                        <div className={styles.videoContainer}>
+                            <div className={styles.header}>
+                                <div></div>
+                                { !isCameraOn || count == 0 && fileIndex == 0? 
+                                (<span>Q : 질문이 나오는 칸입니다.</span>
+                                ) : (
+                                    count == 11 ?
+                                    (
+                                        handleInterviewEnd()
+                                ) :
+                                    <span>Q{count} : {que[count - 1].qcontent}</span> 
+                                )}
+                                <div>
+                                {count < 11 && isCameraOn &&
+                                <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
+                                }
+                                </div>
+                            </div>
+                                <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
+                                {isCameraOn && saved? (
+                                    <video className={styles.video} ref={videoRef} autoPlay muted />
+                                ) : (
+                                    <div className={styles.emptyScreen}>
+                                        {count > 0 ? <Loading text="저장 중.. 답변을 준비해주세요." />
+                                        : <Loading text="준비되면 '면접 시작하기'를 눌러주세요" />}
+                                    </div>
+                                )}
+                            <div className={styles.emptyBottom}>
+                                <div className={styles.buttonBox}>
+                                    <RadiusButton
+                                        color="#77AAAD"
+                                        fontSize="14px"
+                                        padding="0.5rem 1rem"
+                                        onClick={isCameraOn ? handleInterviewEnd : startCamera }
+                                        text={isCameraOn ? '면접 중단' : '면접 시작하기'}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
             </div>
-            <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
     );
 });

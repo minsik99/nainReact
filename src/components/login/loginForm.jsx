@@ -64,6 +64,7 @@ const LoginForm = observer (({styles}) => {
     
 
             <form className={styles.form} onSubmit={handleSubmit}>
+                <h1>로그인</h1><hr></hr>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input

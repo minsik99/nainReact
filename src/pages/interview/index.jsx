@@ -16,11 +16,17 @@ const InterviewListForm = observer(()=>{
         if (typeof window !== "undefined") {
             const memberNo = window.localStorage.getItem("memberNo");
             setMemberNo(memberNo);
-            if (!authStore.isSubscribe) {
-                console.log("구독여부", authStore.isSubscribe);
-                alert(authStore.isSubscribe)
-                alert("구독이 필요한 서비스입니다.");
-                router.push('/payment');
+            if(memberNo){            
+                if (!authStore.isSubscribe) {
+                    console.log("구독여부", authStore.isSubscribe);
+                    alert(authStore.isSubscribe)
+                    alert("구독이 필요한 서비스입니다.");
+                    router.push('/payment');
+                }
+            }else{
+                if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+                    router.push("/member/login");
+                  };
             }
         }
     }, [authStore.isSubscribe]);

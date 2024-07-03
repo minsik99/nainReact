@@ -18,9 +18,9 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
     const [selectedInterview, setSelectedInterview] = useState(null);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const { isDropdownVisible, toggleDropdown } = useDropdown();
+    const [ isDropdownVisible, setIsDropdownVisible ] = useState(false);
     const size = 3;
-    const wrapperRef = useClickOutside(toggleDropdown);
+    // const wrapperRef = useClickOutside(setIsDropdownVisible);
     const deleteModal = useModal();
     const titleModal = useModal();
     const categoryModal = useModal();
@@ -29,7 +29,7 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
         { text: 'Video', id: 'video' },
         { text: 'Total', id: 'total' }
     ];
-
+    const [openInfo, setOpenInfo] = useState(false);
     const loadMore = () => {
         setPage(prevPage => prevPage + 1);
     };
@@ -53,7 +53,7 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
 
     const handleSelect = (item) => {
         setSortKey(item ? item.Accessor : null);
-        toggleDropdown();
+        // toggleDropdown();
     };
 
     const startInterview = async () => {
@@ -143,9 +143,12 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
           onConfirm: (selectedInterview) => {
             try {
                 console.log(selectedInterview);
-               deleteInterview(selectedInterview);
-               setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
-               setPage(1);
+               deleteInterview(selectedInterview).then(res => {
+                alert("삭제되었습니다.");
+                window.location.reload();
+               });
+            //    setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
+            //    setPage(1);
             } catch (error) {
               console.error("면접 삭제 실패", error);
             } finally {
@@ -153,6 +156,14 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
             }
         },
     }); 
+    };
+
+    const infoHandler = () => {
+        setOpenInfo(true);
+    };
+
+    const dropdownHandler = () => {
+        setIsDropdownVisible(!isDropdownVisible);
     };
       
     useEffect(() => {
@@ -193,16 +204,22 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
     return (    
         <div className={styles.interviewListContainer}>  
             <div className={styles.listContainer}>
+                <h2 className={styles.title}>AI 면접 분석 History</h2>
                 <div className={styles.menuContainer} >
-                    <img src="/image/sortMenu.png" onClick={toggleDropdown} className={styles.sortMenu} />
+                    <img src="/image/interviewInfo.png" onClick={infoHandler} className={styles.info}/>
+                    <div>
+                        {openInfo && (
+                            <div></div>
+                        )}
+                    </div>
+                    <div className={styles.dropdownBox}>
                         {isDropdownVisible && (
-                            <div className={styles.dropdownBox} ref={wrapperRef}>
                                 <CustomDropdown columns={sort} onSelect={handleSelect} 
                                 header={sort.header} dropdownWidth="110px"/>
-                                </div>
                         )}
+                    </div>
+                    <img src="/image/sortMenu.png" onClick={dropdownHandler} className={styles.sortMenu} />
                 </div>
-                <h2 className={styles.title}>AI 면접 분석 History</h2>
                 <div className={styles.cardContainer} ref={containerRef}>
                     <div className={styles.addBlock}><img className={styles.img} onClick={startInterview} src="/image/add.png"/></div>
                     <Modal isOpened={titleModal.isOpened} type='' closeModal={titleModal.closeModal} data={titleModal.modalData} />
@@ -223,7 +240,6 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
                                 isSelected={selectedInterview === interview.itvNo}
                                 deleteInterviewOne={handleOpenModal}
                             /> 
-                            
                         </div>
                         );
                     })}
@@ -235,10 +251,8 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
                     </div>
                 </div>
             </div>
-                <div className={styles.resultContainer}>
-                <InterviewResultComponent memberNo={memberNo} buttons={buttons} selectedButton={selectedButton} handleSelected={handleSelected} itvNo={selectedInterview} />
-                </div>
-            </div>
+                 <InterviewResultComponent memberNo={memberNo} buttons={buttons} selectedButton={selectedButton} handleSelected={handleSelected} itvNo={selectedInterview} />
+        </div>
     );
 });
 
