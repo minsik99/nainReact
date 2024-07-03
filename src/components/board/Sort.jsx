@@ -1,20 +1,17 @@
 import React, {useState} from "react";
-import styles from "../../styles/board/search.module.css";
 
-const Sort = ({options, onSort}) => {
+const Sort = ({styles, sortOptions, setSort, sort}) => {
     const [selectedOption, setSelectedOption] = useState('');
 
-    const handleOptionChange = (event) => {
-        const value = event.target.value;
-        setSelectedOption(value);
-        onSort(selectedOption);
-      };
+    const handleSort = (event) => {
+        setSort(event.target.value);
+    };
 
   return (
     <div className={styles.selectContainer}>
         <select className={styles.selectBox}
-            value={selectedOption} onChange={handleOptionChange}>
-            {options.map((option, index) => (
+            value={sort} onChange={handleSort}>
+            {sortOptions.map((option, index) => (
                 <option key={index} value={option.value}>{option.label}</option>
             ))}
         </select>

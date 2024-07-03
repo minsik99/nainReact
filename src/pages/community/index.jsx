@@ -6,6 +6,7 @@ import Paging from "../../components/board/Paging";
 import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/board/board.module.css';
+import Sort from "../../components/board/Sort";
 
 const Community = observer(() => {
     const [boards, setBoards] = useState([]);
@@ -84,9 +85,9 @@ const Community = observer(() => {
         { value: 'readCount', label: '조회수 높은순' },
     ];
 
-    const handleSort = (event) => {
-        setSort(event.target.value);
-    }
+    // const handleSort = (event) => {
+    //     setSort(event.target.value);
+    // }
 
     //전체목록(새로고침)
     const reload = () => {
@@ -146,14 +147,15 @@ const Community = observer(() => {
                 </div>
             </div>
             <div className={styles.controlItem}>
-                <div className={styles.selectContainer}>
+                <Sort styles={styles} sortOptions={sortOptions} setSort={setSort} sort={sort}/>
+                {/* <div className={styles.selectContainer}>
                     <select className={styles.selectBox}
                         value={sort} onChange={handleSort}>
                         {sortOptions.map((option, index) => (
                             <option key={index} value={option.value}>{option.label}</option>
                         ))}
                     </select>
-                </div>
+                </div> */}
             </div>
         </div>
         <div>
