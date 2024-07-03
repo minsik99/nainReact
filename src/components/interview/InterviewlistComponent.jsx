@@ -53,7 +53,7 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
 
     const handleSelect = (item) => {
         setSortKey(item ? item.Accessor : null);
-        toggleDropdown();
+        // toggleDropdown();
     };
 
     const startInterview = async () => {
@@ -143,9 +143,12 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
           onConfirm: (selectedInterview) => {
             try {
                 console.log(selectedInterview);
-               deleteInterview(selectedInterview);
-               setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
-               setPage(1);
+               deleteInterview(selectedInterview).then(res => {
+                alert("삭제되었습니다.");
+                window.location.reload();
+               });
+            //    setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
+            //    setPage(1);
             } catch (error) {
               console.error("면접 삭제 실패", error);
             } finally {
@@ -248,10 +251,8 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
                     </div>
                 </div>
             </div>
-                <div className={styles.resultContainer}>
                  <InterviewResultComponent memberNo={memberNo} buttons={buttons} selectedButton={selectedButton} handleSelected={handleSelected} itvNo={selectedInterview} />
-                </div>
-            </div>
+        </div>
     );
 });
 

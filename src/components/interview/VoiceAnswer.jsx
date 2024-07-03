@@ -39,7 +39,7 @@ const VoiceAnswer = ({page, sentences, question, styles}) => {
 
 
     return(
-        <div>
+        <>
             <div className={styles.questionContainer}>Q{page+1}. {question}</div>
             <div className={styles.sentences}>
                 <p>답변</p>
@@ -47,18 +47,19 @@ const VoiceAnswer = ({page, sentences, question, styles}) => {
             </div>
                 {isClicked && detail?
                     <div className={styles.resultContainer}>
-                        <div>{detail.sentence}</div>
+                        {detail.sentence}
                         <div className={styles.resultRight}>
                             <img className={styles.seperate} src="/image/startBar.png"/>
                             <div>
                                 <div>긍정 수치 : {detail.positive}%</div>
                                 <div>부정 수치 : {detail.negative}%</div>
+                                <div>중립 수치 : {100 - detail.positive - detail.negative}%</div>
                             </div>
                         </div>
                     </div>
                 :   <div className={styles.resultContainer}>표시할 내용이 없습니다.<br/>문장을 선택해주세요.</div>
                 }
-        </div>
+        </>
     );
 };
 

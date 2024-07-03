@@ -7,7 +7,7 @@ import VoiceAnswer from './VoiceAnswer';
 
 const Voice = observer(({itvNo}) => {
     const router = useRouter();
-    const [selectedItvNo, setSelectedItvNo] = useState(null);
+    const [selectedItvNo, setSelectedItvNo] = useState(itvNo);
     const [sentences, setSentences] = useState([]);
     const [question, setQuestion] = useState('');
     const [qCount, setQCount] = useState('');
@@ -16,21 +16,19 @@ const Voice = observer(({itvNo}) => {
     useEffect(() => {
         setSelectedItvNo(itvNo);
         setPage(0);
-    }, [itvNo]);
+    }, [itvNo])
 
     useEffect(() => {
         console.log("선택여부");
         if (selectedItvNo !== null) {
             getRecord(selectedItvNo).then(res => {
-                setQCount(res.qnaList.length);
-                console.log("history : ", res.qnaList);
+                setQCount(res.qnaList.length > 0 ?  res.qnaList.length : 0);
+                console.log("page, qCount : ", page, qCount);
                 setSentences(res.answerList[page] || []);
-                if (res.qnaList.length > 0 && res.qnaList[page].qcontent) {
-                    setQuestion(res.qnaList[page].qcontent);
-                    console.log("질문 : ", res.qnaList[page].qcontent);
-                    console.log("답변 : ", res.answerList[page]);
-                    console.log("page : ", page, " 질문 길이 : ", qCount);
-                }
+                setQuestion(res.qnaList[page].qcontent);
+                console.log("질문 : ", res.qnaList[page].qcontent);
+                console.log("답변 : ", res.answerList[page]);
+                console.log("page : ", page, " 질문 길이 : ", qCount);
             }).catch(error => {
                 console.log("질문 가져오지 못함", error);
             });
@@ -53,11 +51,10 @@ const Voice = observer(({itvNo}) => {
             <div className={styles.contentContainer}>
                 <VoiceAnswer page={page} sentences={sentences} question={question} styles={styles}/>
             </div>
-            {page == qCount - 1? <img className={styles.startBar} src="/image/startBar.png"/>
-            : <img className={styles.arrow} src="/image/rightArrow.png" onClick={pageUpper}/>}
+            {page < qCount - 1?<img className={styles.arrow} src="/image/rightArrow.png" onClick={pageUpper}/>
+            :  <img className={styles.startBar} src="/image/startBar.png"/>}
         </div>
     );
-
 });
 
 export default Voice;
