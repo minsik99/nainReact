@@ -1,12 +1,8 @@
 
-import axios from "./axiosApi"
-import { authStore } from "../stores/authStore"
-import CryptoJS from 'crypto-js';
-import { headers } from "next/headers";
-import instance from "./axiosApi";
+import axios from "./axiosApi";
+import { authStore } from "../stores/authStore";
 
 const baseUrl = "/api/auth";
-const secretKey = 'your-secret-key'; // 비밀 키는 안전하게 관리해야 합니다.
 
 export const signUp = (signUpData) => { axios.post(baseUrl + "/member/signup",signUpData).then(res =>{
         console.log(signUpData)
