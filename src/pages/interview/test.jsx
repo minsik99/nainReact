@@ -25,6 +25,8 @@ const InterviewComponent = observer(() => {
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
     const [count, setcount] = useState(0);
+    const [saved, setSaved] = useState(true);
+    let que = '';
     useEffect(() => {
         if(!router.isReady) return;
         console.log(itvNo, memberNo, decodeURIComponent(question));
@@ -35,10 +37,10 @@ const InterviewComponent = observer(() => {
             router.push('/payment');
         }
 
-     }, [router.isReady])
+     }, [router.isReady]);
 
      try {
-        const que = JSON.parse(decodeURIComponent(question));
+        que = JSON.parse(decodeURIComponent(question));
         console.log(que);
       } catch (error) {
         console.error('Error parsing JSON:', error);
@@ -57,7 +59,7 @@ const InterviewComponent = observer(() => {
             startRecording();
             // setcount((preCount)=> preCount + 1);
         } else if (!isRecording) {
-            setIsRecording(prevState => !prevState); 
+            setIsRecording(prevState => !prevState);
         }
         setcount((preCount)=> preCount + 1);
     };
@@ -172,7 +174,8 @@ const InterviewComponent = observer(() => {
     
     // 녹화된 비디오 저장 및 서버로 전송
     const saveVideo = async () => {
-        try {            
+        try {
+            setSaved(false);
             if (recordedChunks.length > 0) {
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
                 const formData = new FormData();
@@ -181,7 +184,12 @@ const InterviewComponent = observer(() => {
                 formData.append('qNo', que[fileIndex].qno);
                 console.log("FormData prepared:", formData);
                 await stopRecording();
-                await saveOneVideo(formData);
+                await saveOneVideo(formData).then(res => {
+                    console.log("파이썬 res", res.success);
+                    if(res.success == "Analysis Succeed"){
+                        setSaved(true);
+                    }
+                });
 
                 setFileIndex(prevIndex => {
                     const newIndex = prevIndex < 10 ? prevIndex + 1 : 0;
@@ -328,15 +336,18 @@ const InterviewComponent = observer(() => {
                             (
                                 handleInterviewEnd()
                         ) :
-                            <span>Q : {que[count - 1].qcontent}</span> 
+                            <span>Q{count} : {que[count - 1].qcontent}</span> 
                         )}
                         <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
                     </div>
                         <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
-                        {isCameraOn ? (
+                        {isCameraOn && saved? (
                             <video className={styles.video} ref={videoRef} autoPlay muted />
                         ) : (
-                            <div className={styles.emptyScreen}><Loading text="Loading.." /></div>
+                            <div className={styles.emptyScreen}>
+                                {count > 0 ? <Loading text="저장 중.. 답변을 준비해주세요." />
+                                : <Loading text="Loading.." />}
+                            </div>
                         )}
                     <div className={styles.emptyBottom}>
                         <div className={styles.buttonBox}>
@@ -344,7 +355,7 @@ const InterviewComponent = observer(() => {
                                 color="#77AAAD"
                                 fontSize="14px"
                                 padding="0.5rem 1rem"
-                                onClick={isCameraOn ? stopCamera : startCamera }
+                                onClick={isCameraOn ? handleInterviewEnd : startCamera }
                                 text={isCameraOn ? '면접 중단' : '면접 시작하기'}
                             />
                         </div>

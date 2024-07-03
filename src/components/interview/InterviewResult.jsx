@@ -285,14 +285,18 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 selectedButton={selectedButton}
                 handleSelected={handleSelected}
             />
-            {selectedButton == 'voice' &&
+
+            {selectedButton == 'voice' && itvNo ?
             <div className={styles.resultContainer}>
                 {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
                 {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
                 <Voice itvNo={itvNo}></Voice>
             </div>
+            : <div className={styles.emptyBox}>
+                지금 바로 AI 면접을 보고 결과를 확인하세요!
+            </div>
             }
-            {selectedButton == 'video' &&
+            {selectedButton == 'video' && itvNo &&
             <div className={styles.resultContainer}>
                 {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
                 {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
@@ -306,7 +310,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 </div>
             </div>
             }
-            {selectedButton == 'total' &&
+            {selectedButton == 'total' && itvNo &&
             <div className={styles.resultContainer}>
                 <div className={styles.textRow}>
                     <div className={styles.resultText}>
@@ -325,8 +329,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                     <BarChart data={totalData} title="총분석결과" />
                     </div>
                 </div>
-            </div>
-            }
+            </div>}
 
             </div> 
     );

@@ -23,7 +23,7 @@ const BoardList = (props) => {
                 <tbody>
                   <tr className={styles.emptyRow}>
                     <td></td> 
-                    <td className={styles.empty}>검색 결과가 없습니다.</td>
+                    <td className={styles.empty}>표시할 내용이 없습니다.</td>
                     <td></td>
                     <td></td>
                   </tr>

@@ -20,9 +20,19 @@
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 30rem;
 }
 
+.emptyBox {
+    width: 100%;
+    min-height: 30rem;
+    line-height: 30rem;
+    justify-content: center;
+    display: flex;
+    font-weight: 600;
+    font-size: 20px;
+    color: #888888;
+}
 
 .chartRow {
     display: flex;
