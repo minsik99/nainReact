@@ -55,6 +55,7 @@ const MyinfoLogin = () => {
         e.preventDefault(); // 폼 제출의 기본 동작을 막습니다.
         try {
             const response = await myinfoLoginPwd(memberNo, formData.memberPwd);
+            console.log(formData.memberPwd);
             if (response === "Success") {
                 router.push("/member/myinfo");
             } else {
