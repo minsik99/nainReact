@@ -30,7 +30,6 @@ class AuthStore {
     
   setIsSubscribe(status) {
     this.isSubscribe = status;
-    alert("상태확인용" +  status)
   }
 
   setIsAdmin(status) {
