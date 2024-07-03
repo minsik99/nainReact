@@ -1,8 +1,8 @@
 .companyContainer {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: stretch;
-    width: 100%; /* 부모 컨테이너의 전체 너비 사용 */
+    align-items: stretch; */
+    /* width: 100%; */
     margin: 0 auto;
 }
 

@@ -1,10 +1,8 @@
 /* 결과 버튼 */
 .buttonContainer {
-    position: inherit;
-    margin-left: 2.5rem; 
-    margin-top: 3rem;
+    margin-top: 1rem;
     width: 100%;
-    padding-left: 1rem;
+    padding-left: 0.5rem;
     display: flex;
     flex-direction: row;
     height: 2.5rem;

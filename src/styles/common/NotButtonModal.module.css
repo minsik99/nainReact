@@ -17,6 +17,7 @@
   background-color: #77AAAD;
   color: white;
   border-radius: 8px;
+
   /* 위치 설정을 위한 기본 값 */
 }
 
@@ -24,6 +25,7 @@
     width: 200px;
 }
 .modalContent{
+  width: 17rem;
 padding: 1.2rem;
 display: flex;
 justify-content: center;
