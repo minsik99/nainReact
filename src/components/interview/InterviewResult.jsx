@@ -279,59 +279,68 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
     };
 
     return (
-        <div className={styles.graphContainer}>
+        <div className={styles.resultBase}>
             <ButtonContainer
                 buttons={buttons}
                 selectedButton={selectedButton}
                 handleSelected={handleSelected}
             />
-
-            {selectedButton == 'voice' && itvNo ?
-            <div className={styles.resultContainer}>
-                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
-                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                <Voice itvNo={itvNo}></Voice>
-            </div>
-            : <div className={styles.emptyBox}>
-                지금 바로 AI 면접을 보고 결과를 확인하세요!
-            </div>
-            }
-            {selectedButton == 'video' && itvNo &&
-            <div className={styles.resultContainer}>
-                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
-                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                <div className={styles.chartRow}>
-                    <LineChart data={videoTotalData} title="영상분석결과" />
-                    <LineChart data={posData} title="자세분석" />
-                </div>
-                <div className={styles.chartRow}> 
-                    <PieChart data={emotionData} title="감정 분석" />
-                    <LineChart data={eyeData} title="시선 감지" />
-                </div>
-            </div>
-            }
-            {selectedButton == 'total' && itvNo &&
-            <div className={styles.resultContainer}>
-                <div className={styles.textRow}>
-                    <div className={styles.resultText}>
-                    {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
-                    {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                        <div className={styles.leftText}>{memberNo} 님의 <br/> 면접 결과</div>
-                        <div className={styles.rightText}>{analyText}                         
+            <div className={styles.graphContainer}>
+                {itvNo ? (
+                    selectedButton === 'voice' && (
+                        <div className={styles.resultContainer}>
+                            {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                            {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
+                            <Voice itvNo={itvNo}></Voice>
                         </div>
+                    )
+                ) : null}
+    
+                {itvNo ? (
+                    selectedButton === 'video' && (
+                        <div className={styles.resultContainer}>
+                            {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                            {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
+                            <div className={styles.chartRow}>
+                                <LineChart data={videoTotalData} title="영상분석결과" />
+                                <LineChart data={posData} title="자세분석" />
+                            </div>
+                            <div className={styles.chartRow}>
+                                <PieChart data={emotionData} title="감정 분석" />
+                                <LineChart data={eyeData} title="시선 감지" />
+                            </div>
+                        </div>
+                    )
+                ) : null}
+    
+                {itvNo ? (
+                    selectedButton === 'total' && (
+                        <div className={styles.resultContainer}>
+                            <div className={styles.textRow}>
+                                <div className={styles.resultText}>
+                                    {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                                    {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
+                                    <div className={styles.leftText}>{memberNo} 님의 <br /> 면접 결과</div>
+                                    <div className={styles.rightText}>{analyText}</div>
+                                </div>
+                            </div>
+                                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
+                                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
+                                <div className={styles.totalBox}>
+                                    <BarChart data={videoScore} title="음성/영상분석결과" />
+                                    <BarChart data={totalData} title="총분석결과" />
+                                </div>
+                        </div>
+                    )
+                ) : null}
+    
+                {!itvNo && (
+                    <div className={styles.emptyBox}>
+                        <p>지금 바로 AI 면접을 통해 결과를 확인하세요!</p>
                     </div>
-                </div>
-                <div className={styles.totalContainer}>
-                {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
-                {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                <div className={styles.totalBox}>
-                    <BarChart data={videoScore}  title="음성/영상분석결과"/>
-                    <BarChart data={totalData} title="총분석결과" />
-                    </div>
-                </div>
-            </div>}
-
-            </div> 
+                )}
+            </div>
+        </div>
     );
 };
 
