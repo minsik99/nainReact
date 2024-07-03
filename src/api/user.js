@@ -91,7 +91,7 @@ export const myinfoLogin = (memberNo) => {
     console.log("memberNo:", memberNo);
     console.log("memberPwd:", memberPwd);
     try {
-        const res = await axios.post(`${baseUrl}/member/myinfo/${memberNo}`, memberPwd,
+        const res = await axios.post(`${baseUrl}/member/myinfo/${memberNo}`, {memberPwd},
 
             {
                 headers: {
