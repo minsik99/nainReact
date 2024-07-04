@@ -7,7 +7,8 @@ const KakaoLogin = () => {
         const redirectUri = 'http://localhost:9999/auth/kakao/callback'; // 리다이렉트 URI
         const encodedRedirectUri = encodeURIComponent(redirectUri); // 리다이렉트 URI를 인코딩합니다.
 
-        window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodedRedirectUri}&through_account=true`;
+        window.location.href = 
+        `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodedRedirectUri}&through_account=true`;
     };
 
     const handleLogout = () => {
