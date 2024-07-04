@@ -1,10 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { observer } from "mobx-react";
-import { useRouter } from 'next/router';
+import {getArecord } from '../../api/interview/voice';
 
-const VoiceAnswer = ({page, sentences, question, styles}) => {
+const VoiceAnswer = ({page, qList, styles}) => {
     const [isClicked, setIsClicked] = useState(false);
     const [detail, setDetail] = useState(null);
+    const [question, setQuestion] = useState('');
+    const [sentences, setSentences] = useState([]);
+    const [voiceNo, setVoiceNo] = useState('');
+    
+    useEffect(() => {
+        if(qList.length > 0){
+        setQuestion(qList[page].qcontent);
+        setVoiceNo(qList[page].voiceNo);
+        console.log("qList : ", qList[page].qcontent);
+        console.log("voiceNo : ", qList[page].voiceNo);
+        }
+    }, [qList, page])
+
+
+    useEffect(() => {
+        console.log("선택여부");
+        if (voiceNo !== '') {
+            getArecord(voiceNo).then(res => {
+                setSentences(res || []);
+                console.log("답변 : ", res);
+            }).catch(error => {
+                console.log("질문 가져오지 못함", error);
+            });
+        }
+    }, [voiceNo]);
 
     useEffect(() => {
         setDetail(null);

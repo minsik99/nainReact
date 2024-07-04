@@ -21,11 +21,11 @@ export const login =  (loginData) => {
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
                 window.localStorage.setItem("refresh", response.data.refresh);
-                window.localStorage.setItem("isSubscribe", response.data.subscribe);
+                window.localStorage.setItem("isSubscribe", response.data.subscribeYN);
                 window.localStorage.setItem("memberNo", response.data.memberNo);
                 authStore.setIsAdmin(response.data.isAdmin);
                 authStore.setMemberNo(response.data.memberNo);  
-                authStore.setIsSubscribe(response.data.subscribe);            
+                authStore.setIsSubscribe(response.data.subscribeYN);            
                 authStore.checkLoggedIn();
                 
             }
