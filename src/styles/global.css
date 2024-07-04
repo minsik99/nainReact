@@ -1,14 +1,5 @@
 /* global.css */
 
-@font-face {
-  font-family: 'NanumSquareRound';
-  src: url('/public/font/NanumSquareRoundR.ttf');
-}
-
-.body {
-  font-family: 'NanumSquareRound'
-}
-
 
 .flex-container {
   display: flex;

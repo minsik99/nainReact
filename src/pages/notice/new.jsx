@@ -55,7 +55,7 @@ const NewBoard = () => {
                         const data = new FormData();
                         data.append('file', file);
 
-                        fetch('http://localhost:9999/api/image/upload', {
+                        fetch('http://localhost:9999/api/image/notice', {
                             method: 'POST',
                             body: data,
                         })
@@ -74,15 +74,14 @@ const NewBoard = () => {
     }
 
     const saveBoard = async () => {
-        const notice = {
-            noticeTitle,
-            noticeContent,
-            noticeFile: file[0] ? file[0].name : null,
-            noticeMFile: '',
-            noticeImportent
-        };
-
         if (parsedBoard) {
+            const notice = {
+                noticeTitle,
+                noticeContent,
+                noticeFile: file[0] ? file[0].name : null,
+                noticeMFile: '',
+                noticeImportent
+            };
             // 기존 공지를 수정하는 경우
             notice.noticeNo = parsedBoard.noticeNo;
             notice.noticeDate = parsedBoard.noticeDate;
@@ -110,11 +109,19 @@ const NewBoard = () => {
             }
         } else {
             // 새 공지를 작성하는 경우
+            const notice = {
+                noticeTitle:noticeTitle,
+                noticeContent:noticeContent,
+                noticeFile: file[0] ? file[0].name : null,
+                noticeMFile: '',
+                noticeImportent
+            };
             if (file[0]) {
                 try {
                     const formData = new FormData();
                     formData.append('file', file[0]);
                     const fileUploadResponse = await noticeAxios.insertFile(formData);
+                    console.log(fileUploadResponse.data);
                     notice.noticeMFile = fileUploadResponse.data;
                 } catch (error) {
                     alert("파일 업로드 실패");
@@ -126,6 +133,7 @@ const NewBoard = () => {
             }
 
             try {
+                console.log("등록되는 글 정보", notice);
                 const createNoticeResponse = await noticeAxios.createNotice(notice);
                 showModalWithTimeout(() => router.push(`/notice/detail?noticeNo=${createNoticeResponse.data}`));
             } catch (error) {

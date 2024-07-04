@@ -77,6 +77,7 @@ const noticeDetail = () => {
     }, [noticeNo]);
 
     const downloadFile = () => {
+        console.log("현재 글 정보 : ", board);
         noticeAxios.getFile(board.noticeMFile).then(res => {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');

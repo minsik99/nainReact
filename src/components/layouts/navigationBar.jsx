@@ -29,7 +29,7 @@ const NavigationBar = observer(() => {
 
   const handleNavigation = (path) => {
     if (typeof window !== "undefined") {
-      if(loggedIn){            
+      if(loggedIn){
         if (isSubscribe == 'Y') {
           router.push(path);
         }else{
@@ -44,6 +44,18 @@ const NavigationBar = observer(() => {
               router.push("/main")
             }
       }
+    }
+  };
+
+  const handleChatLogin = (path) => {
+    if(loggedIn){
+        router.push(path)
+    }else{
+        if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+            router.push("/member/login");
+          }else{
+            router.push("/main")
+          }
     }
   };
 
@@ -147,7 +159,7 @@ const NavigationBar = observer(() => {
                     <br />
                     <a
                       className="subword"
-                      onClick={() => handleNavigation("/chat")}
+                      onClick={() => handleChatLogin("/chat")}
                       style={{ cursor: "pointer" }}
                     >
                       채팅방
