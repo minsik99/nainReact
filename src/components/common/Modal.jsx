@@ -48,7 +48,9 @@ const DefaultModal = ({ data, closeModal, onConfirm }) => {
   return (
     <div>
       <div className={styles.modalTitle}>{data.title}</div>
-      <div className={styles.modalContent}>{data.content}</div>
+      <div className={styles.modalContent}>
+        {data.content}
+      </div>
       <div className={styles.buttonBox}>
         <RadiusButton className={styles.modalButton} color="#77AAAD" padding="0.5rem 1rem" fontSize="14px" text="취소" onClick={closeModal}/>
         <RadiusButton className={styles.modalButton} color="#77AAAD" padding="0.5rem 1rem" fontSize="14px" text="확인" onClick={handleConfirmClick}/>
@@ -89,8 +91,29 @@ const CustomModal = ({ data, closeModal, onConfirm}) => {
   );
 };
 
+const TextModal = ({data, closeModal}) => {
+  if (!data) {
+    return null; // 데이터가 없으면 아무것도 렌더링하지 않음
+  }
+  return (
+    <div className={styles.modalBody}>
+      <div className={styles.infoTitle}>
+        <div>{data.title}</div>
+         &nbsp;&nbsp; 
+        <div style={{color:"red"}}>{data.info}</div>
+      </div>
+      <div className={styles.infoContent}>{data.content1}</div>
+      <div className={styles.infoContent}>{data.content2}</div>
+      <div className={styles.infoContent}>{data.content3}</div>
+      <div className={styles.infoCloseBtn}>
+        <RadiusButton text="닫기" color="#77AAAD" padding="0.5rem 1rem" fontSize="14px" onClick={closeModal} />
+      </div>
+    </div>
+  );
+}
+
 // 모달 컨테이너 컴포넌트
-const Modal = ({ isOpened, type, closeModal, data }) => {
+const Modal = ({ isOpened, type, closeModal, data}) => {
   if (!isOpened) return null;
 
   const wrapperRef = useClickOutside(closeModal);
@@ -103,9 +126,12 @@ const Modal = ({ isOpened, type, closeModal, data }) => {
       type === 'default' ?
       (
         <DefaultModal onConfirm={data.onConfirm} data={data} closeModal={closeModal} />
-      ) :
+      ) : (
+        type === 'text' ? (
+          <TextModal data={data} closeModal={closeModal}/>
+      ) : (
        <InputModal onConfirm={data.onConfirm} data={data} closeModal={closeModal} />
-    )}
+    )))}
       </div>
     </div>
   );

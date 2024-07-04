@@ -90,7 +90,7 @@ const InterviewComponent = observer(() => {
             let options = { mimeType: 'video/webm; codecs=vp8,opus' };
             let recorder = null;
            
-            if (stream && stream.active && !isRecording) {
+            if (stream && stream.active && !isRecording && saved) {
                 console.log("스트림 존재함 레코딩 시작");
                 videoRef.current.srcObject = stream;
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
@@ -213,8 +213,9 @@ const InterviewComponent = observer(() => {
                 setDownChunks(prev => {
                     const newDownChunks = [...prev, ...recordedChunks];
                     console.log("downChunks:", newDownChunks);
-                    return newDownChunks});
-
+                    return newDownChunks
+                });
+                console.log("ChunkLenght", downChunks.length);
                 console.log("저장후 청크 비우기");
                 setRecordedChunks([]);
                 setIsRecording(false);
@@ -324,45 +325,49 @@ const InterviewComponent = observer(() => {
 
     return (
         <div className={styles.base}>
-        <div className={styles.path}> <PathText paths={paths} /></div>
-            <div className={styles.interviewContainer}>
-                <div className={styles.videoContainer}>
-                    <div className={styles.header}>
-                        <div></div>
-                        { !isCameraOn || count == 0 && fileIndex == 0? 
-                        (<span>Q : 질문이 나오는 칸입니다.</span>
-                        ) : (
-                            count > 10 ?
-                            (
-                                handleInterviewEnd()
-                        ) :
-                            <span>Q{count} : {que[count - 1].qcontent}</span> 
-                        )}
-                        <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
-                    </div>
-                        <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
-                        {isCameraOn && saved? (
-                            <video className={styles.video} ref={videoRef} autoPlay muted />
-                        ) : (
-                            <div className={styles.emptyScreen}>
-                                {count > 0 ? <Loading text="저장 중.. 답변을 준비해주세요." />
-                                : <Loading text="Loading.." />}
+            <div className={styles.path}> <PathText paths={paths} /></div>
+            <div className={styles.testContainer}>
+                        <div className={styles.videoContainer}>
+                            <div className={styles.header}>
+                                <div></div>
+                                { !isCameraOn || count == 0 && fileIndex == 0? 
+                                (<span>Q : 질문이 나오는 칸입니다.</span>
+                                ) : (
+                                    count == 11 ?
+                                    (
+                                        handleInterviewEnd()
+                                ) :
+                                    <span>Q{count} : {que[count - 1].qcontent}</span> 
+                                )}
+                                <div>
+                                {count < 11 && isCameraOn &&
+                                <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
+                                }
+                                </div>
                             </div>
-                        )}
-                    <div className={styles.emptyBottom}>
-                        <div className={styles.buttonBox}>
-                            <RadiusButton
-                                color="#77AAAD"
-                                fontSize="14px"
-                                padding="0.5rem 1rem"
-                                onClick={isCameraOn ? handleInterviewEnd : startCamera }
-                                text={isCameraOn ? '면접 중단' : '면접 시작하기'}
-                            />
+                                <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
+                                {isCameraOn && saved? (
+                                    <video className={styles.video} ref={videoRef} autoPlay muted />
+                                ) : (
+                                    <div className={styles.emptyScreen}>
+                                        {count > 0 ? <Loading text="저장 중.. 답변을 준비해주세요." />
+                                        : <Loading text="준비되면 '면접 시작하기'를 눌러주세요" />}
+                                    </div>
+                                )}
+                            <div className={styles.emptyBottom}>
+                                <div className={styles.buttonBox}>
+                                    <RadiusButton
+                                        color="#77AAAD"
+                                        fontSize="14px"
+                                        padding="0.5rem 1rem"
+                                        onClick={isCameraOn ? handleInterviewEnd : startCamera }
+                                        text={isCameraOn ? '면접 중단' : '면접 시작하기'}
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
             </div>
-            <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
         </div>
     );
 });

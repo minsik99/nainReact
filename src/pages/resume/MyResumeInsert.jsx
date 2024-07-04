@@ -206,7 +206,9 @@ const MyResumeInsert = () => {
 
     return (
         <div className={styles.resumeContainer}>
-            <h1>이력서 작성하기</h1>
+            <div className={styles.resumeContainerTitle}>
+                이력서 작성하기
+            </div>
             <form>
                 <div>
                     <label>직무 카테고리</label><p />
@@ -228,15 +230,15 @@ const MyResumeInsert = () => {
 
                 <label>기본 정보</label>
                 <div className={styles.resumebasic}>
-                    <div className={styles.inputGroup}>
+                    <div className={styles.basicInput}>
                         <p>이름</p>
                         <input type="text" name="resumeName" value={resume.resumeName} onChange={handleChange} />
                     </div>
-                    <div className={styles.inputGroup}>
+                    <div className={styles.basicInput}>
                         <p>이메일</p>
                         <input type="email" name="email" value={resume.email} onChange={handleChange} />
                     </div>
-                    <div className={styles.inputGroup}>
+                    <div className={styles.basicInput}>
                         <p>전화번호</p>
                         <input type="tel" name="phone" value={resume.phone} onChange={handleChange} />
                     </div>

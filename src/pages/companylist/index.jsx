@@ -81,10 +81,10 @@ const CompanyComponent = observer(()=> {
     }, [isSearchOn]);
 
     return (
-    <div className="map_div" style={{padding: '10px', margin: '0 auto'}}>
         <div className={styles.companyContainer}>
             <h2 className={styles.title}>기업 공고 리스트</h2>
                 <div className={styles.searchBar}>
+                        <>
                         { !isSearchOn && (
                         <SearchBar
                             columns={columns}
@@ -97,7 +97,8 @@ const CompanyComponent = observer(()=> {
                         <SortComponent sortKey={sortKey} originalData={originalData} setDataSet={setDataSet}
                         selectHeader={selectHeader} comparisonValue={comparisonValue} canIndex={canIndex}
                             selectAccesor={selectAccesor}/>
-                    </div>
+                        </>
+                </div>
                 {mutation.isLoading &&
                 <div className={styles.tableContainer}>
                     <Loading loading={mutation.isLoading} text="Loading..." />                    
@@ -118,7 +119,6 @@ const CompanyComponent = observer(()=> {
 
             )}
         </div>
-    </div>
 );
 
 });

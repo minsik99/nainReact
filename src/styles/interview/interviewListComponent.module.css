@@ -8,34 +8,32 @@
 
 .interviewListContainer {
     display: flex;
-    justify-content: center;
+    /* justify-content: ; */
     margin: 0 auto;
-    width: 85rem;
-    height: 80%;
+    width: 100%;
     background-color: #f9f9f9;
-    border-radius: 10%;
+    border-radius: 5%;
+    padding-bottom: 1rem;
 }
 
 /* 왼쪽 리스트 컨테이너 */
 .interviewContainer {
     display: flex;
     flex-direction: row;
-
     padding: 1rem;
     border-radius: 8px;
-    width: 90%;
+    width: 80%;
     height: 40rem;
-   
 }
 
 .resultContainer {
     min-height: 100%;
-    margin-left: 3rem;
-    margin-right: 3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 100%;
 }
 
 .img {
@@ -64,11 +62,11 @@
 
 /* 모의 면접 결과 리스트 컨테이너 */
 .listContainer {
-    margin-top: 3rem;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 35rem;
+    min-width: 30rem;
     height: 35rem;
     border-right: 3px solid#D8E6E7;
 }
@@ -91,15 +89,15 @@
 .menuContainer{
     display: flex;
     justify-content: space-between;
-    width: 28rem;
+    width: 80%;
     vertical-align: center;
     margin-bottom: 1rem;
     position: relative; /* 자식 요소의 절대 위치 기준 */
 }
 .dropdownBox {
-    position: absolute;
-    top: -110%; /* sortMenu 바로 위에 위치 */
-    left: 18rem; /* sortMenu의 margin-left와 일치 */
+    position: absolute; /* sortMenu 바로 위에 위치 */
+    top: 2rem;
+    right: -5rem; /* sortMenu의 margin-left와 일치 */
     z-index: 10000;
 }
 
@@ -109,8 +107,8 @@
     flex-direction: column;
     gap: 20px;
     padding: 0.3em;
-    width: 28rem;
-    min-height: 65%;
+    width: 80%;
+    min-height: 75%;
     max-height: 100%;
     background-color: #D8E6E7;
     overflow-y: scroll; /* 스크롤바 숨기기 */

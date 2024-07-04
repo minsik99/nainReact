@@ -24,12 +24,12 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
     const deleteModal = useModal();
     const titleModal = useModal();
     const categoryModal = useModal();
+    const infoModal = useModal();
     const buttons = [
         { text: 'Voice', id: 'voice' },
         { text: 'Video', id: 'video' },
         { text: 'Total', id: 'total' }
     ];
-    const [openInfo, setOpenInfo] = useState(false);
     const loadMore = () => {
         setPage(prevPage => prevPage + 1);
     };
@@ -53,7 +53,7 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
 
     const handleSelect = (item) => {
         setSortKey(item ? item.Accessor : null);
-        toggleDropdown();
+        // toggleDropdown();
     };
 
     const startInterview = async () => {
@@ -143,9 +143,12 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
           onConfirm: (selectedInterview) => {
             try {
                 console.log(selectedInterview);
-               deleteInterview(selectedInterview);
-               setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
-               setPage(1);
+               deleteInterview(selectedInterview).then(res => {
+                alert("삭제되었습니다.");
+                window.location.reload();
+               });
+            //    setInterviewList(prev => prev.filter(interview => interview.itvNo !== selectedInterview));
+            //    setPage(1);
             } catch (error) {
               console.error("면접 삭제 실패", error);
             } finally {
@@ -155,8 +158,14 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
     }); 
     };
 
-    const infoHandler = () => {
-        setOpenInfo(true);
+    const infoOpener = () => {
+        infoModal.openModal({
+            title: '서비스 안내',
+            info: '※ 캠, 마이크 필수',
+            content1 : '답변하신 내용이 면접관의 관점에서 어떻게 반영될 지 참고할 수 있도록 정보를 제공해드립니다.',
+            content2 : '절대적인 점수가 아니므로 맥락에 맞게 판단할 필요가 있습니다.',
+            content3 : '뒷배경이 깔끔하고, 주변이 조용한 환경일수록 정확도가 올라갑니다.',
+        });
     };
 
     const dropdownHandler = () => {
@@ -203,11 +212,13 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
             <div className={styles.listContainer}>
                 <h2 className={styles.title}>AI 면접 분석 History</h2>
                 <div className={styles.menuContainer} >
-                    <img src="/image/interviewInfo.png" onClick={infoHandler} className={styles.info}/>
+                    <img src="/image/interviewInfo.png" onClick={infoOpener} className={styles.info}/>
                     <div>
-                        {openInfo && (
-                            <div></div>
-                        )}
+                        <Modal
+                        isOpened={infoModal.isOpened}
+                        type='text'
+                        data={infoModal.modalData}
+                        closeModal={infoModal.closeModal}/>
                     </div>
                     <div className={styles.dropdownBox}>
                         {isDropdownVisible && (
@@ -248,10 +259,8 @@ const InterviewListComponent = observer(({ memberNo, sortKey, setSortKey, select
                     </div>
                 </div>
             </div>
-                <div className={styles.resultContainer}>
                  <InterviewResultComponent memberNo={memberNo} buttons={buttons} selectedButton={selectedButton} handleSelected={handleSelected} itvNo={selectedInterview} />
-                </div>
-            </div>
+        </div>
     );
 });
 

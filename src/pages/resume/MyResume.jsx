@@ -100,7 +100,7 @@ const MyResume = () => {
       <div className={styles.app}>
         <div className={styles.resumeManagement}>
           <div className={styles.resumeActions} onClick={handleAcceptedKeywordClick}>
-            <button>합격 키워드 분석 →</button>
+            <button>직무 분석 →</button>
           </div>
           <div className={styles.resumeList}>
             <div className={styles.resumeCard} onClick={handleNewResumeClick} style={{ cursor: 'pointer' }}>

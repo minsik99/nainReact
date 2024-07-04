@@ -2,96 +2,87 @@ import axios from 'axios';
 
 // Axios 인스턴스 생성
 const instance = axios.create({
-    baseURL: "http://localhost:9999"
+  baseURL: "http://localhost:9999"
 });
 
 // 요청 인터셉터 추가
 instance.interceptors.request.use(
-    config => {
-        // '/reissue' 요청은 인터셉터에서 액세스 토큰을 추가하지 않도록 합니다.
-        if (config.url !== '/reissue') {
-            const token = localStorage.getItem('token');
-            if (token) {
-                config.headers['Authorization'] = `Bearer ${token}`;
-            }
-        }
-        return config;
-    },
-    error => Promise.reject(error)
+  config => {
+    if (config.url !== '/reissue') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  error => Promise.reject(error)
 );
-
-
-const refreshToken = async () => {
-    try {
-        const refreshToken = localStorage.getItem('refresh');
-        const response = await instance.post('/reissue', null, {
-            headers: {
-                'Authorization': `Bearer ${refreshToken}`
-            }
-        });
-        const token = response.headers['authorization'] || response.headers['Authorization'];
-        const pureToken = token.split(' ')[1];
-        localStorage.setItem('token', pureToken);
-        return pureToken;
-    } catch (error) {
-        // 에러 응답을 확인합니다.
-        if (error.response && error.response.data === 'refresh token expired') {
-            // 리프레시 토큰이 만료된 경우 로그아웃 처리
-            logout();
-        } else {
-            // 다른 종류의 에러 처리
-            console.error('An error occurred:', error);
-        }
-    }
-};
-
-const logout = async () => {
-    try {
-        //서버에 로그아웃 요청
-        await instance.post('/logout');
-    } catch(error){
-        console.error('Logout error:', error);
-    } finally {
-    // 로컬 스토리지의 모든 항목을 비웁니다.
-    localStorage.clear();
-    // 로그인 페이지로 리다이렉트
-    window.location.href = '/member/login';
-    }
-};
-
-
-
 
 // 응답 인터셉터 추가
 instance.interceptors.response.use(
-    response => response, // 정상 응답
-    async (error) => {
-        const originalRequest = error.config;
+  response => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-        if (!error.response || error.response.status === null){
-            logout();
-        }
-        // 401 오류가 발생하고, 이미 재시도를 한 적이 없다면
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true; // 재시도 했음을 표시
-
-            // 토큰을 갱신하고 재시도
-            const newAccessToken = await refreshToken();
-            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-
-            // 원래 요청을 다시 수행
-            return instance(originalRequest);
-        } else {
-            logout();
-        }
-
-        //추가적인 에러 처리 (예: 500 오류)
-        if (error.response.status === 500){
-            console.error('Internal Server Error:', error.response.data);
-            alert('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
-        }
-        return Promise.reject(error);
+    // 응답이 없거나 상태 코드가 null인 경우 로그아웃 처리
+    if (!error.response || error.response.status === null) {
+      logout();
     }
+    // 401 오류가 발생하고, 재시도를 한 적이 없다면
+    if (error.response.status === 401 && !originalRequest._retry) {
+        alert('오류발생');
+      originalRequest._retry = true;
+
+      // 토큰을 갱신하고 재시도
+      const newAccessToken = await refreshToken();
+      originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+
+      // 원래 요청을 다시 수행
+      return instance(originalRequest);
+    } else {
+      logout();
+    }
+
+    // 추가적인 에러처리
+    if (error.response.status === 500) {
+      console.error('Internal Server Error:', error.response.data);
+      alert('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+    return Promise.reject(error);
+  }
 );
+
+const refreshToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem('refresh');
+    const response = await instance.post('/reissue', null, {
+      headers: {
+        'Authorization': `Bearer ${refreshToken}`
+      }
+    });
+    const token = response.headers['authorization'] || response.headers['Authorization'];
+    const pureToken = token.split(' ')[1];
+    localStorage.setItem('token', pureToken);
+    return pureToken;
+  } catch (error) {
+    if (error.response && error.response.data === 'refresh token expired') {
+      logout();
+    } else {
+      console.error('An error occurred:', error);
+    }
+  }
+};
+
+const logout = async () => {
+  try {
+    await instance.post('/logout');
+  } catch (error) {
+    console.error('Logout error:', error);
+  } finally {
+    localStorage.clear();
+    window.location.href = '/member/login';
+  }
+};
 
 export default instance;

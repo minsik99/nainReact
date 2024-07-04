@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import instance from '../../api/axiosApi';
-import CreateRoomPopup from './CreateRoomPopup';
-import ChatRoomDetail from './ChatRoomDetail';
+import dynamic from 'next/dynamic';
 import styles from '../../styles/chat/room.module.css';
+
+const CreateRoomPopup = dynamic(() => import('./CreateRoomPopup'), { ssr: false });
+const ChatRoomDetail = dynamic(() => import('./ChatRoomDetail'), { ssr: false });
 
 const ChatRoomsPage = () => {
     const [rooms, setRooms] = useState([]);
