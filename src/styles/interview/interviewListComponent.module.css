@@ -1,28 +1,43 @@
-.mapDiv {
+/* .mapDiv {
     height: 100%;
     width: 100%;
     display:flex;
     align-items: center;
-}
+} */
 
 
 .interviewListContainer {
-    display:flex;
-    flex-direction: row;
-    margin-left: 10vw;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 85rem;
+    height: 80%;
+    background-color: #f9f9f9;
+    border-radius: 10%;
 }
 
 /* 왼쪽 리스트 컨테이너 */
 .interviewContainer {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+
     padding: 1rem;
     border-radius: 8px;
     width: 90%;
     height: 40rem;
    
 }
+
+.resultContainer {
+    min-height: 100%;
+    margin-left: 3rem;
+    margin-right: 3rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+}
+
 .img {
     width: 2.2rem;
     cursor: pointer;
@@ -50,31 +65,42 @@
 /* 모의 면접 결과 리스트 컨테이너 */
 .listContainer {
     margin-top: 3rem;
-    margin-left: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 35rem;
     height: 35rem;
-    padding-right: 3rem;
     border-right: 3px solid#D8E6E7;
 }
 
+.info {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-left: 10px;
+}
 
 .sortMenu {
     width: 30px;
     height: 30px;
-    margin-left: 20rem;
+    margin-left: 18rem;
     cursor: pointer;
+    position: relative; 
 }
+
 .menuContainer{
-    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 28rem;
+    vertical-align: center;
+    margin-bottom: 1rem;
+    position: relative; /* 자식 요소의 절대 위치 기준 */
 }
 .dropdownBox {
     position: absolute;
-    top: 100%; /* 부모 요소의 하단에 위치하게 설정 */
-    left: 90%;
-    z-index: 1000;
+    top: -110%; /* sortMenu 바로 위에 위치 */
+    left: 18rem; /* sortMenu의 margin-left와 일치 */
+    z-index: 10000;
 }
 
 .cardContainer {
@@ -83,7 +109,8 @@
     flex-direction: column;
     gap: 20px;
     padding: 0.3em;
-    max-width: 25rem;
+    width: 28rem;
+    min-height: 65%;
     max-height: 100%;
     background-color: #D8E6E7;
     overflow-y: scroll; /* 스크롤바 숨기기 */

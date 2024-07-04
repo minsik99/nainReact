@@ -10,6 +10,7 @@ import {
   updateAdminStatus,
   removeAdminStatus,
 } from "../../api/adminManager";
+import { useRouter } from "next/router";
 
 const CustomFloatingFilter = (props) => {
   const [filterValue, setFilterValue] = useState("");
@@ -38,6 +39,8 @@ const AdminGrid = () => {
   const [modalContent, setModalContent] = useState(""); // 모달 내용 상태 추가
   const gridApi = useRef(null);
   const gridColumnApi = useRef(null);
+  const router = useRouter();
+  const [memberNo, setMemberNo] = useState(0);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -95,6 +98,15 @@ const AdminGrid = () => {
       floatingFilterComponent: CustomFloatingFilter,
     },
   ];
+
+  useEffect(() => {
+    const memberNo = localStorage.getItem("memberNo");
+    if (memberNo !== "1") {
+      router.push("/error/errorPage"); // memberNo가 1이 아닐 경우 리디렉션
+    } else {
+      setMemberNo(memberNo);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAdminList = async () => {

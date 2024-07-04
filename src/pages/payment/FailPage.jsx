@@ -1,9 +1,20 @@
-import React from "react";
-import { useRouter } from "next/router"; // Next.js의 useRouter 훅을 불러옵니다.
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import RadiusButton from "../../components/designTool/RadiusButton";
 
 const FailPage = () => {
-  const router = useRouter(); // useRouter 훅을 사용하여 router 객체를 가져옵니다.
+  const router = useRouter();
+  const [message, setMessage] = useState("");
+  const [code, setCode] = useState("");
+
+  useEffect(() => {
+    if (router.query.message) {
+      setMessage(router.query.message);
+    }
+    if (router.query.code) {
+      setCode(router.query.code);
+    }
+  }, [router.query]);
 
   const handleNavigateToPayment = () => {
     router.push("/payment");
@@ -26,10 +37,6 @@ const FailPage = () => {
       </div>
     </div>
   );
-};
-
-FailPage.getInitialProps = ({ query }) => {
-  return { message: query.message, code: query.code };
 };
 
 export default FailPage;

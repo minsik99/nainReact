@@ -11,6 +11,7 @@ const NavigationBar = observer(() => {
   const { handleLogoutClick } = useLogoutHandler();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부 상태
+  const isSubscribe = authStore.isSubscribe;
 
   const handleSignUpClick = () => {
     router.push("/member/terms");
@@ -25,6 +26,16 @@ const NavigationBar = observer(() => {
     const adminStatus = localStorage.getItem("isAdmin") === "true";
     setIsAdmin(adminStatus);
   }, [loggedIn]);
+
+  const handleSubscribeClick = () => {
+    alert(authStore.isSubscribe);
+    if (!authStore.isSubscribe) {
+      console.log("구독여부", isSubscribe);
+      alert("구독이 필요한 서비스입니다.");
+      router.push('/payment');
+  }
+  };
+
 
   const [hovered, setHovered] = useState(false);
 
@@ -57,7 +68,9 @@ const NavigationBar = observer(() => {
               <ul style={{ marginBottom: "0px" }}>
                 <li>
                   <Link href="/resume" passHref legacyBehavior>
-                    <a style={{ marginRight: "15px" }}>이력서 매니저</a>
+                    <a style={{ marginRight: "15px", fontWeight: "600" }}>
+                      이력서 매니저
+                    </a>
                   </Link>
                   <div className="submenu">
                     <Link href="/resume/MyResumeInsert" passHref legacyBehavior>
@@ -69,40 +82,56 @@ const NavigationBar = observer(() => {
                     </Link>
                     <br />
 
-                    <Link href="/resume/AcceptedKeyword" passHref legacyBehavior>
+                    <Link
+                      href="/resume/AcceptedKeyword"
+                      passHref
+                      legacyBehavior
+                    >
                       <a className="subword">직무 키워드 분석</a>
                     </Link>
                     <br />
                   </div>
                 </li>
                 <li>
-                  <Link href="/interview" passHref legacyBehavior>
-                    <a>AI 면접</a>
-                  </Link>
-                  <div className="submenu">
-                    <Link href="/interview/test" legacyBehavior>
-                      <a className="subword">모의면접</a>
-                    </Link>
-                    <br />
-                    <Link href="/interview" legacyBehavior>
-                      <a className="subword">면접 report</a>
-                    </Link>
-                    <br />
-                  </div>
-                </li>
+                  <a
+                    href="#"
+                    style={{ fontWeight: "600" }}
+                    onClick={isSubscribe ? () => (window.location.href = "/interview") : handleSubscribeClick}
+                  >
+                    AI 면접
+                  </a>
+                  {isSubscribe ? (
+                    <div className="submenu">
+                      
+                      <Link href="/interview" passHref legacyBehavior>
+                        <a className="subword">면접 report</a>
+                      </Link>
+                      <br />
+                    </div>
+                  ) : (
+                    <div className="submenu">
+                      <Link href="/interview" passHref legacyBehavior>
+                      <a className="subword" onClick={handleSubscribeClick}>
+                        면접 report
+                      </a>
+                      </Link>
+                      <br />
+                    </div>
+                  )}
+                  </li>
                 <li>
                   <Link href="/search" passHref legacyBehavior>
-                    <a>AI 트랜드서칭</a>
+                    <a style={{ fontWeight: "600" }}>AI 트랜드서칭</a>
                   </Link>
                 </li>
                 <li>
                   <Link href="/companylist" passHref legacyBehavior>
-                    <a>기업공고</a>
+                    <a style={{ fontWeight: "600" }}>기업공고</a>
                   </Link>
                 </li>
                 <li>
                   <Link href="/community" passHref legacyBehavior>
-                    <a>커뮤니티</a>
+                    <a style={{ fontWeight: "600" }}>커뮤니티</a>
                   </Link>
                   <div className="submenu">
                     <Link href="/community" legacyBehavior>
@@ -117,13 +146,13 @@ const NavigationBar = observer(() => {
                 </li>
                 <li>
                   <Link href="/notice" passHref legacyBehavior>
-                    <a>공지사항</a>
+                    <a style={{ fontWeight: "600" }}>공지사항</a>
                   </Link>
                 </li>
                 {isAdmin && (
                   <li>
                     <Link href="/manager/Dashboard" passHref legacyBehavior>
-                      <a>관리자</a>
+                      <a style={{ fontWeight: "600" }}>관리자</a>
                     </Link>
                     <div className="submenu">
                       <Link href="/manager/Dashboard" passHref legacyBehavior>
@@ -135,7 +164,7 @@ const NavigationBar = observer(() => {
                         passHref
                         legacyBehavior
                       >
-                        <a className="subword">회원</a>
+                        <a className="subword">회원관리</a>
                       </Link>
                       <br />
                       <Link
@@ -158,13 +187,27 @@ const NavigationBar = observer(() => {
             ></div>
             {loggedIn ? (
               <Nav>
-                <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
-                <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
+                <Nav.Link
+                  style={{ fontWeight: "600" }}
+                  onClick={handleLogoutClick}
+                >
+                  로그아웃
+                </Nav.Link>
+                <Nav.Link style={{ fontWeight: "600" }} href={"/member/myinfo"}>
+                  내 정보
+                </Nav.Link>
               </Nav>
             ) : (
               <Nav>
-                <Nav.Link href={"/member/login"}>로그인</Nav.Link>
-                <Nav.Link onClick={handleSignUpClick}>회원가입</Nav.Link>
+                <Nav.Link style={{ fontWeight: "600" }} href={"/member/login"}>
+                  로그인
+                </Nav.Link>
+                <Nav.Link
+                  style={{ fontWeight: "600" }}
+                  onClick={handleSignUpClick}
+                >
+                  회원가입
+                </Nav.Link>
               </Nav>
             )}
           </Navbar.Collapse>

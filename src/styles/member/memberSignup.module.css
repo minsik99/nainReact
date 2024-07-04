@@ -22,6 +22,13 @@
     margin-bottom: 20px;
 }
 
+.confirmPwd {
+    margin-top: -12px;
+    margin-left: 5px;
+    font-size:12px;
+    color:red;
+}
+
 .formGroup label {
     display: block;
     margin-bottom: 8px;
@@ -66,15 +73,14 @@
 
 .kakaoSignup {
     width: 95%;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-left: 8px;
     cursor: pointer;
 }
 
 .checkButton button {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px 30px;
+    padding: 10px 10px;
     background-color: #77AAAD;
     color: white;
     border: 1px solid #ddd;

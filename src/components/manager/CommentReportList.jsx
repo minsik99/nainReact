@@ -29,6 +29,7 @@ const CommentReportList = () => {
   const [handledEndDate, setHandledEndDate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [memberNo, setMemberNo] = useState(0);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -41,6 +42,13 @@ const CommentReportList = () => {
   useEffect(() => {
     fetchReports();
     fetchReportCounts();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const memberNo = window.localStorage.getItem("memberNo");
+      setMemberNo(memberNo);
+    }
   }, []);
 
   const fetchReports = async () => {
@@ -77,7 +85,7 @@ const CommentReportList = () => {
 
   const handleProcess = async (report) => {
     try {
-      const adminId = 1; // 실제 admin ID 사용
+      const adminId = memberNo; // 실제 admin ID 사용
       const block = blockAccount[report.commentReportId] || false;
       const del = deletePost[report.commentReportId] || false;
       if (block) {
@@ -87,7 +95,7 @@ const CommentReportList = () => {
             adminId,
             report.commentReportType
           );
-          openModal("계정 차단이 성공적으로 처리되었습니다.");
+          openModal("성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("계정 차단 중 오류가 발생했습니다.", error);
           openModal("계정 차단 처리 중 오류가 발생했습니다.");
@@ -101,7 +109,7 @@ const CommentReportList = () => {
             adminId,
             report.commentNo
           );
-          openModal("댓글 삭제가 성공적으로 처리되었습니다.");
+          openModal("성공적으로 처리되었습니다.");
         } catch (error) {
           console.error("댓글 삭제 중 오류가 발생했습니다.", error);
           openModal("댓글 삭제 처리 중 오류가 발생했습니다.");
@@ -290,11 +298,14 @@ const CommentReportList = () => {
                               ? new Date(
                                   report.commentReportHandledDate
                                 ).toLocaleDateString()
-                              : "N/A"}
+                              : "미처리"}
                           </span>
                           <span>
                             <strong>처리자:</strong>{" "}
-                            {report.commentReportAdminName || "N/A"}
+                            {report.commentReportAdminName
+                              ? report.commentReportAdminName
+                              : (console.log("처리자 값 없음", report),
+                                "미처리")}
                           </span>
                         </div>
                       </div>

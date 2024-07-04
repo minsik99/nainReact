@@ -21,6 +21,8 @@ const SignUpForm = () => {
 
     const [emailError, setEmailError] = useState('');
     const [emailValid, setEmailValid] = useState(null);
+    const [pwdChanged, setPwdChanged] = useState(null);
+    const [pwdError, setPwdError] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value} = e.target;
@@ -39,9 +41,13 @@ const SignUpForm = () => {
         return emailRegex.test(email);
     };
 
+    const validatePassword = (password) => {
+        // 비밀번호는 영문, 숫자, 특수문자를 포함한 8자리 이상의 조합이어야 합니다.
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
     const handleEmailCheck = async () => {
-
-
         if(!formData.memberEmail.trim() && formData.memberEmail.trim() == ''){
             console.log("memberEmail", formData.memberEmail);
             setEmailError('이메일을 입력해주세요.');
@@ -73,11 +79,25 @@ const SignUpForm = () => {
         }
     }
 
+    useEffect(() => {
+        if (formData.memberPwd && formData.confirmPwd) {
+            setPwdChanged(formData.memberPwd !== formData.confirmPwd);
+        } else {
+            setPwdChanged(null);
+        }
+
+        if (formData.memberPwd && !validatePassword(formData.memberPwd)) {
+            setPwdError('비밀번호는 영문, 숫자, 특수문자를 포함한 8자리 이상이어야 합니다.');
+        } else {
+            setPwdError('');
+        }
+    }, [formData]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         console.log(formData)
-        const { memberEmail, memberPwd, confirmPassword, memberName } = formData;
+        const { memberEmail, memberPwd, confirmPwd, memberName } = formData;
 
         if (!validateEmail(memberEmail)){
             alert('정확한 이메일 주소를 입력해주세요.');
@@ -88,8 +108,13 @@ const SignUpForm = () => {
             alert('이메일 확인을 완료해주세요.');
             return;
         }
+        
+        if (!validatePassword(memberPwd)) {
+            alert('비밀번호는 영문, 숫자, 특수문자를 포함한 8자리 이상이어야 합니다.');
+            return;
+        }
 
-        if (memberPwd !== confirmPassword) {
+        if (formData.memberPwd !== formData.confirmPwd) {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
@@ -111,6 +136,8 @@ const SignUpForm = () => {
     return (
         <div className={styles.centerDiv}>
             <form className={styles.form} onSubmit={handleSubmit}>
+                <h1> 회원가입 </h1><hr></hr><br></br>
+                
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input type="email" 
@@ -138,15 +165,16 @@ const SignUpForm = () => {
                         />
                 </div>
                 <div className={styles.formGroup}>
-                    <label htmlFor="confirmPassword">확인:</label>
+                    <label htmlFor="confirmPwd">비밀번호 확인:</label>
                     <input type="password" 
-                            id="confirmPassword" 
-                            name="confirmPassword" 
-                            value={formData.confirmPassword} 
+                            id="confirmPwd" 
+                            name="confirmPwd" 
+                            value={formData.confirmPwd} 
                             onChange={handleInputChange} 
                             required 
                         />
                 </div>
+                {pwdChanged && <p className={styles.confirmPwd}>비밀번호가 일치하지 않습니다.</p>}
                 <div className={styles.formGroup}>
                     <label htmlFor="name">이름:</label>
                     <input type="text" 

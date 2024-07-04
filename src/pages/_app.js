@@ -15,6 +15,7 @@ import Footer from "../components/layouts/footer";
 const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }) => {
+
   return (
     // QueryClientProvider 컴포넌트로 전체 앱을 감싸줍니다. 이를 통해 애플리케이션의 모든 부분에서 리액트 쿼리를 사용할 수 있도록 합니다.
     <QueryClientProvider client={queryClient}>

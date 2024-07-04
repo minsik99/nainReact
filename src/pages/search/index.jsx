@@ -1,13 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react";
 import ArticleComponent from "../../components/search/ArticleComponent";
+import styles from "../../styles/search/index.module.css";
 
-const searchComponent = observer(()=>{
+const SearchComponent = observer(() => {
     return (
-        <div>
+        <div className={styles.searchContainer}>
             <ArticleComponent />
         </div>
-    )
-})
+    );
+});
 
-export default searchComponent;
+export default SearchComponent;

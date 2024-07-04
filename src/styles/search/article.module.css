@@ -1,90 +1,115 @@
-/* ArticleComponent.module.css */
-
 .container {
-  max-width: 800px;
+  max-width: 1000px;
+  min-width: 800px;
   margin: 0 auto;
+  margin-top: 4rem;
   padding: 20px;
-  text-align: center; /* 가운데 정렬 */
+  text-align: center;
+  background-color: #ffffff; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
-.search-button {
+.searchForm {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  width: 70%;
+}
+
+.searchButton {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #77AAAD;
   color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 0 5px 5px 0;
 }
 
-.search-button:hover {
-  background-color: #0056b3;
-}
-
-.article-list {
+.articleList {
   list-style-type: none;
   padding: 0;
 }
 
-.article-item {
+.articleItem {
   display: flex;
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
-  align-items: center; /* 가운데 정렬 */
+  align-items: center;
+  transition: transform 0.2s, background-color 0.2s;; 
 }
 
-.article-link {
+.articleItem:hover {
+  transform: scale(1.02);
+  background-color: #9DC3C1;
+}
+
+.articleLink {
   display: flex;
   text-decoration: none;
   color: inherit;
   flex: 1;
 }
 
-.image-container {
-  flex: 0 0 150px; /* 이미지 크기 조절 */
-  height: 100px; /* 이미지 높이 조절 */
+.imageContainer {
+  flex: 0 0 150px;
+  height: 100px;
   overflow: hidden;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
 }
 
-.article-image {
-  width: 100%;
-  height: auto;
+.articleImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-.article-info {
+.articleInfo {
   padding: 10px;
   flex: 1;
-  text-align: left; /* 텍스트 왼쪽 정렬 */
+  text-align: left;
 }
 
-.article-title {
+.articleTitle {
   font-size: 18px;
   margin-bottom: 5px;
 }
 
-.article-content {
+.articleContent {
   font-size: 14px;
   margin-bottom: 5px;
 }
 
-.article-time,
-.article-source {
+.articleTime,
+.articleSource {
   font-size: 12px;
   color: #666;
 }
 
-.scroll-to-top {
+.scrollToTop {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff;
+  background-color: #77AAAD;
   color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.scroll-to-top:hover {
-  background-color: #0056b3;
+.scrollToTop:hover {
+  background-color: #77AAAD;
 }

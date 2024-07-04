@@ -35,6 +35,9 @@ const BoardDetail = () => {
     useEffect(() => {
         if (typeof window !== "undefined") {
             const memberNo = window.localStorage.getItem("memberNo");
+            if(memberNo){
+                setLoginState(true);
+            }
             if(board.memberNo == memberNo){
                 setIsMine(true);
             }
@@ -91,33 +94,35 @@ const BoardDetail = () => {
     };
 
     const handleOpenReport = () => {
-       reportModal.openModal({
-          title: '게시글 신고', //제목 추가 가능
-          content: '신고 사유', //모달안 내용(현재는 드롭다운만 구현상태)
-          columns: [{'Header':'욕설 및 비방'}, {'Header':'광고'}, {'Header':'도배'}],
-    //신고하기 대신 원하는 문구 삽입, 처음 들어가는 문장이 기본값
-          onConfirm: (selectedItem) => {
-            const rCommunity = {
-                communityNo: board.communityNo,
-                reportType: selectedItem['Header'],
-                handledYN: 'N',
-            };
-            console.log('Selected item:', rCommunity);
-            reportCommunity(rCommunity).then(res => {
-                alert("신고되었습니다.");
-                console.log("성공");
-            }).catch(error => {
-                console.log(error);
+        if(loginState){
+            reportModal.openModal({
+                title: '게시글 신고',
+                content: '신고 사유',
+                columns: [{'Header':'욕설 및 비방'}, {'Header':'광고'}, {'Header':'도배'}],
+                onConfirm: (selectedItem) => {
+                    const rCommunity = {
+                        communityNo: board.communityNo,
+                        reportType: selectedItem['Header'],
+                        handledYN: 'N',
+                    };
+                    console.log('Selected item:', rCommunity);
+                    reportCommunity(rCommunity).then(res => {
+                            console.log("신고 결과", res);
+                            alert(res);
+                    }).catch(error => {
+                        console.log(error);
+                    });
+                    reportModal.closeModal();
+                },
             });
-            reportModal.closeModal();
-          },
-    //드롭다운 선택시 안에 들어있는 값가지고 옴
-        });
+        }else{
+            alert("로그인이 필요합니다.");
+        }
       };
 
       const handleOpenDelete = () => {
         delModal.openModal({
-          title: '게시글 삭제', //제목 추가 가능
+          title: '게시글 삭제',
           content: '정말로 삭제하시겠습니까?', 
           columns: board.communityNo,
           onConfirm: (communityNo) => {
@@ -189,7 +194,7 @@ const BoardDetail = () => {
                     </div>
                     )}
             <h4>댓글</h4>
-            <Comment comments={comments} communityNo={board.communityNo} styles={styles} />
+            <Comment comments={comments} communityNo={board.communityNo} styles={styles} loginState={loginState}/>
         </div>
     );
 };

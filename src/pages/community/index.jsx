@@ -6,6 +6,7 @@ import Paging from "../../components/board/Paging";
 import { useRouter } from 'next/router';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/board/board.module.css';
+import Sort from "../../components/board/Sort";
 
 const Community = observer(() => {
     const [boards, setBoards] = useState([]);
@@ -17,14 +18,25 @@ const Community = observer(() => {
     const [type, setType] = useState('title');
     const [myInfo, setMyInfo] = useState('');
     const router = useRouter();
+    const [loginState, setLoginState] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const memberNo = window.localStorage.getItem("memberNo");
+            if(memberNo){
+                setLoginState(true);
+                CommunityAxios.myInfo().then(res => {
+                    console.log("유저 닉네임", res.data);
+                    setMyInfo(res.data);
+                });
+            }
+        }
+    }, []);
 
     useEffect(() => {
         CommunityAxios.searchCommunity(type, searchKeyword, currentPage, limit, sort).then(res => {
             setBoards(res.data.list);
             setPaging(res.data.pg);
-        });
-        CommunityAxios.myInfo().then(res => {
-            setMyInfo(res.data);
         });
     }, [currentPage, sort]);
 
@@ -73,9 +85,9 @@ const Community = observer(() => {
         { value: 'readCount', label: '조회수 높은순' },
     ];
 
-    const handleSort = (event) => {
-        setSort(event.target.value);
-    }
+    // const handleSort = (event) => {
+    //     setSort(event.target.value);
+    // }
 
     //전체목록(새로고침)
     const reload = () => {
@@ -84,11 +96,11 @@ const Community = observer(() => {
     
     //내 글 보기
     const myBoard = () => {
+        setType('writer');
+        setSearchKeyword(myInfo);
         CommunityAxios.searchCommunity('writer', myInfo, currentPage, limit, sort).then(res=>{
             setBoards(res.data.list);
             setPaging(res.data.pg);
-            setType('writer');
-            setSearchKeyword(myInfo);
         });
     };
 
@@ -110,7 +122,10 @@ const Community = observer(() => {
         <div className={styles.controls}>
             <div className={styles.controlItem}>
                 <RadiusButton color="#77AAAD" text="전체 목록" onClick={reload} />
-                <RadiusButton color="#77AAAD" text="내 글" onClick={myBoard} />
+                {loginState ? <RadiusButton color="#77AAAD" text="내 글" onClick={myBoard}/>
+                : <p/>
+                }
+                
             </div>
             <div className={styles.controlItem}>
                 <div className={styles.searchContainer}>
@@ -132,14 +147,15 @@ const Community = observer(() => {
                 </div>
             </div>
             <div className={styles.controlItem}>
-                <div className={styles.selectContainer}>
+                <Sort styles={styles} sortOptions={sortOptions} setSort={setSort} sort={sort}/>
+                {/* <div className={styles.selectContainer}>
                     <select className={styles.selectBox}
                         value={sort} onChange={handleSort}>
                         {sortOptions.map((option, index) => (
                             <option key={index} value={option.value}>{option.label}</option>
                         ))}
                     </select>
-                </div>
+                </div> */}
             </div>
         </div>
         <div>
@@ -150,7 +166,7 @@ const Community = observer(() => {
         <div className={styles.actionBar}>
         <div />
         <Paging className={styles.page} paging={paging} setCurrentPage={setCurrentPage} />
-        <RadiusButton color="#77AAAD" text="글쓰기" onClick={createBoard} />
+        {loginState ? <RadiusButton color="#77AAAD" text="글쓰기" onClick={createBoard} /> : <div/>} 
         </div>
     </div>
     );

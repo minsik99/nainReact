@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { useMutation } from 'react-query';
 import { useRouter } from "next/router";
-import axios from "axios";
-import { authStore } from "../../stores/authStore";
 import styles from "../../styles/member/memberMyinfo.module.css";
 import { myinfo } from "../../api/user";
-import { updateMyinfo, deleteMember } from "../../api/user";
+import { updateMyinfo } from "../../api/user";
+import { deleteMember } from "../../api/user";
+import { logout } from "../../api/user";
 
 const Myinfo = () => {
 
@@ -22,6 +22,7 @@ const Myinfo = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [pwdChanged, setPwdChanged] = useState(null);
 
     const fetchUserMember = async (memberNo) => {
         try {
@@ -30,7 +31,6 @@ const Myinfo = () => {
             console.log(res);
             setFormData({
                 memberEmail: res.memberEmail,
-                
                 memberName: res.memberName,
                 memberNickName: res.memberNickName,
                 subscribeYN: res.subscribeYN === 'Y' ? 'Y' : 'N',
@@ -40,7 +40,7 @@ const Myinfo = () => {
             console.log(formData);
         } catch(error) {
             setError(error);
-            console.error('Error fetching member info:', error);
+            console.error('회원 정보를 가져오는 중 오류 발생:', error);
         } finally{
             setLoading(false);
         }
@@ -58,6 +58,15 @@ const Myinfo = () => {
             }
         }
     }, [memberNo]);
+
+
+    useEffect(() => {
+        if(formData.memberPwd !== formData.confirmPwd){
+            setPwdChanged(true);
+        }else{
+            setPwdChanged(false);
+        }
+    }, [formData]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -96,14 +105,15 @@ const Myinfo = () => {
         }
     );
 
-    const deleteMember = useMutation(
+    const deleteMemberMutation = useMutation(
         async () => {
+            console.log("회원삭제데이터:", memberNo);
             return await deleteMember(memberNo);
         },
         {
             onSuccess: () => {
                 alert("회원탈퇴가 성공적으로 완료되었습니다.");
-                authStore.logout();
+                logout();
                 router.push("/main");
             },
             onError: (error) => {
@@ -115,7 +125,13 @@ const Myinfo = () => {
 
     const handleDeleteAccount = () => {
         if(confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
-            deleteMember.mutate();
+            deleteMemberMutation.mutate();
+        }
+    }
+
+    const handleSubscribe = () => {
+        if(confirm("구독하기 결제 페이지로 이동하시겠습니까?")){
+            router.push("/payment");
         }
     }
 
@@ -128,14 +144,14 @@ const Myinfo = () => {
     }
 
     if(error){
-        return <p> Error loading member info.</p>;
+        return <p>회원 정보를 불러오는 중 오류가 발생했습니다.</p>;
     }
 
     console.log(memberNo);
     return (
         <div className={styles.centerDiv}>
-           
             <form className={styles.form} onSubmit={handleSubmit}>
+            <h1> 내 정보 보기</h1> <hr></hr>
                 <div className={styles.formGroup}>
                     <label htmlFor="email">이메일:</label>
                     <input 
@@ -143,7 +159,6 @@ const Myinfo = () => {
                         id="email" 
                         name="memberEmail" 
                         value={formData.memberEmail} 
-                        onChange={handleInputChange} 
                         readOnly={true} //항상 readOnly
                         />
                 </div>
@@ -169,6 +184,7 @@ const Myinfo = () => {
                         readOnly={isReadOnly} //상태에 따라 변경
                         />
                 </div>
+                {pwdChanged && <p className={styles.confirmPwd}>비밀번호가 일치하지 않습니다.</p>}
                 <div className={styles.formGroup}>
                     <label htmlFor="name">이름:</label>
                     <input
@@ -176,7 +192,6 @@ const Myinfo = () => {
                         id="name"
                         name="memberName"
                         value={formData.memberName}
-                        onChange={handleInputChange}
                         readOnly={true}
                         />
                 </div>
@@ -191,20 +206,9 @@ const Myinfo = () => {
                         readOnly={isReadOnly} //상태에 따라 변경
                         />
                 </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="subscribeYN">구독 여부:</label>
-                    <select
-                        id="subscribeYN"
-                        name="subscribeYN"
-                        value={formData.subscribeYN}
-                        onChange={handleInputChange}
-                        readOnly={isReadOnly} //상태에 따라 변경
-                    >
-                        <option value="true">구독</option>
-                        <option value="false">구독 취소</option>
-                    </select>
-                </div>
+
                 <div className={styles.buttonContainer}>
+                <button type="button" id="subscribeButton" onClick={handleSubscribe}>구독하기</button>
                     {updateMyinfoMutation.isLoading ? (
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
                         <p>수정 중...</p>
@@ -212,10 +216,12 @@ const Myinfo = () => {
                         //수정 중일 때는 로딩 텍스트를 표시합니다.
                         <button type="submit" disabled={isReadOnly}>수정</button>
                     )}
+
                         <button type="button" id="mainButton" onClick={goToMain}>메인으로 돌아가기</button>
-                        <button type="buootn" id="deleteButton" onClick={handleDeleteAccount} disabled={isReadOnly}>회원탈퇴</button>
+                        <button type="button" id="deleteButton" onClick={handleDeleteAccount} disabled={isReadOnly}>회원탈퇴</button>
                 </div>
             </form>
+            
         </div>
     );
 };

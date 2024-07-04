@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import CommunityAxios from "../../api/CommunityAxios";
 import RadiusButton from '../designTool/RadiusButton';
 import CommentDetail from './CommentDetail';
+import {useRouter} from 'next/router';
 
-const Comment = ({comments, communityNo, styles}) => {
+const Comment = ({comments, communityNo, styles, loginState}) => {
     const [showModal, setShowModal] = useState(false);
     const [content, setContent] = useState('');
+    const router = useRouter();
 
     const handleComment = (event) => {
       setContent(event.target.value);
@@ -18,11 +20,16 @@ const Comment = ({comments, communityNo, styles}) => {
         content: content,
       }
       console.log(newComment);
-      if(content){
-        CommunityAxios.createComment(newComment).then(res => {
-            window.location.reload();
-      })}else{
-          alert('내용을 입력해주세요.');
+      if(loginState){
+        if(content){
+          CommunityAxios.createComment(newComment).then(res => {
+              window.location.reload();
+        })}else{
+            alert('내용을 입력해주세요.');
+      }}else{
+        if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+          router.push("/member/login");
+        };
       }
     };
 

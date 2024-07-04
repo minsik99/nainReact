@@ -3,19 +3,28 @@ import { observer } from "mobx-react";
 import InterviewListComponent from "../../components/interview/InterviewlistComponent";
 import styles from '../../styles/interview/interviewComponent.module.css';
 import PathText from "../../components/interview/PathText";
+import { useRouter } from "next/router";
+import { authStore } from "../../stores/authStore";
 
 const InterviewListForm = observer(()=>{
     const [memberNo, setMemberNo] = useState(null);
     const [selectedButton, setSelectedButton] = useState('voice');
     const [sortKey, setSortKey] = useState('');
+    const router = useRouter();
 
     useEffect(() => {
         if (typeof window !== "undefined") {
             const memberNo = window.localStorage.getItem("memberNo");
             setMemberNo(memberNo);
+            if (!authStore.isSubscribe) {
+                console.log("구독여부", authStore.isSubscribe);
+                alert(authStore.isSubscribe)
+                alert("구독이 필요한 서비스입니다.");
+                router.push('/payment');
+            }
         }
-    }, []);
-
+    }, [authStore.isSubscribe]);
+    
     const paths = [
         { name: '메인', link: '/' },
         { name: 'AI 면접', link: '/interview' },
@@ -32,7 +41,7 @@ const InterviewListForm = observer(()=>{
     };
 
     return (
-        <div className="mapDiv">
+        <div className={styles.base}>
             <div className={styles.path}> <PathText paths={paths} /></div>
             <InterviewListComponent  memberNo={memberNo} selectedButton={selectedButton}
                     handleSelected={handleSelected} sortKey={sortKey} sort={sort} setSortKey={setSortKey}/>

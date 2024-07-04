@@ -113,7 +113,7 @@ const AcceptedKeyword = () => {
               </ul>
             </label>
             <div className={styles.acceptKeywordInformation}>
-              <img src="/image/InformationIcon.png" alt="데이터 정보" className={styles.informationIcon} />
+              <img src="/image/informationIcon.png" alt="데이터 정보" className={styles.informationIcon} />
               {selectedJob} 공고 1,000개 분석 / 2024-06-27 기준
             </div>
           </div>

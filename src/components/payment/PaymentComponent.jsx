@@ -2,17 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import RadiusButton from "../designTool/RadiusButton";
-import { useRouter } from "next/router"; // Next.js의 useRouter 훅을 불러옵니다.
+import { useRouter } from "next/router";
 
-const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = "dgBrpPTua28tNK0x-pjjH";
+const widgetClientKey = process.env.NEXT_PUBLIC_TOSS_PAYMENTS_CLIENT_KEY;
+const customerKey = "your_customer_key_here"; // 고객 키
 
 export function PaymentComponent() {
   const [paymentWidget, setPaymentWidget] = useState(null);
   const paymentMethodsWidgetRef = useRef(null);
   const [price, setPrice] = useState(10_000);
   const [selectedCoupon, setSelectedCoupon] = useState("");
-  const router = useRouter(); // useRouter 훅을 사용합니다.
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPaymentWidget = async () => {
@@ -60,7 +60,6 @@ export function PaymentComponent() {
     const selectedValue = event.target.value;
     let newPrice = price;
 
-    // 쿠폰 적용 전 가격 복원
     switch (selectedCoupon) {
       case "5000":
         newPrice += 5000;
@@ -69,13 +68,12 @@ export function PaymentComponent() {
         newPrice /= 0.9;
         break;
       case "30":
-        newPrice /= 0.3;
+        newPrice /= 0.7;
         break;
       default:
         break;
     }
 
-    // 새로운 쿠폰 적용
     switch (selectedValue) {
       case "5000":
         newPrice -= 5000;
@@ -84,7 +82,7 @@ export function PaymentComponent() {
         newPrice *= 0.9;
         break;
       case "30":
-        newPrice *= 0.3;
+        newPrice *= 0.7;
         break;
       default:
         break;
@@ -102,12 +100,12 @@ export function PaymentComponent() {
         customerName: "김민식",
         customerEmail: "customer123@gmail.com",
         customerMobilePhone: "01012341234",
-        successUrl: `${window.location.origin}/payment/SuccessPage`,
-        failUrl: `${window.location.origin}/fail`,
+        successUrl: process.env.NEXT_PUBLIC_TOSS_SUCCESS,
+        failUrl: process.env.NEXT_PUBLIC_TOSS_FAIL,
       });
     } catch (error) {
       console.error("Error requesting payment:", error);
-      router.push("payment/FailPage"); // 실패 시 실패 페이지로 이동합니다.
+      router.push("/payment/FailPage");
     }
   };
 

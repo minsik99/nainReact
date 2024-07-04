@@ -2,12 +2,13 @@ import React, { useRef, useEffect, useState } from 'react';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/interview/interviewComponent.module.css';
 import { observer } from "mobx-react";
-import { saveOneVideo } from '../../api/interview/video';
+import { saveOneVideo, upTotalVideo  } from '../../api/interview/video';
 import Loading from '../../components/designTool/Loading';
 import PathText from '../../components/interview/PathText';
 import {useModal} from '../../components/hook/useModal';
 import NotButtonModal from '../../components/interview/NotButtonModal';
 import { useRouter } from 'next/router';
+import { authStore } from '../../stores/authStore';
 
 //파이썬으로 영상보내기
 const InterviewComponent = observer(() => {
@@ -23,13 +24,28 @@ const InterviewComponent = observer(() => {
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [fileIndex, setFileIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
-    const [count, setcount] = useState(-1);
-    
+    const [count, setcount] = useState(0);
+    const [saved, setSaved] = useState(true);
+    let que = '';
     useEffect(() => {
         if(!router.isReady) return;
         console.log(itvNo, memberNo, decodeURIComponent(question));
-     }, [router.isReady])
-    
+
+        if (!authStore.isSubscribe) {
+            console.log("구독여부", authStore.isSubscribe);
+            alert("구독이 필요한 서비스입니다.");
+            router.push('/payment');
+        }
+
+     }, [router.isReady]);
+
+     try {
+        que = JSON.parse(decodeURIComponent(question));
+        console.log(que);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+      }
+      
     const paths = [
         { name: '메인', link: '/' },
         { name: 'AI history', link: '/interview' },
@@ -39,11 +55,11 @@ const InterviewComponent = observer(() => {
     const handleStartRecording = async () => {
         console.log("handleStartRecording 시작");
         console.log("count", count);
-        if(count == -1) {
+        if(count == 0) {
             startRecording();
-            setcount((preCount)=> preCount + 1);
+            // setcount((preCount)=> preCount + 1);
         } else if (!isRecording) {
-            setIsRecording(prevState => !prevState); 
+            setIsRecording(prevState => !prevState);
         }
         setcount((preCount)=> preCount + 1);
     };
@@ -158,27 +174,41 @@ const InterviewComponent = observer(() => {
     
     // 녹화된 비디오 저장 및 서버로 전송
     const saveVideo = async () => {
-        try {            
-            console.log("저장할 itvNo", itvNo);
+        try {
+            setSaved(false);
             if (recordedChunks.length > 0) {
-                console.log("저장할 청크::::", recordedChunks);
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
                 const formData = new FormData();
                 formData.append('video', blob, `${fileIndex}.webm`);
                 formData.append('itvNo', itvNo);
+                formData.append('qNo', que[fileIndex].qno);
                 console.log("FormData prepared:", formData);
                 await stopRecording();
-                const response = await saveOneVideo(formData);
-                console.log("서버까지 갔다옴", isRecording, JSON.stringify(response.data));
-
-                setFileIndex(prevIndex => {
-                    if (prevIndex < 10) {
-                        return prevIndex + 1;
-                    } else {
-                        stopCamera();
-                        return 0;
+                await saveOneVideo(formData).then(res => {
+                    console.log("파이썬 res", res.success);
+                    if(res.success == "Analysis Succeed"){
+                        setSaved(true);
                     }
                 });
+
+                setFileIndex(prevIndex => {
+                    const newIndex = prevIndex < 10 ? prevIndex + 1 : 0;
+                    console.log("Updated fileIndex:", newIndex);
+                    if (newIndex === 0) {
+                        stopCamera();
+                    }
+                    return newIndex;
+                });
+    
+
+                // setFileIndex(prevIndex => {
+                //     if (prevIndex < 10) {
+                //         return prevIndex + 1;
+                //     } else {
+                //         stopCamera();
+                //         return 0;
+                //     }
+                // });
 
                 setDownChunks(prev => {
                     const newDownChunks = [...prev, ...recordedChunks];
@@ -234,9 +264,12 @@ const InterviewComponent = observer(() => {
     };
 
     const handleInterviewEnd = () => {
+        stopCamera();
         alert("면접이 종료되었습니다.");
         router.push('/interview');
     };
+
+    
 
     const stopCamera = async () => {
         if (videoRef.current) {
@@ -258,18 +291,17 @@ const InterviewComponent = observer(() => {
         try {
             if (recordedChunks.length > 0) {
                 await saveVideo();
+                
                 setRecordedChunks([]);
             }
         } catch (err) {
             console.error("영상 저장 실패", err);
         }
 
-        
-
         setFileIndex(0);
         setStream(null);
         setIsCameraOn(false);
-
+        await upTotalVideo();
         router.push("/interview");
     };
 
@@ -288,31 +320,34 @@ const InterviewComponent = observer(() => {
         };
     }, []);
 
-    const que = JSON.parse(decodeURIComponent(question));
+    
 
     return (
-        <>
+        <div className={styles.base}>
         <div className={styles.path}> <PathText paths={paths} /></div>
             <div className={styles.interviewContainer}>
                 <div className={styles.videoContainer}>
                     <div className={styles.header}>
                         <div></div>
-                        { !isCameraOn || count < 0 && fileIndex == 0? 
+                        { !isCameraOn || count == 0 && fileIndex == 0? 
                         (<span>Q : 질문이 나오는 칸입니다.</span>
                         ) : (
-                            count == 10 ?
+                            count > 10 ?
                             (
-                                handleInterviewEnd
+                                handleInterviewEnd()
                         ) :
-                            <span>Q : {que[count].qcontent}</span> 
+                            <span>Q{count} : {que[count - 1].qcontent}</span> 
                         )}
                         <img className={styles.arrowBox} onClick={handleStartRecording} src="/image/arrowbox.png"/>
                     </div>
                         <NotButtonModal event={handleStartRecording} position={{ top: '20%', left: '82%' }} isOpened={isOpened} data={modalData} closeModal={closeModal} />
-                        {isCameraOn ? (
+                        {isCameraOn && saved? (
                             <video className={styles.video} ref={videoRef} autoPlay muted />
                         ) : (
-                            <div className={styles.emptyScreen}><Loading text="Loading.." /></div>
+                            <div className={styles.emptyScreen}>
+                                {count > 0 ? <Loading text="저장 중.. 답변을 준비해주세요." />
+                                : <Loading text="Loading.." />}
+                            </div>
                         )}
                     <div className={styles.emptyBottom}>
                         <div className={styles.buttonBox}>
@@ -320,73 +355,18 @@ const InterviewComponent = observer(() => {
                                 color="#77AAAD"
                                 fontSize="14px"
                                 padding="0.5rem 1rem"
-                                onClick={isCameraOn ? stopCamera : startCamera }
-                                text={isCameraOn ? '중단' : '면접 시작하기'}
+                                onClick={isCameraOn ? handleInterviewEnd : startCamera }
+                                text={isCameraOn ? '면접 중단' : '면접 시작하기'}
                             />
-                            {/* <RadiusButton
-                                color="#77AAAD"
-                                fontSize="14px"
-                                padding="0.5rem 1rem"
-                                onClick={stopCamera}
-                                disabled={!isCameraOn}
-                                text="테스트 중지"
-                            /> */}
                         </div>
                     </div>
                 </div>
             </div>
             <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
-        </>
+        </div>
     );
 });
 
 export default InterviewComponent;
           
 
-
-// useEffect(() => {
-    //     if (!isCameraOn && videoRef.current) {
-    //         startCamera();
-    //     }
-    // }, [isCameraOn, videoRef]);
-    
-    
-    // useEffect(() => {
-    //     if (isCameraOn) {
-    //         startCamera();
-    //     }
-    //     return () => {
-    //         if (videoRef.current && videoRef.current.srcObject) {
-    //             videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-    //         }
-    //     };
-    // }, [isCameraOn]);
-
-    // 컴포넌트 언마운트 시 스트림 정리
-    
-
-    // 프레임을 서버로 전송
-    // const sendFramesToServer = () => {
-    //     const captureFrame = () => {
-    //         const context = canvasRef.current.getContext('2d');
-    //         if(videoRef.current && context) {
-    //             if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
-    //                 canvasRef.current.width = videoRef.current.videoWidth;
-    //                 canvasRef.current.height = videoRef.current.videoHeight;
-    //                 context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-    //                 const frame = canvasRef.current.toDataURL('image/jpeg', 0.7); // 70% 품질로 압축
-
-    //                 try {
-    //                     const response = realTimeAnaly(frame);
-    //                 } catch (err) {
-    //                     console.error("Error sending frame to server: ", err);
-    //                 }
-    //             }
-    //     } else {
-    //         <Loading text="Loading..." />
-    //     }
-    //     };
-    //     const frameRate = 10;
-    //     const id = setInterval(captureFrame, 1000 / frameRate); // frameRate에 따라 프레임 전송
-    //     setIntervalId(id);
-    // };

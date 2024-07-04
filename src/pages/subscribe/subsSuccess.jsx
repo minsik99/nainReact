@@ -20,6 +20,8 @@ const subsSuccess = () => {
             window.localStorage.setItem("isAdmin", isAdmin === 'true');
             window.localStorage.setItem("refresh", refresh);
             window.localStorage.setItem("memberNo", memberNo);
+            window.localStorage.setItem("isSubscribe", isSubscribe);
+            authStore.setIsSubscribe(isSubscribe == 'true');
             authStore.setIsAdmin(isAdmin === 'true');
             authStore.checkLoggedIn();
             authStore.setMemberNo(memberNo);

@@ -13,17 +13,37 @@ const noticeDetail = () => {
     const [board, setBoard] = useState({
         noticeNo : noticeNo,
         noticeTitle: '',
+        memberNo: '',
         noticeWriter: '',
         noticeDate: '',
         noticeModify: '',
         noticeContent: '',
-        noticeFileName: '',
+        fileName: '',
         noticeMFile:'',
         noticeReadCount : '',
+        noticeImportent : '',
     });
-
     const [noticeDate, setNoticeDate] = useState('');
     const [noticeModify, setNoticeModify] = useState('');
+    const [isMine, setIsMine] = useState(false);
+    const [LoginState, setLoginState] = useState(false);
+    const delModal = useModal();
+    
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const memberNo = window.localStorage.getItem("memberNo");
+            if(memberNo){
+                setLoginState(true);
+            }
+            if(board.memberNo == memberNo){
+                setIsMine(true);
+            }
+            console.log('정보', memberNo, board.memberNo);
+        }
+
+    }, [board]);
+
 
     console.log("가져온 정보", board);
 
@@ -43,12 +63,14 @@ const noticeDetail = () => {
                   noticeNo : noticeNo,
                   noticeTitle: data.noticeTitle,
                   noticeWriter: data.noticeWriter,
+                  memberNo: data.memberNo,
                   noticeDate: data.noticeDate,
                   noticeModify: data.noticeModify,
                   noticeContent: data.noticeContent,
-                    noticeFileName: data.noticeFileName,
-                    noticeMFile: data.noticeMFile,
+                  fileName: data.noticeFile,
+                  noticeMFile: data.noticeMFile,
                     noticeReadCount: data.noticeReadCount,
+                    noticeImportent: data.noticeImportent,
                 });
             });
         }
@@ -59,7 +81,7 @@ const noticeDetail = () => {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', board.noticeFileName); // 다운로드 파일 이름 설정
+            link.setAttribute('download', board.fileName); // 다운로드되는 파일의 이름 설정
             document.body.appendChild(link);
             link.click();
         });
@@ -72,17 +94,27 @@ const noticeDetail = () => {
 
     const handleDeleteBoard = () => {
         // 글 삭제
-        noticeAxios.hiddenNotice(board.noticeNo, board).then(res => {
-            setShowModal(true); // 성공 모달 열기
-            setTimeout(() => {
-              setShowModal(false); // 모달 닫기
-              router.push('/notice'); // 페이지 이동
-            }, 500); // 2초 후에 페이지 이동
-        })
-        .catch(error => {
-            alert('게시글 삭제 오류');
-        })
-    };
+        delModal.openModal({
+            title: '게시글 삭제',
+            content: '정말로 삭제하시겠습니까?', 
+            columns: board.noticeNo,
+            onConfirm: (noticeNo) => {
+              noticeAxios.hiddenNotice(noticeNo, board).then(res => {
+                  setShowModal(true); // 성공 모달 열기
+                  setTimeout(() => {
+                    setShowModal(false); // 모달 닫기
+                    router.push('/notice'); // 페이지 이동
+                  }, 500); // 2초 후에 페이지 이동
+              })
+              .catch(error => {
+                  alert('게시글 삭제 오류');
+              })
+              delModal.closeModal();
+            },
+      //드롭다운 선택시 안에 들어있는 값가지고 옴
+          });
+        };
+  
 
     const handleModifyBoard = () => {
         //글 수정
@@ -115,15 +147,26 @@ const noticeDetail = () => {
                         )}
                         </span>
                     </div>
-                    <div className={styles.content} dangerouslySetInnerHTML={{ __html: board.noticeContent }} />
-                {board.noticeFileName && (
-                        <div>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{board.noticeFileName}</a></div>
-                    )}
-            </div>
-            <div className={styles.buttons}>
-                    <RadiusButton color="#77AAAD" text="삭제" onClick={handleDeleteBoard}/>
-                    <RadiusButton color="#77AAAD" text="수정" onClick={handleModifyBoard}/>
-            </div>
+                        <div className={styles.content} dangerouslySetInnerHTML={{ __html: board.noticeContent }} />
+                          {board.fileName && (
+                        <div>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{board.fileName}</a></div>
+                            )}
+                            {/* <label className={styles.importanceLabel}>{board.noticeImportent} </label> */}
+                    </div>
+                    {isMine && (
+                    <div className={styles.buttons}>
+                            <RadiusButton color="#77AAAD" text="삭제" onClick={handleDeleteBoard}/>
+                            <Modal type='default' isOpened={delModal.isOpened} data={delModal.modalData} closeModal={delModal.closeModal}/>
+                            {showModal && (
+                            <div className="modal">
+                            <div className="modal-content">
+                                    <h5>게시글을 삭제하였습니다.</h5>
+                                </div>
+                            </div>
+                            )}
+                            <RadiusButton color="#77AAAD" text="수정" onClick={handleModifyBoard}/>
+                    </div>
+                        )}
             </div>
         </div>
     );
