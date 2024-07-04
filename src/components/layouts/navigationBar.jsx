@@ -199,7 +199,7 @@ const NavigationBar = observer(() => {
             {loggedIn ? (
               <Nav>
                 <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
-                <Nav.Link href={"/member/myinfo"}>내 정보</Nav.Link>
+                <Nav.Link href={"/member/myinfoLogin"}>내 정보</Nav.Link>
               </Nav>
             ) : (
               <Nav>
