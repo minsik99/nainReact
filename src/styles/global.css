@@ -412,3 +412,6 @@
   border: 2px solid #9dc3c1;
 }
 
+.ck-editor__editable {
+  min-height: 30rem;
+}
