@@ -31,6 +31,7 @@ const BoardDetail = () => {
     const reportModal = useModal();
     const delModal = useModal();
     const [data, setData] = useState('');
+    const [loginState, setLoginState] = useState(false); 
 
     useEffect(() => {
         if (typeof window !== "undefined") {
