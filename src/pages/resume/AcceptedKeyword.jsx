@@ -73,7 +73,7 @@ const AcceptedKeyword = () => {
     ],
   };
 
-  // 상위 5개의 값과 기타를 계산하는 함수
+  // 요구 경력 상위 5개의 값과 기타를 계산하는 함수
   const prepareExpData = (keywords) => {
     const sortedKeywords = [...keywords].sort((a, b) => b.frequency - a.frequency);
     const top5 = sortedKeywords.slice(0, 5);
