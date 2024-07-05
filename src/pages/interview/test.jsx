@@ -213,8 +213,9 @@ const InterviewComponent = observer(() => {
                 setDownChunks(prev => {
                     const newDownChunks = [...prev, ...recordedChunks];
                     console.log("downChunks:", newDownChunks);
-                    return newDownChunks});
-
+                    return newDownChunks
+                });
+                console.log("ChunkLenght", downChunks.length);
                 console.log("저장후 청크 비우기");
                 setRecordedChunks([]);
                 setIsRecording(false);

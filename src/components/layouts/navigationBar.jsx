@@ -12,6 +12,7 @@ const NavigationBar = observer(() => {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false); // 관리자 여부 상태
   const isSubscribe = authStore.isSubscribe;
+  const [hovered, setHovered] = useState(false);
 
   const handleSignUpClick = () => {
     router.push("/member/terms");
@@ -22,22 +23,43 @@ const NavigationBar = observer(() => {
   }, []);
 
   useEffect(() => {
-    // localStorage에서 isAdmin 값을 가져와 설정합니다.
     const adminStatus = localStorage.getItem("isAdmin") === "true";
     setIsAdmin(adminStatus);
   }, [loggedIn]);
 
-  const handleSubscribeClick = () => {
-    alert(authStore.isSubscribe);
-    if (!authStore.isSubscribe) {
-      console.log("구독여부", isSubscribe);
-      alert("구독이 필요한 서비스입니다.");
-      router.push('/payment');
-  }
+  const handleNavigation = (path) => {
+    if (typeof window !== "undefined") {
+      if(loggedIn){
+        if (isSubscribe == 'Y') {
+          router.push(path);
+        }else{
+          console.log("구독여부", isSubscribe);
+          alert("구독이 필요한 서비스입니다.");
+          router.push('/payment');
+        }
+      }else{
+          if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+              router.push("/member/login");
+            }else{
+              router.push("/main")
+            }
+      }
+    }
+  };
+
+  const handleChatLogin = (path) => {
+    if(loggedIn){
+        router.push(path)
+    }else{
+        if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+            router.push("/member/login");
+          }else{
+            router.push("/main")
+          }
+    }
   };
 
 
-  const [hovered, setHovered] = useState(false);
 
   return (
     <>
@@ -65,94 +87,95 @@ const NavigationBar = observer(() => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <nav className="navigation-container">
-              <ul style={{ marginBottom: "0px" }}>
-                <li>
-                  <Link href="/resume" passHref legacyBehavior>
-                    <a style={{ marginRight: "15px", fontWeight: "600" }}>
-                      이력서 매니저
-                    </a>
-                  </Link>
+              <ul style={{marginBottom:"0px"}}>
+                <li style={{whiteWrap:"nowrap"}}>
+                  <a
+                    style={{fontWeight: "600", cursor: "pointer" }}
+                    onClick={() => handleNavigation("/resume")}
+                  >
+                    이력서 매니저
+                  </a>
                   <div className="submenu">
-                    <Link href="/resume/MyResumeInsert" passHref legacyBehavior>
-                      <a className="subword">이력서 작성</a>
-                    </Link>
+                  <Link href="/resume/AcceptedKeyword" passHref legacyBehavior>
+                    직무 분석
+                  </Link>
                     <br />
-                    <Link href="/resume" passHref legacyBehavior>
-                      <a className="subword">이력서 관리</a>
-                    </Link>
-                    <br />
-
-                    <Link
-                      href="/resume/AcceptedKeyword"
-                      passHref
-                      legacyBehavior
+                    <a
+                      className="subword"
+                      onClick={() => handleNavigation("/resume/MyResumeInsert")}
+                      style={{ cursor: "pointer" }}
                     >
-                      <a className="subword">직무 키워드 분석</a>
-                    </Link>
+                      이력서 작성
+                    </a>
+                    <br />
+                    <a
+                      className="subword"
+                      onClick={() => handleNavigation("/resume")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      이력서 관리
+                    </a>
                     <br />
                   </div>
                 </li>
                 <li>
                   <a
                     href="#"
-                    style={{ fontWeight: "600" }}
-                    onClick={isSubscribe ? () => (window.location.href = "/interview") : handleSubscribeClick}
+                    style={{ fontWeight: "600", cursor: "pointer" }}
+                    onClick={() => handleNavigation("/interview")}
                   >
                     AI 면접
                   </a>
-                  {isSubscribe ? (
-                    <div className="submenu">
-                      
-                      <Link href="/interview" passHref legacyBehavior>
-                        <a className="subword">면접 report</a>
-                      </Link>
-                      <br />
-                    </div>
-                  ) : (
-                    <div className="submenu">
-                      <Link href="/interview" passHref legacyBehavior>
-                      <a className="subword" onClick={handleSubscribeClick}>
-                        면접 report
-                      </a>
-                      </Link>
-                      <br />
-                    </div>
-                  )}
-                  </li>
+                  <div className="submenu">
+                    <a
+                      className="subword"
+                      onClick={() => handleNavigation("/interview")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      면접 기록 관리
+                    </a>
+                    <br />
+                  </div>
+                </li>
                 <li>
                   <Link href="/search" passHref legacyBehavior>
-                    <a style={{ fontWeight: "600" }}>AI 트랜드서칭</a>
+                    <a>AI 트랜드서칭</a>
                   </Link>
+                  <div></div>
                 </li>
                 <li>
                   <Link href="/companylist" passHref legacyBehavior>
-                    <a style={{ fontWeight: "600" }}>기업공고</a>
+                    <a>기업공고</a>
                   </Link>
                 </li>
                 <li>
                   <Link href="/community" passHref legacyBehavior>
-                    <a style={{ fontWeight: "600" }}>커뮤니티</a>
+                    <a>커뮤니티</a>
                   </Link>
                   <div className="submenu">
                     <Link href="/community" legacyBehavior>
                       <a className="subword">게시판</a>
                     </Link>
                     <br />
-                    <Link href="/chat" legacyBehavior>
-                      <a className="subword">채팅방</a>
-                    </Link>
+                    <a
+                      className="subword"
+                      onClick={() => handleChatLogin("/chat")}
+                      style={{ cursor: "pointer" }}
+                    >
+                      채팅방
+                    </a>
                     <br />
                   </div>
                 </li>
                 <li>
                   <Link href="/notice" passHref legacyBehavior>
-                    <a style={{ fontWeight: "600" }}>공지사항</a>
+                    <a>공지사항</a>
                   </Link>
                 </li>
                 {isAdmin && (
                   <li>
                     <Link href="/manager/Dashboard" passHref legacyBehavior>
-                      <a style={{ fontWeight: "600" }}>관리자</a>
+                      <a>관리자</a>
                     </Link>
                     <div className="submenu">
                       <Link href="/manager/Dashboard" passHref legacyBehavior>
@@ -164,7 +187,7 @@ const NavigationBar = observer(() => {
                         passHref
                         legacyBehavior
                       >
-                        <a className="subword">회원관리</a>
+                        <a className="subword">회원</a>
                       </Link>
                       <br />
                       <Link
@@ -187,27 +210,13 @@ const NavigationBar = observer(() => {
             ></div>
             {loggedIn ? (
               <Nav>
-                <Nav.Link
-                  style={{ fontWeight: "600" }}
-                  onClick={handleLogoutClick}
-                >
-                  로그아웃
-                </Nav.Link>
-                <Nav.Link style={{ fontWeight: "600" }} href={"/member/myinfo"}>
-                  내 정보
-                </Nav.Link>
+                <Nav.Link onClick={handleLogoutClick}>로그아웃</Nav.Link>
+                <Nav.Link href={"/member/myinfoLogin"}>내 정보</Nav.Link>
               </Nav>
             ) : (
               <Nav>
-                <Nav.Link style={{ fontWeight: "600" }} href={"/member/login"}>
-                  로그인
-                </Nav.Link>
-                <Nav.Link
-                  style={{ fontWeight: "600" }}
-                  onClick={handleSignUpClick}
-                >
-                  회원가입
-                </Nav.Link>
+                <Nav.Link href={"/member/login"}>로그인</Nav.Link>
+                <Nav.Link onClick={handleSignUpClick}>회원가입</Nav.Link>
               </Nav>
             )}
           </Navbar.Collapse>

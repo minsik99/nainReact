@@ -9,10 +9,34 @@ import { authStore } from "../../stores/authStore";
 import { observer } from "mobx-react";
 
 const MainComponent = observer (()=>{
+  const router = useRouter();
+  const loggedIn = authStore.loggedIn;
+  const isSubscribe = authStore.isSubscribe;
+
+  const handleNavigation = (path) => {
+    if (typeof window !== "undefined") {
+      if(loggedIn){            
+          if (isSubscribe == 'Y') {
+            router.push(path);
+          }else{
+            console.log("구독여부", isSubscribe);
+            alert("구독이 필요한 서비스입니다.");
+            router.push('/payment');
+          }
+      }else{
+          if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
+              router.push("/member/login");
+            }else{
+              router.push("/main")
+            }
+      }
+    }
+  };
   useEffect(() => {
     console.log(authStore.isAdmin);
     console.log(authStore.memberNo);
     console.log(authStore.loggedIn);
+    console.log(isSubscribe);
 
     if (authStore.isAdmin) {
       console.log(authStore.isAdmin);
@@ -22,7 +46,7 @@ const MainComponent = observer (()=>{
     }
   }, [authStore.isAdmin, authStore.memberNo]);
 
-  const router = useRouter();
+
 
   const settings = {
     dots: true,
@@ -203,7 +227,7 @@ const MainComponent = observer (()=>{
               text="자세히 보기"
               borderRadius="30px"
               fontSize="18px"
-              onClick={() => router.push("/resume")}
+              onClick={() => handleNavigation("/resume")}
             />
           </div>
         </div>
@@ -238,7 +262,7 @@ const MainComponent = observer (()=>{
               text="자세히 보기"
               borderRadius="30px"
               fontSize="18px"
-              onClick={() => router.push("/interview")}
+              onClick={() => handleNavigation("/interview")}
             />
           </div>
         </div>

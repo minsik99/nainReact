@@ -36,6 +36,7 @@
 .modalContent{
 padding: 1.2rem;
 display: flex;
+font-size: 1rem;
 justify-content: center;
 align-items: center;
 }
@@ -54,4 +55,28 @@ gap: 6rem;
 
 .modalBorder{
 border-right: 1px solid #cbcbcb;
+}
+
+.infoTitle{
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: large;
+}
+
+.infoContent {
+  margin-left: 1.2rem;
+  margin-right: 1.2rem;
+  font-size: 1rem;
+  white-space: pre-line;
+  font-weight: 500;
+}
+
+.infoCloseBtn {
+  display:flex;
+  flex-direction: row;
+  justify-content: right;
+  margin: 1rem;
+  gap: 6rem;
 }

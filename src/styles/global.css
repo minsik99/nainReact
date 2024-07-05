@@ -1,14 +1,5 @@
 /* global.css */
 
-@font-face {
-  font-family: 'NanumSquareRound';
-  src: url('/public/font/NanumSquareRoundR.ttf');
-}
-
-.body {
-  font-family: 'NanumSquareRound'
-}
-
 
 .flex-container {
   display: flex;
@@ -16,9 +7,6 @@
   min-height: 40rem;
 }
 
-.navigation-container {
-  width: 100%;
-}
 
 .left-nav-container {
   flex: 0 0 15vh;
@@ -51,6 +39,7 @@
 .navigation_bar {
   display: flex;
   justify-content: space-between;
+  flex-wrap: nowrap;
   align-items: center;
   background-color: black;
 }
@@ -78,27 +67,32 @@
 }
 
 .navigation-container {
+  width: 100%;
   background-color: #ffffff;
   padding: 0px;
 }
 
 .navigation-container ul {
+  display: flex;
+  width: 50rem;
   list-style: none;
 }
 
 .navigation-container li {
   position: relative;
   display: inline-block;
-  margin-right: 15px; /* 각 메뉴 간 간격 설정 */
+  margin-right: 0.9rem; /* 각 메뉴 간 간격 설정 */
   font-weight: 900;
 }
 
 .navigation-container a {
   text-decoration: none;
+  white-space: nowrap;
   font-weight: 500;
   padding: 0px 12px 0px 18px;
   display: inline-block;
-  font-size: 17px;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: #222;
 }
 
@@ -131,7 +125,7 @@
   z-index: 2; /* 세부 메뉴 뒤에 위치하도록 설정 */
   transition: max-height 0.3s ease, opacity 0.7s ease;
   pointer-events: none; /* 마우스 이벤트를 무시 */
-  behavior: "smooth";
+  scroll-behavior: smooth;
   opacity: 0;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -417,6 +411,7 @@
   color: #ffffff;
   border: 2px solid #9dc3c1;
 }
+
 .ck-editor__editable {
   min-height: 30rem;
 }
