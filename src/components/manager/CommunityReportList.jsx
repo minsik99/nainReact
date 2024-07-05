@@ -83,8 +83,7 @@ const CommunityReportList = () => {
 
   const handleProcess = async (report) => {
     try {
-      const adminId = memberNo; // 실제 admin ID 사용
-      console.log(`Processing report with adminId: ${adminId}`); // 확인용 콘솔 로그
+      const adminId = memberNo;
       const block = blockAccount[report.communityReportId] || false;
       const del = deletePost[report.communityReportId] || false;
       if (block) {
@@ -120,7 +119,7 @@ const CommunityReportList = () => {
         await processBlockAccountCommnity(
           report.communityReportId,
           adminId,
-          "처리 사유를 여기에 입력하세요"
+          "처리되었습니다."
         );
       }
 

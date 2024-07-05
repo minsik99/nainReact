@@ -107,7 +107,7 @@ const AdminGrid = () => {
       router.push("/error/errorPage"); // memberNo가 1이 아닐 경우 리디렉션
     } else {
       setMemberNo(memberNo);
-      setLoading(false); // 로딩 완료 상태로 변경
+      setLoading(false);
     }
   }, [router]);
 
@@ -137,11 +137,11 @@ const AdminGrid = () => {
     const selectedRows = gridApi.current.getSelectedRows();
     const emails = selectedRows.map((row) => row.memberEmail);
     try {
-      await removeAdminStatus(emails); // 서버에 관리자 상태 제거 요청
+      await removeAdminStatus(emails);
       const updatedRows = rowData.filter(
         (row) => !emails.includes(row.memberEmail)
       );
-      setRowData(updatedRows); // 필터링된 상태로 rowData 업데이트
+      setRowData(updatedRows);
       openModal("관리자를 삭제했습니다.");
     } catch (error) {
       openModal("관리자 삭제에 실패했습니다.");
@@ -152,7 +152,7 @@ const AdminGrid = () => {
   const addAdmin = async () => {
     try {
       console.log("Adding admin:", newRow.email);
-      const updatedMember = await updateAdminStatus(newRow.email); // 서버에 관리자 상태 업데이트 요청
+      const updatedMember = await updateAdminStatus(newRow.email);
       console.log("Admin added successfully:", updatedMember);
       const newRowData = [...rowData, updatedMember];
       setRowData(newRowData);

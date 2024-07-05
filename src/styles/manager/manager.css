@@ -29,14 +29,21 @@ body,
 }
 
 .dashboard,
-.userManagement,
-.adminManagement,
 .reportList {
   float: right;
   width: 80%;
   margin-right: 30px;
   background: #effbf8;
   height: auto;
+}
+
+.userManagement,
+.adminManagement {
+  float: right;
+  width: 80%;
+  margin-right: 30px;
+  background: #effbf8;
+  height: 1175px;
 }
 
 .payment {

@@ -27,7 +27,7 @@ export const getSubscription = async () => {
     const response = await axios.get(`${BASE_URL}/count/subscriptionratio`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching subscription data:", error);
+    console.error("구독자 통계를 가져오지 못했습니다.:", error);
     throw error;
   }
 };
@@ -37,7 +37,7 @@ export const getDailyNewSubscriber = async () => {
     const response = await axios.get(`${BASE_URL}/count/newsubscribe`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching subscription data:", error);
+    console.error("신규구독 통계를 가져오지 못했습니다.:", error);
     throw error;
   }
 };
@@ -47,7 +47,7 @@ export const getDailyNewMember = async () => {
     const response = await axios.get(`${BASE_URL}/count/newmember`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching subscription data:", error);
+    console.error("신규가입 통계를 가져오지 못했습니다.:", error);
     throw error;
   }
 };
@@ -57,7 +57,7 @@ export const getWithdrawalAccumulation = async () => {
     const response = await axios.get(`${BASE_URL}/count/withdrawal`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching subscription data:", error);
+    console.error("탈퇴 통계를 가져오지 못했습니다.:", error);
     throw error;
   }
 };
