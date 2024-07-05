@@ -27,11 +27,11 @@ ChartJS.register(
 );
 
 const AcceptedKeyword = () => {
-  const [selectedJob, setSelectedJob] = useState('웹 개발자');
-  const [jobKeywords, setJobKeywords] = useState([]);
-  const [expKeywords, setExpKeywords] = useState([]);
-  const [referenceDate, setReferenceDate] = useState('');
-  const jobOptions = ['웹 개발자', '프론트엔드 개발자', '서버 개발자', '서비스 기획자', 'PM'];
+  const [selectedJob, setSelectedJob] = useState('웹 개발자');  // 선택된 직무
+  const [jobKeywords, setJobKeywords] = useState([]); // 직무 키워드 데이터
+  const [expKeywords, setExpKeywords] = useState([]); // 요구 경력 데이터
+  const [referenceDate, setReferenceDate] = useState(''); // 기준 날짜
+  const jobOptions = ['웹 개발자', '프론트엔드 개발자', '서버 개발자', '서비스 기획자', 'PM']; // 직무 옵션
 
   useEffect(() => {
     if (selectedJob) {
@@ -40,6 +40,7 @@ const AcceptedKeyword = () => {
     }
   }, [selectedJob]);
 
+  // 직무 키워드 데이터 및 요구 경력 데이터 가져오기
   const fetchJobKeywords = async (jobCategory) => {
     try {
       const jobResponse = await axios.get(`http://localhost:9999/acceptedkeyword/api/jobkeywords?jobCategory=${jobCategory}`);
@@ -51,6 +52,7 @@ const AcceptedKeyword = () => {
     }
   };
 
+  // 기준 날짜 가져오기
   const fetchReferenceDate = async (jobCategory) => {
     try {
       const response = await axios.get(`http://localhost:9999/acceptedkeyword/api/referenceDate?jobCategory=${jobCategory}`);
@@ -60,6 +62,7 @@ const AcceptedKeyword = () => {
     }
   };
 
+  // 직무 키워드 
   const jobData = {
     labels: jobKeywords.map(keyword => keyword.acceptKeyword),
     datasets: [
@@ -73,7 +76,7 @@ const AcceptedKeyword = () => {
     ],
   };
 
-  // 상위 5개의 값과 기타를 계산하는 함수
+  // 요구 년차 : 상위 5개의 값과 기타를 계산
   const prepareExpData = (keywords) => {
     const sortedKeywords = [...keywords].sort((a, b) => b.frequency - a.frequency);
     const top5 = sortedKeywords.slice(0, 5);
@@ -143,7 +146,7 @@ const AcceptedKeyword = () => {
       },
       legend: {
         labels: {
-          padding: 20, // 범례와 그래프 사이 간격 조정
+          padding: 20, 
           boxWidth: 20,
           font: {
             size: 12,
@@ -152,7 +155,7 @@ const AcceptedKeyword = () => {
         },
         position: 'bottom',
         // align: 'start',
-        maxWidth: 500, // 범례의 최대 너비 설정
+        maxWidth: 500, 
       },
     },
   };
@@ -185,7 +188,7 @@ const AcceptedKeyword = () => {
       </div>
       <div className={styles.acceptedKeywordContent}>
         <div className={styles.acceptedKeywordKeywords}>
-            <h5>{selectedJob}</h5>
+            {selectedJob}
         </div>
         <div className={styles.chartsContainer}>
           <div className={styles.acceptedKeywordChart}>
