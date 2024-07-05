@@ -52,14 +52,14 @@ const MyinfoLogin = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // 폼 제출의 기본 동작을 막습니다.
+        e.preventDefault(); 
         try {
             const response = await myinfoLoginPwd(memberNo, formData.memberPwd);
             console.log(formData.memberPwd);
             if (response === "Success") {
                 router.push("/member/myinfo");
             } else {
-                setError(response.message || "로그인 실패");
+                setError(response.message || "내 정보 확인 실패");
             }
         } catch (error) {
             setError('비밀번호가 일치하지 않습니다.');

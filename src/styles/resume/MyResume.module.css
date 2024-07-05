@@ -2,7 +2,7 @@
   width: 1200px;
   margin: 0 auto;
   text-align: left;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 600;
   margin-bottom: 20px;
 }
@@ -27,6 +27,7 @@
 }
 
 .resumeActions button {
+  font-weight: 700;
   margin: 0 5px;
   padding: 10px 20px;
   width: 200px;

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import styles from '../../styles/interview/interviewComponent.module.css';
 import { observer } from "mobx-react";
-import { saveOneVideo, upTotalVideo  } from '../../api/interview/video';
+import { saveOneVideo } from '../../api/interview/video';
 import Loading from '../../components/designTool/Loading';
 import PathText from '../../components/interview/PathText';
 import {useModal} from '../../components/hook/useModal';
@@ -149,7 +149,7 @@ const InterviewComponent = observer(() => {
         return await new Promise((resolve, reject) => {
             if (downChunks.length || recordedChunks.length) {
                 setDownChunks(prevD => {
-                    const newDownChunks = [...prevD, ...recordedChunks];
+                    const newDownChunks = [...prevD, ...downChunks];
                     console.log("downChunks:", newDownChunks);      
                 const blob = new Blob(newDownChunks, { type: 'video/webm' });
                 const url = URL.createObjectURL(blob);
@@ -213,8 +213,9 @@ const InterviewComponent = observer(() => {
                 setDownChunks(prev => {
                     const newDownChunks = [...prev, ...recordedChunks];
                     console.log("downChunks:", newDownChunks);
-                    return newDownChunks});
-
+                    return newDownChunks
+                });
+                console.log("ChunkLenght", downChunks.length);
                 console.log("저장후 청크 비우기");
                 setRecordedChunks([]);
                 setIsRecording(false);
@@ -301,7 +302,6 @@ const InterviewComponent = observer(() => {
         setFileIndex(0);
         setStream(null);
         setIsCameraOn(false);
-        await upTotalVideo();
         router.push("/interview");
     };
 

@@ -26,7 +26,9 @@ const InterviewListForm = observer(()=>{
             }else{
                 if(confirm("로그인이 필요합니다. 이동하시겠습니까?")){
                     router.push("/member/login");
-                  };
+                  }else{
+                    router.push("/main")
+                  }
             }
         }
     }, [authStore.isSubscribe]);

@@ -1,12 +1,8 @@
 
-import axios from "./axiosApi"
-import { authStore } from "../stores/authStore"
-import CryptoJS from 'crypto-js';
-import { headers } from "next/headers";
-import instance from "./axiosApi";
+import axios from "./axiosApi";
+import { authStore } from "../stores/authStore";
 
 const baseUrl = "/api/auth";
-const secretKey = 'your-secret-key'; // 비밀 키는 안전하게 관리해야 합니다.
 
 export const signUp = (signUpData) => { axios.post(baseUrl + "/member/signup",signUpData).then(res =>{
         console.log(signUpData)
@@ -25,11 +21,11 @@ export const login =  (loginData) => {
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
                 window.localStorage.setItem("refresh", response.data.refresh);
-                window.localStorage.setItem("isSubscribe", response.data.subscribe);
+                window.localStorage.setItem("isSubscribe", response.data.subscribeYN);
                 window.localStorage.setItem("memberNo", response.data.memberNo);
                 authStore.setIsAdmin(response.data.isAdmin);
                 authStore.setMemberNo(response.data.memberNo);  
-                authStore.setIsSubscribe(response.data.subscribe);            
+                authStore.setIsSubscribe(response.data.subscribeYN);            
                 authStore.checkLoggedIn();
                 
             }

@@ -3,21 +3,21 @@
 
 .centerDiv {
     width: 100%;
-    padding: 350px;
-    text-align: center;
+    height: 100vh; /* 전체 높이를 100%로 설정 */
     display: flex;
     justify-content: center;
-    left:50%;
-    
+    align-items: flex-start; /* 상단 정렬 */
+    text-align: center;
+    padding-top: 150px; /* 폼을 위로 올림 */
 }
 
 .centerDiv form {
     align-items:center;
     width: 400px;
     padding: 30px;
-    background-color: #f2f2f2;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
 }
 
 .formGroup label {

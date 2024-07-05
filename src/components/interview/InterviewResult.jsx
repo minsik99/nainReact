@@ -9,7 +9,7 @@ import { emotionAnaly, PosEyeAnaly, videoTotal, totalVideo  } from "../../api/in
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
     BarElement, LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
 import { useMutation } from "react-query";
-import { getInterview, analsisText, totalVoice, getInterviewScore } from "../../api/interview/interview";
+import { getInterview, analsisText, totalVoice, getInterviewScore, upTotalVideo } from "../../api/interview/interview";
 import Voice from "../../components/interview/Voice";
 import BarChart from "./BarChart";
 
@@ -25,7 +25,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
         const [totalData, setTotalData] = useState({labels: [], datasets: []});
         const [emotionData, setEmotionData] = useState({ labels: [], datasets: [] });
         const [analyText, setAnalyText] = useState(null);
-        const totalScore = 80
+        const [totalScore, setTotalScore] = useState('');
         
         const fetchEmoData = async () => {
             try {
@@ -95,13 +95,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
             }
         };
 
-        const fetchAnalyText = async () => {
-            const textData = await analsisText(totalScore, itvNo);
-            if(textData) {
-                console.log("text", textData);
-                setAnalyText(textData.data);
-            }
-        }
+
 
         const fetchTotalData = async () => {
             try {
@@ -122,8 +116,8 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                                 fill: false,
                             },
                         ],
-                })
-            }
+                     })
+                 }
             } catch (error) {
                 console.error('Error fetching total data:', error);
             }
@@ -133,7 +127,13 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
         const fetchTotalVideo = async () => {
             try {
                 const [videoResponse, voiceResponse] = await Promise.all([totalVideo(itvNo), totalVoice(itvNo)]);
-
+                const avg = ((videoResponse + voiceResponse) / 2);
+                console.log("평균 : ", avg);
+                const textData = await analsisText(avg, itvNo);
+                if(textData) {
+                    console.log("text", textData);
+                    setAnalyText(textData.data);
+                }
                 if (videoResponse && voiceResponse) {
                     const labels = ['영상', '음성'];
                     const data = [videoResponse, voiceResponse]; 
@@ -233,6 +233,14 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
             }
         };
         
+        // const fetchAnalyText = async () => {
+        //     const textData = await analsisText(totalScore, itvNo);
+        //     if(textData) {
+        //         console.log("text", textData);
+        //         setAnalyText(textData.data);
+        //     }
+        // }
+
         useEffect(() => {
             const setting = async () =>{
                 try {
@@ -240,9 +248,11 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                     await fetchEmoData();
                     await fetchPosEyeData();
                     await fetchVideoTotalData();
-                    await fetchTotalVideo();
-                    await fetchAnalyText();
-                    await fetchTotalData();
+                    await Promise.all([
+                     fetchTotalVideo(),
+                     fetchTotalData()
+                     ]);
+                    //  await fetchAnalyText();
                 }   
                 } catch (error) {
                     console.error("데이터 불러오기 중 오류 발생:", error);
@@ -320,7 +330,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                                 <div className={styles.resultText}>
                                     {mutation.isLoading && <Loading loading={mutation.isLoading} text="Loading..." />}
                                     {mutation.isError && <p>Error occurred: {mutation.error.message}</p>}
-                                    <div className={styles.leftText}>{memberNo} 님의 <br /> 면접 결과</div>
+                                    <div className={styles.leftText}>면접 결과</div>
                                     <div className={styles.rightText}>{analyText}</div>
                                 </div>
                             </div>
