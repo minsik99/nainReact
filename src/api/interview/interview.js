@@ -88,10 +88,10 @@ export const addInterview = async (memberNo, title, info) => {
   }
 };
 
-export const analsisText = async (score, itvNo) => {
+export const analsisText = async (avg, itvNo) => {
   try {
-    console.log(score, itvNo);
-    const res = instance.get(BASE_URL + "/analysis", {  params: { score: score, itvNo:itvNo },
+    // console.log(avg, itvNo);
+    const res = instance.get(BASE_URL + "/analysis", {  params: { score: avg, itvNo:itvNo },
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
