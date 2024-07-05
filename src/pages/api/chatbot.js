@@ -25,7 +25,7 @@ const handler = async (req, res) => {
   const data = {
     model: 'gpt-3.5-turbo',  // 사용할 모델
     messages: [{ role: 'user', content: message.content }],
-    max_tokens: 150,
+    max_tokens: 1000,
   };
 
   try {

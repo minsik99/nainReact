@@ -200,7 +200,7 @@ const NewBoard = () => {
                     type="file"
                     onChange={(e) => setFile(e.target.files)}
                 />
-                <label className={styles.importanceLabel} htmlFor="importance">중요도: </label>
+                <label className={styles.importanceLabel} htmlFor="importance">중요도 기한 설정 : </label>
                 <input
                     id="importance"
                     className={styles.importanceInput}
