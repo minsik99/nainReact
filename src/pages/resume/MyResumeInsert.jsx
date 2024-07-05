@@ -5,6 +5,8 @@ import styles from '../../styles/resume/MyResumeInsert.module.css';
 
 const MyResumeInsert = () => {
     const router = useRouter();
+
+    // 이력서 초기 상태 정의
     const [resume, setResume] = useState({
         title: '',
         resumeName: '',
@@ -17,6 +19,7 @@ const MyResumeInsert = () => {
         activity: [{ id: Date.now(), activityName: '', organizer: '', activityDescription: '', startDate: '', endDate: '' }]
     });
 
+    // 이력서 기본 정보 변경 핸들러
     const handleChange = (e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
@@ -31,6 +34,7 @@ const MyResumeInsert = () => {
         return durationInMonths;
     };
 
+    // 경력 항목 변경 핸들러
     const handleExperienceChange = (id, e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
@@ -47,6 +51,7 @@ const MyResumeInsert = () => {
         setResume({ ...resume, experience: newExperience });
     };
 
+    // 경력 항목 추가
     const addExperience = () => {
         setResume({
             ...resume,
@@ -54,11 +59,13 @@ const MyResumeInsert = () => {
         });
     };
 
+    // 경력 항목 제거
     const removeExperience = (id) => {
         const newExperience = resume.experience.filter(exp => exp.id !== id);
         setResume({ ...resume, experience: newExperience });
     };
 
+    // 학력 항목 변경 핸들러
     const handleEducationChange = (id, e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
@@ -68,6 +75,7 @@ const MyResumeInsert = () => {
         setResume({ ...resume, education: newEducation });
     };
 
+    // 학력 항목 추가
     const addEducation = () => {
         setResume({
             ...resume,
@@ -75,11 +83,13 @@ const MyResumeInsert = () => {
         });
     };
 
+    // 학력 항목 제거
     const removeEducation = (id) => {
         const newEducation = resume.education.filter(edu => edu.id !== id);
         setResume({ ...resume, education: newEducation });
     };
 
+    // 활동 항목 변경 핸들러
     const handleactChange = (id, e) => {
         const { name, value } = e.target;
         const newActivity = resume.activity.map(act =>
@@ -88,6 +98,7 @@ const MyResumeInsert = () => {
         setResume({ ...resume, activity: newActivity });
     };
 
+    // 활동 항목 추가
     const addActivity = () => {
         setResume({
             ...resume,
@@ -95,12 +106,13 @@ const MyResumeInsert = () => {
         });
     };
 
+    // 활동 항목 제거
     const removeActivity = (id) => {
         const newActivity = resume.activity.filter(act => act.id !== id);
         setResume({ ...resume, activity: newActivity });
     };
 
-    // 유효성 체크
+    // 이력서 유효성 체크
     const validateResume = () => {
         if (!resume.title) return '이력서 제목을 입력하세요.';
         if (!resume.resumeName) return '이름을 입력하세요.';
@@ -109,24 +121,27 @@ const MyResumeInsert = () => {
         if (!resume.introduction) return '자기 소개서를 입력하세요.';
         if (!resume.jobCategory) return '직무 카테고리를 선택하세요.';
         for (let exp of resume.experience) {
-            if (!exp.company || !exp.department || !exp.exPosition || !exp.startDate || !exp.endDate || !exp.responsibilities) {
+            if (!exp.company || !exp.department || !exp.exPosition || 
+                !exp.startDate || !exp.endDate || !exp.responsibilities) {
                 return '모든 경력 사항을 입력하세요.';
             }
         }
         for (let edu of resume.education) {
-            if (!edu.schoolName || !edu.major || !edu.degree || !edu.startDate || !edu.endDate || !edu.score) {
+            if (!edu.schoolName || !edu.major || !edu.degree || 
+                !edu.startDate || !edu.endDate || !edu.score) {
                 return '모든 학력 사항을 입력하세요.';
             }
         }
         for (let act of resume.activity) {
-            if (!act.activityName || !act.organizer || !act.activityDescription || !act.startDate || !act.endDate) {
+            if (!act.activityName || !act.organizer || !act.activityDescription || 
+                !act.startDate || !act.endDate) {
                 return '모든 활동 사항을 입력하세요.';
             }
         }
         return null;
     };
 
-    // resume 저장
+    // 이력서 저장
     const saveResume = async () => {
         // 유효성 체크 안내
         const errorMessage = validateResume();
@@ -136,7 +151,7 @@ const MyResumeInsert = () => {
         }
 
         try {
-            // resume 객체 복사
+            // 이력서 객체 복사 및 변환
             const modifiedResume = {
                 ...resume,
                 experience: resume.experience.map(exp => ({
@@ -158,16 +173,17 @@ const MyResumeInsert = () => {
                 throw new Error('No token found');
             }
 
-            // resume 저장 요청
+            // 이력서 저장 요청
             const response = await axios.post('http://localhost:9999/resume/create', modifiedResume, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
+            // 이력서 번호 가져오기
             const resumeNo = response.data.resumeNo;
 
-            // 응답 받은 resumeNo로, 경력 저장 요청
+            // 응답 받은 이력서 번호로, 경력 저장 요청
             const experiencePromises = modifiedResume.experience.map(exp => {
                 return axios.post(`http://localhost:9999/experience/resume/${resumeNo}/create`, exp, {
                     headers: {
@@ -176,7 +192,7 @@ const MyResumeInsert = () => {
                 });
             });
 
-            // 응답 받은 resumeNo로, 학력 저장 요청
+            // 응답 받은 이력서 번호로, 학력 저장 요청
             const educationPromises = modifiedResume.education.map(edu => {
                 return axios.post(`http://localhost:9999/education/resume/${resumeNo}/create`, edu, {
                     headers: {
@@ -185,7 +201,7 @@ const MyResumeInsert = () => {
                 });
             });
 
-            // 응답 받은 resumeNo로, 활동 저장 요청
+            // 응답 받은 이력서 번호로, 활동 저장 요청
             const activityPromises = modifiedResume.activity.map(act => {
                 return axios.post(`http://localhost:9999/activity/resume/${resumeNo}/create`, act, {
                     headers: {

@@ -51,15 +51,8 @@
   padding: 20px;
   border-radius: 5px;
   margin-bottom: 5px;
-}
-
-.acceptedKeywordKeywords ul {
-  list-style: none;
-  padding: 0;
-}
-
-.acceptedKeywordKeywords li {
-  padding: 5px 0;
+  font-weight: 600;
+  color: #464545;
 }
 
 .acceptKeywordInformation {
@@ -86,7 +79,7 @@
 }
 
 .acceptedKeywordChartTitle{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 

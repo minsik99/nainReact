@@ -7,7 +7,9 @@ import RadiusButton from '../../components/designTool/RadiusButton';
 
 const MyResumeUpdate = () => {
     const router = useRouter();
-    const { resumeNo } = router.query;
+
+    // URL에서 resumeNo 가져오기
+    const { resumeNo } = router.query; 
     const [resume, setResume] = useState({
         title: '',
         resumeName: '',
@@ -21,8 +23,10 @@ const MyResumeUpdate = () => {
     const [activity, setActivity] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // 이력서, 경력, 학력, 경력 정보 가져오기
     useEffect(() => {
         if (resumeNo) {
+            // 이력서 정보 가져오기
             axios.get(`http://localhost:9999/resume/${resumeNo}`)
                 .then(response => {
                     setResume(response.data);
@@ -31,6 +35,7 @@ const MyResumeUpdate = () => {
                     console.error('Error fetching resume:', error);
                 });
 
+            // 경력 정보 가져오기
             axios.get(`http://localhost:9999/experience/resume/${resumeNo}`)
                 .then(response => {
                     const experiences = response.data.map(exp => ({
@@ -43,6 +48,7 @@ const MyResumeUpdate = () => {
                     console.error('Error fetching experiences:', error);
                 });
 
+            // 학력 정보 가져오기
             axios.get(`http://localhost:9999/education/resume/${resumeNo}`)
                 .then(response => {
                     const educations = response.data.map(edu => ({
@@ -55,6 +61,7 @@ const MyResumeUpdate = () => {
                     console.error('Error fetching education:', error);
                 });
 
+            // 활동 정보 가져오기
             axios.get(`http://localhost:9999/activity/resume/${resumeNo}`)
                 .then(response => {
                     setActivity(response.data);
@@ -62,10 +69,11 @@ const MyResumeUpdate = () => {
                 .catch(error => {
                     console.error('Error fetching activities:', error);
                 })
-                .finally(() => setLoading(false));
+                .finally(() => setLoading(false)); // 모든 데이터 가져오기 완료 후 로딩 상태 해제
         }
     }, [resumeNo]);
 
+    // 폼 입력값 변경 핸들러
     const handleChange = (e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
@@ -80,6 +88,7 @@ const MyResumeUpdate = () => {
         return durationInMonths;
     };
 
+    // 경력 정보 변경 핸들러
     const handleExperienceChange = (id, e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
@@ -96,15 +105,18 @@ const MyResumeUpdate = () => {
         setExperience(newExperience);
     };
 
+    // 경력 추가
     const addExperience = () => {
         setExperience([...experience, { experienceNo: Date.now(), company: '', department: '', exPosition: '', startDate: '', endDate: '', responsibilities: '', current: false, exDuration: '' }]);
     };
 
+    // 경력 삭제
     const removeExperience = (id) => {
         const newExperience = experience.filter(exp => exp.experienceNo !== id);
         setExperience(newExperience);
     };
 
+    // 학력 정보 변경 핸들러
     const handleEducationChange = (id, e) => {
         const { name, value, checked, type } = e.target;
         const valueToUse = type === 'checkbox' ? checked : value;
@@ -112,25 +124,30 @@ const MyResumeUpdate = () => {
         setEducation(newEducation);
     };
 
+    // 교육 추가
     const addEducation = () => {
         setEducation([...education, { educationNo: Date.now(), schoolName: '', major: '', degree: '', score: '', startDate: '', endDate: '', current: false }]);
     };
 
+    // 교육 제거
     const removeEducation = (id) => {
         const newEducation = education.filter(edu => edu.educationNo !== id);
         setEducation(newEducation);
     };
 
+    // 활동 정보 변경 핸들러
     const handleActivityChange = (id, e) => {
         const { name, value } = e.target;
         const newActivity = activity.map(act => act.activityNo === id ? { ...act, [name]: value } : act);
         setActivity(newActivity);
     };
 
+    // 활동 추가
     const addActivity = () => {
         setActivity([...activity, { activityNo: Date.now(), activityName: '', organizer: '', activityDescription: '', startDate: '', endDate: '' }]);
     };
 
+    // 활동 제거
     const removeActivity = (id) => {
         const newActivity = activity.filter(act => act.activityNo !== id);
         setActivity(newActivity);
