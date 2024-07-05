@@ -123,6 +123,8 @@
 }
 
 .leftText {
+    font-size: 1.2rem;
+    font-weight: bolder;
     margin: 2rem;
     width: 15%;
 }

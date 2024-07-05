@@ -91,7 +91,7 @@ const NavigationBar = observer(() => {
                 <li style={{whiteWrap:"nowrap"}}>
                   <a
                     style={{fontWeight: "600", cursor: "pointer" }}
-                    onClick={() => handleNavigation("/resume")}
+                    onClick={() => handleChatLogin("/resume")}
                   >
                     이력서 매니저
                   </a>
@@ -102,7 +102,7 @@ const NavigationBar = observer(() => {
                     <br />
                     <a
                       className="subword"
-                      onClick={() => handleNavigation("/resume/MyResumeInsert")}
+                      onClick={() => handleChatLogin("/resume/MyResumeInsert")}
                       style={{ cursor: "pointer" }}
                     >
                       이력서 작성
@@ -110,7 +110,7 @@ const NavigationBar = observer(() => {
                     <br />
                     <a
                       className="subword"
-                      onClick={() => handleNavigation("/resume")}
+                      onClick={() => handleChatLogin("/resume")}
                       style={{ cursor: "pointer" }}
                     >
                       이력서 관리

@@ -55,6 +55,7 @@ const CompanyComponent = observer(()=> {
             }
         }
     );
+    
 
     const handleSubmit = (event) => {
         if (event) event.preventDefault();
