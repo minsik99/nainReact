@@ -199,13 +199,16 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                 if (response) {
                     const posData = response.POS || [];
                     const eyeData = response.EYE || [];
+                    const labels = Object.keys(response.POS)
+                    const values = Object.values(response.POS)
+
 
                     setPosData({
-                        labels: posData.map((_, index) => `${index + 1}`),
+                        labels: [1, 2, 3, 4, 5, 6,7,8,9 ,10],
                         datasets: [
                             {
                                 label: '자세',
-                                data: posData,
+                                data: values,
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                 borderColor: 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1,
@@ -215,7 +218,8 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                     });
 
                     setEyeData({
-                        labels: eyeData.map((_, index) => `${index + 1}`),
+                        // labels: eyeData.map((_, index) => `${index + 1}`),
+                        labels: [1, 2, 3, 4, 5, 6,7,8,9 ,10],
                         datasets: [
                             {
                                 label: '시선',
