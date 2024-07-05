@@ -9,7 +9,7 @@ import { emotionAnaly, PosEyeAnaly, videoTotal, totalVideo  } from "../../api/in
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement,
     BarElement, LineElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
 import { useMutation } from "react-query";
-import { getInterview, analsisText, totalVoice, getInterviewScore } from "../../api/interview/interview";
+import { getInterview, analsisText, totalVoice, getInterviewScore, upTotalVideo } from "../../api/interview/interview";
 import Voice from "../../components/interview/Voice";
 import BarChart from "./BarChart";
 
@@ -242,6 +242,7 @@ const InterviewResultComponent = ({memberNo, itvNo, buttons, selectedButton, han
                     await fetchVideoTotalData();
                     await fetchTotalVideo();
                     await fetchAnalyText();
+                    await upTotalVideo();
                     await fetchTotalData();
                 }   
                 } catch (error) {
