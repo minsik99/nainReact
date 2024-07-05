@@ -6,9 +6,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /* height: 90%; */
     background-color: #f9f9f9;
     padding: 20px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .termsContainer h1 {
