@@ -27,6 +27,7 @@ const NavigationBar = observer(() => {
     setIsAdmin(adminStatus);
   }, [loggedIn]);
 
+
   const handleNavigation = (path) => {
     if (typeof window !== "undefined") {
       if(loggedIn){
@@ -58,7 +59,6 @@ const NavigationBar = observer(() => {
           }
     }
   };
-
 
 
   return (

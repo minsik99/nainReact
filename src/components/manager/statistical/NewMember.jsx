@@ -46,8 +46,8 @@ const NewMember = () => {
             {
               label: "Daily New member",
               data: amounts,
-              backgroundColor: "rgba(54, 162, 235, 0.2)", // 파란색 배경
-              borderColor: "rgba(54, 162, 235, 1)", // 파란색 테두리
+              backgroundColor: "rgba(54, 162, 235, 0.2)",
+              borderColor: "rgba(54, 162, 235, 1)",
               borderWidth: 1,
             },
           ],
