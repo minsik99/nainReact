@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import RadiusButton from "../../components/designTool/RadiusButton";
 import { confirmPayment } from "../../api/paymentService";
+import refreshToken from "../../api/axiosApi";
+import { authStore } from "../../stores/authStore";
 
 export function SuccessPage() {
   const router = useRouter();
@@ -13,6 +15,7 @@ export function SuccessPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedMemberNo = window.localStorage.getItem("memberNo");
+      
       if (storedMemberNo) {
         setMemberNo(parseInt(storedMemberNo, 10));
       }
@@ -47,11 +50,13 @@ export function SuccessPage() {
     async function confirm() {
       try {
         const response = await confirmPayment(requestData);
-
         if (!response.success) {
           router.push(
             `/fail?message=${response.message}&code=${response.code}`
           );
+        } else {
+          authStore.setIsSubscribe('Y');
+          window.localStorage.setItem("isSubscribe", 'Y');
         }
       } catch (error) {
         console.error("결제 확인 요청에 실패했습니다.", error);
@@ -61,7 +66,7 @@ export function SuccessPage() {
 
     confirm();
   }, [orderId, amount, paymentKey, memberNo, router]);
-
+  
   const handleNavigateToPayment = () => {
     router.push("/main");
   };
