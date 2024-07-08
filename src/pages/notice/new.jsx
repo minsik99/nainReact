@@ -148,7 +148,7 @@ const NewBoard = () => {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', board.fileName); // 다운로드되는 파일의 이름 설정
+            link.setAttribute('download', parsedBoard.fileName); // 다운로드되는 파일의 이름 설정
             document.body.appendChild(link);
             link.click();
         });
