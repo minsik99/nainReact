@@ -187,7 +187,7 @@ const NavigationBar = observer(() => {
                         passHref
                         legacyBehavior
                       >
-                        <a className="subword">회원</a>
+                        <a className="subword">회원관리</a>
                       </Link>
                       <br />
                       <Link
