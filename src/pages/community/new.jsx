@@ -25,7 +25,6 @@ const NewBoard = () => {
           'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
           'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
           'undo', 'redo', '|',
-          'insertImage',
         ],
       extraPlugins: [ MyCustomUploadAdapterPlugin ]
       };
