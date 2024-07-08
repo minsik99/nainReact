@@ -169,18 +169,7 @@ const noticeDetail = () => {
                             <RadiusButton color="#77AAAD" text="수정" onClick={handleModifyBoard}/>
                     </div>
                         )}
-            </div>
-          )}
         </div>
-        <div
-          className={styles.noticeContent}
-          dangerouslySetInnerHTML={{ __html: board.noticeContent }}
-        />
-      </div>
-      <div className={styles.buttons}>
-        <RadiusButton color="#77AAAD" text="삭제" onClick={deleteBoard} />
-        <RadiusButton color="#77AAAD" text="수정" onClick={modifyBoard} />
-      </div>
     </div>
   );
 };
