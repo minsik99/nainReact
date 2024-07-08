@@ -168,7 +168,7 @@ const NewBoard = () => {
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', board.fileName); // 다운로드되는 파일의 이름 설정
+            link.setAttribute('download', parsedBoard.fileName); // 다운로드되는 파일의 이름 설정
             document.body.appendChild(link);
             link.click();
         });
@@ -213,7 +213,8 @@ const NewBoard = () => {
               }}
             />
               {uploadedFile && (
-                <div className={styles.fileName}>첨부 파일 : <a className={styles.file} onClick={downloadFile}>{uploadedFile}</a>
+                <div className={styles.fileName}>
+                  첨부 파일 : <a className={styles.file} onClick={downloadFile}>{uploadedFile}</a>
                   &nbsp; <img className={styles.delete} src="../../../image/pngegg11.png" onClick={delFile}></img>
                   <h6>※ 파일 업로드는 1개만, 최대 50MB까지 가능합니다.</h6>
                 </div>
