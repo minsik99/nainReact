@@ -17,7 +17,7 @@ const InterviewListForm = observer(()=>{
             const memberNo = window.localStorage.getItem("memberNo");
             setMemberNo(memberNo);
             if(memberNo){            
-                if (!authStore.isSubscribe) {
+                if (authStore.isSubscribe != 'Y') {
                     console.log("구독여부", authStore.isSubscribe);
                     alert(authStore.isSubscribe)
                     alert("구독이 필요한 서비스입니다.");
