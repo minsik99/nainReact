@@ -18,19 +18,20 @@ const ChatRoomDetail = ({ room, onClose }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const memberNo = window.localStorage.getItem("memberNo");
-      setMemberNo(memberNo);
+      if (memberNo) {
+        setMemberNo(parseInt(memberNo));
+      }
     }
   }, []);
 
-
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   useEffect(() => {
-    if (!room.chatRoomNo) return;
+    if (!room || !room.chatRoomNo) return;
 
     const fetchMessages = async () => {
       try {
@@ -43,10 +44,10 @@ const ChatRoomDetail = ({ room, onClose }) => {
     };
 
     fetchMessages();
-  }, [room.chatRoomNo]);
+  }, [room]);
 
   useEffect(() => {
-    if (!room.chatRoomNo) return;
+    if (!room || !room.chatRoomNo) return;
 
     const client = mqtt.connect(MQTT_BROKER_URL);
 
@@ -78,7 +79,7 @@ const ChatRoomDetail = ({ room, onClose }) => {
         client.end();
       }
     };
-  }, [room.chatRoomNo, sentMessageIds]);
+  }, [room, sentMessageIds]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -142,10 +143,10 @@ const ChatRoomDetail = ({ room, onClose }) => {
       <div className="chat-room-header">
         <button className="back-button" onClick={onClose}>◀</button>
         <div>
-          <h2>{room.name}</h2>
-          <p>{room.description}</p>
+          <h2>{room?.name}</h2>
+          <p>{room?.description}</p>
         </div>
-        <div className="participants-count"> {room.participants}</div>
+        <div className="participants-count"> {room?.participants}</div>
       </div>
       <div className="chat-messages">
         {messages.map((message, index) => (
@@ -224,10 +225,10 @@ const ChatRoomDetail = ({ room, onClose }) => {
           align-self: flex-start;
           text-align: left;
         }
-          .message-text {
+        .message-text {
           white-space: pre-wrap; /* 줄바꿈을 유지하여 표시 */
         }
-          .message-date {
+        .message-date {
           display: block;
           font-size: 0.75rem;
           color: #666;
@@ -253,10 +254,11 @@ const ChatRoomDetail = ({ room, onClose }) => {
           margin-left: 10px;
           border-radius: 5px;
           cursor: pointer;
-        }`
-      }</style>
+        }
+      `}</style>
     </div>
   );
 };
 
 export default ChatRoomDetail;
+

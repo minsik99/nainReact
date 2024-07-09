@@ -37,14 +37,13 @@ const InterviewComponent = observer(() => {
             router.push('/payment');
         }
 
-     }, [router.isReady]);
-
      try {
         que = JSON.parse(decodeURIComponent(question));
         console.log(que);
       } catch (error) {
         console.error('Error parsing JSON:', error);
-      }
+      }	   
+    }, [router.isReady, question]);
       
     const paths = [
         { name: '메인', link: '/' },
