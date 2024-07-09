@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import CommunityAxios from "../../api/CommunityAxios";
 import { useRouter } from 'next/router';
 import styles from '../../styles/board/newBoard.module.css';
 
-const CKEditor = dynamic(() => import('@ckeditor/ckeditor5-react').then(mod => mod.CKEditor), {
-  ssr: false,
-  loading: () => <div>Loading...</div>,
-});
-
-const ClassicEditor = dynamic(() => import('@ckeditor/ckeditor5-build-classic'), {
-  ssr: false,
-  loading: () => <div>Loading...</div>,
-});
 
 const NewBoard = () => {
     const router = useRouter();
@@ -32,6 +25,7 @@ const NewBoard = () => {
           'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
           'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
           'undo', 'redo', '|',
+          'insertImage',
         ],
       extraPlugins: [ MyCustomUploadAdapterPlugin ]
       };
@@ -53,7 +47,7 @@ const NewBoard = () => {
                         const data = new FormData();
                         data.append('file', file);
     
-                        fetch('http://13.209.244.239:9999/api/image/upload', {
+                        fetch('http://localhost:9999/api/image/upload', {
                             method: 'POST',
                             body: data,
                         })

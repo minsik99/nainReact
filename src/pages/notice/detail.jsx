@@ -126,8 +126,7 @@ const noticeDetail = () => {
         });
     };
 
-return (
-        <>
+    return (
         <div className={styles.base}>
             <h2>공지사항</h2>
             <div className={styles.buttons}>
@@ -171,18 +170,7 @@ return (
                     </div>
                         )}
         </div>
-
-        <div className={styles.noticeContent}
-          dangerouslySetInnerHTML={{ __html: board.noticeContent }}>
-      </div>
-    <div className={styles.buttons}>
-        <RadiusButton color="#77AAAD" text="삭제" onClick={handleDeleteBoard} />
-        <RadiusButton color="#77AAAD" text="수정" onClick={handleModifyBoard} />
-
     </div>
-    </>
   );
-
-
 };
 export default noticeDetail;
