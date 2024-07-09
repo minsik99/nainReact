@@ -4,7 +4,7 @@ import axios from "axios";
 export const confirmPayment = async (paymentData) => {
   try {
     const response = await axios.post(
-      "http://localhost:9999/payment/confirm",
+      "http://13.209.244.239:9999/api/payment/confirm",
       paymentData
     );
     return response.data;

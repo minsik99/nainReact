@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:9999/staticstical";
+const BASE_URL = "http://13.209.244.239:9999/api/staticstical";
 
 export const getMonthlyPayAmount = async () => {
   try {

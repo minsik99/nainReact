@@ -43,8 +43,8 @@ const AcceptedKeyword = () => {
   // 직무 키워드 데이터 및 요구 경력 데이터 가져오기
   const fetchJobKeywords = async (jobCategory) => {
     try {
-      const jobResponse = await axios.get(`http://localhost:9999/acceptedkeyword/api/jobkeywords?jobCategory=${jobCategory}`);
-      const expResponse = await axios.get(`http://localhost:9999/acceptedkeyword/api/expkeywords?jobCategory=${jobCategory}`);
+      const jobResponse = await axios.get(`http://13.209.244.239:9999/api/acceptedkeyword/api/jobkeywords?jobCategory=${jobCategory}`);
+      const expResponse = await axios.get(`http://13.209.244.239:9999/api/acceptedkeyword/api/expkeywords?jobCategory=${jobCategory}`);
       setJobKeywords(jobResponse.data);
       setExpKeywords(expResponse.data);
     } catch (error) {
@@ -55,7 +55,7 @@ const AcceptedKeyword = () => {
   // 기준 날짜 가져오기
   const fetchReferenceDate = async (jobCategory) => {
     try {
-      const response = await axios.get(`http://localhost:9999/acceptedkeyword/api/referenceDate?jobCategory=${jobCategory}`);
+      const response = await axios.get(`http://13.209.244.239:9999/api/acceptedkeyword/api/referenceDate?jobCategory=${jobCategory}`);
       setReferenceDate(formatDate(response.data));
     } catch (error) {
       console.error('Failed to fetch reference date: ', error);

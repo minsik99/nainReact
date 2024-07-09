@@ -11,7 +11,7 @@ const CommunityAxios = {
     //게시글 -----------------------------------------------------------------------------------------------------------------
     //커뮤니티 전체목록 조회
     // getCommunityList(page, limit, sort) {
-    //     // return axios.get(`http://localhost:9999${COMMUNITY_URL}/list?page=${page}&limit=${limit}&sort=${sort}`);
+    //     // return axios.get(`http://13.209.244.239:9999${COMMUNITY_URL}/list?page=${page}&limit=${limit}&sort=${sort}`);
     //     return instance.get(COMMUNITY_URL + "/list", {
     //         params : {page: page, limit: limit, sort: sort}
     //     });

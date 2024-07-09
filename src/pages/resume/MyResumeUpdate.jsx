@@ -27,7 +27,7 @@ const MyResumeUpdate = () => {
     useEffect(() => {
         if (resumeNo) {
             // 이력서 정보 가져오기
-            axios.get(`http://localhost:9999/resume/${resumeNo}`)
+            axios.get(`http://13.209.244.239:9999/api/resume/${resumeNo}`)
                 .then(response => {
                     setResume(response.data);
                 })
@@ -36,7 +36,7 @@ const MyResumeUpdate = () => {
                 });
 
             // 경력 정보 가져오기
-            axios.get(`http://localhost:9999/experience/resume/${resumeNo}`)
+            axios.get(`http://13.209.244.239:9999/api/experience/resume/${resumeNo}`)
                 .then(response => {
                     const experiences = response.data.map(exp => ({
                         ...exp,
@@ -49,7 +49,7 @@ const MyResumeUpdate = () => {
                 });
 
             // 학력 정보 가져오기
-            axios.get(`http://localhost:9999/education/resume/${resumeNo}`)
+            axios.get(`http://13.209.244.239:9999/api/education/resume/${resumeNo}`)
                 .then(response => {
                     const educations = response.data.map(edu => ({
                         ...edu,
@@ -62,7 +62,7 @@ const MyResumeUpdate = () => {
                 });
 
             // 활동 정보 가져오기
-            axios.get(`http://localhost:9999/activity/resume/${resumeNo}`)
+            axios.get(`http://13.209.244.239:9999/api/activity/resume/${resumeNo}`)
                 .then(response => {
                     setActivity(response.data);
                 })
@@ -201,7 +201,7 @@ const MyResumeUpdate = () => {
                 throw new Error('No token found');
             }
 
-            const resumeResponse = await axios.put(`http://localhost:9999/resume/${resumeNo}`, modifiedResume, {
+            const resumeResponse = await axios.put(`http://13.209.244.239:9999/api/resume/${resumeNo}`, modifiedResume, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -209,13 +209,13 @@ const MyResumeUpdate = () => {
 
             const experiencePromises = modifiedResume.experiences.map(exp => {
                 if (exp.experienceNo.toString().length > 10) { // 새로운 항목
-                    return axios.post(`http://localhost:9999/experience/resume/${resumeNo}/create`, exp, {
+                    return axios.post(`http://13.209.244.239:9999/api/experience/resume/${resumeNo}/create`, exp, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
                 } else { // 기존 항목
-                    return axios.put(`http://localhost:9999/experience/${exp.experienceNo}`, exp, {
+                    return axios.put(`http://13.209.244.239:9999/api/experience/${exp.experienceNo}`, exp, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
@@ -225,13 +225,13 @@ const MyResumeUpdate = () => {
 
             const educationPromises = modifiedResume.education.map(edu => {
                 if (edu.educationNo.toString().length > 10) { // 새로운 항목
-                    return axios.post(`http://localhost:9999/education/resume/${resumeNo}/create`, edu, {
+                    return axios.post(`http://13.209.244.239:9999/api/education/resume/${resumeNo}/create`, edu, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
                 } else { // 기존 항목
-                    return axios.put(`http://localhost:9999/education/${edu.educationNo}`, edu, {
+                    return axios.put(`http://13.209.244.239:9999/api/education/${edu.educationNo}`, edu, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
@@ -241,13 +241,13 @@ const MyResumeUpdate = () => {
 
             const activityPromises = modifiedResume.activities.map(act => {
                 if (act.activityNo.toString().length > 10) { // 새로운 항목
-                    return axios.post(`http://localhost:9999/activity/resume/${resumeNo}/create`, act, {
+                    return axios.post(`http://13.209.244.239:9999/api/activity/resume/${resumeNo}/create`, act, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
                     });
                 } else { // 기존 항목
-                    return axios.put(`http://localhost:9999/activity/${act.activityNo}`, act, {
+                    return axios.put(`http://13.209.244.239:9999/api/activity/${act.activityNo}`, act, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }

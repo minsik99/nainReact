@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:9999/usermanager";
+const BASE_URL = "http://13.209.244.239:9999/api/usermanager";
 
 export const getUserList = async () => {
   try {

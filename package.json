@@ -47,7 +47,7 @@
     "styled-components": "^6.1.11",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://13.209.244.239:9999",
+  "proxy": "http://13.209.244.239:9999/api/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

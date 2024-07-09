@@ -3,7 +3,7 @@ import { authStore } from '../stores/authStore';
 
 // Axios 인스턴스 생성
 const instance = axios.create({
-	baseURL: "http://13.209.244.239:9999"
+	baseURL: "http://13.209.244.239:9999/api/"
 });
 
 // 요청 인터셉터 추가
