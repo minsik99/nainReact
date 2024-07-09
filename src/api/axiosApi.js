@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { authStore } from '../stores/authStore';
 
 // Axios 인스턴스 생성
 const instance = axios.create({
-  baseURL: "http://localhost:9999"
+	baseURL: "http://13.209.244.239:9999"
 });
 
 // 요청 인터셉터 추가
@@ -30,8 +31,7 @@ instance.interceptors.response.use(
       logout();
     }
     // 401 오류가 발생하고, 재시도를 한 적이 없다면
-    if (error.response.status === 401 && !originalRequest._retry) {
-        alert('오류발생');
+    if (authStore.isSubscribe === 'Y' || error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       // 토큰을 갱신하고 재시도
@@ -40,7 +40,7 @@ instance.interceptors.response.use(
 
       // 원래 요청을 다시 수행
       return instance(originalRequest);
-    } else {
+    }  else {
       logout();
     }
 

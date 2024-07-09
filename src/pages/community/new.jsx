@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import '@ckeditor/ckeditor5-build-classic/build/translations/ko';
+import dynamic from 'next/dynamic';
 import RadiusButton from '../../components/designTool/RadiusButton';
 import CommunityAxios from "../../api/CommunityAxios";
 import { useRouter } from 'next/router';
 import styles from '../../styles/board/newBoard.module.css';
 
+const CKEditor = dynamic(() => import('@ckeditor/ckeditor5-react').then(mod => mod.CKEditor), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
+
+const ClassicEditor = dynamic(() => import('@ckeditor/ckeditor5-build-classic'), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
 
 const NewBoard = () => {
     const router = useRouter();

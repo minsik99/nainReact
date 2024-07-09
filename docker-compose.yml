@@ -1,0 +1,26 @@
+version: '27.0.3'
+  services:
+    frontend:
+      build:
+        context: ./nainreact
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      networks:
+        - backend
+      command: npm run dev
+      volumns:
+        - ./frontend:/app
+
+     backend:
+       build:
+         context: ./nainback
+         dockerfile: Dockerfile
+       ports:
+         - "9999:9999"
+       networks:
+         - nain_net
+
+networks:
+  nain_net:
+    driver: bridge
