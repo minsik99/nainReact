@@ -4,7 +4,7 @@ import instance from '../../api/axiosApi';
 import { formatDistanceToNow, parseISO, format } from 'date-fns';
 import ko from 'date-fns/locale/ko';
 
-const MQTT_BROKER_URL = "ws://localhost:9001";
+const MQTT_BROKER_URL = process.env.MQTT_BROKER_URL;
 
 const ChatRoomDetail = ({ room, onClose }) => {
   const [messages, setMessages] = useState([]);
