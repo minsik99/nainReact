@@ -32,7 +32,6 @@ const NewBoard = () => {
             'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
             'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells', '|',
             'undo', 'redo', '|',
-            'insertImage',
         ],
         extraPlugins: [MyCustomUploadAdapterPlugin]
     };
@@ -55,7 +54,7 @@ const NewBoard = () => {
                         const data = new FormData();
                         data.append('file', file);
 
-                        fetch('http://localhost:9999/api/image/notice', {
+                        fetch('http://13.209.244.239:9999/api/image/notice', {
                             method: 'POST',
                             body: data,
                         })

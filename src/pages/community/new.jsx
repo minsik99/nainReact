@@ -47,6 +47,7 @@ const NewBoard = () => {
                         const data = new FormData();
                         data.append('file', file);
     
+                        fetch('http://13.209.244.239:9999/api/image/upload', {
                         fetch('http://localhost:9999/api/image/upload', {
                             method: 'POST',
                             body: data,
