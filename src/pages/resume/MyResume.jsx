@@ -45,23 +45,23 @@ const MyResume = () => {
     try {
       const token = localStorage.getItem('token'); // 실제 유효한 토큰으로 교체
       await Promise.all([
-        axios.delete(`http://localhost:9999/experience/resume/${openResume}`, {
+        axios.delete(`http://13.209.244.239:9999/api/experience/resume/${openResume}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }),
-        axios.delete(`http://localhost:9999/education/resume/${openResume}`, {
+        axios.delete(`http://13.209.244.239:9999/api/education/resume/${openResume}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         }),
-        axios.delete(`http://localhost:9999/activity/resume/${openResume}`, {
+        axios.delete(`http://13.209.244.239:9999/api/activity/resume/${openResume}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
       ]);
-      await axios.delete(`http://localhost:9999/resume/${openResume}`, {
+      await axios.delete(`http://13.209.244.239:9999/api/resume/${openResume}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

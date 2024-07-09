@@ -174,7 +174,7 @@ const MyResumeInsert = () => {
             }
 
             // 이력서 저장 요청
-            const response = await axios.post('http://localhost:9999/resume/create', modifiedResume, {
+            const response = await axios.post('http://13.209.244.239:9999/api/resume/create', modifiedResume, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -185,7 +185,7 @@ const MyResumeInsert = () => {
 
             // 응답 받은 이력서 번호로, 경력 저장 요청
             const experiencePromises = modifiedResume.experience.map(exp => {
-                return axios.post(`http://localhost:9999/experience/resume/${resumeNo}/create`, exp, {
+                return axios.post(`http://13.209.244.239:9999/api/experience/resume/${resumeNo}/create`, exp, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -194,7 +194,7 @@ const MyResumeInsert = () => {
 
             // 응답 받은 이력서 번호로, 학력 저장 요청
             const educationPromises = modifiedResume.education.map(edu => {
-                return axios.post(`http://localhost:9999/education/resume/${resumeNo}/create`, edu, {
+                return axios.post(`http://13.209.244.239:9999/api/education/resume/${resumeNo}/create`, edu, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -203,7 +203,7 @@ const MyResumeInsert = () => {
 
             // 응답 받은 이력서 번호로, 활동 저장 요청
             const activityPromises = modifiedResume.activity.map(act => {
-                return axios.post(`http://localhost:9999/activity/resume/${resumeNo}/create`, act, {
+                return axios.post(`http://13.209.244.239:9999/api/activity/resume/${resumeNo}/create`, act, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

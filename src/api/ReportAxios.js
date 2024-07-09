@@ -1,7 +1,7 @@
 import axios from "axios";
 import instance from "./axiosApi";
 
-const BASE_URL = "http://localhost:9999/report";
+const BASE_URL = "http://13.209.244.239:9999/api/report";
 
 export const getCommunityReport = async () => {
   try {
