@@ -12,7 +12,8 @@ export const signUp = (signUpData) => { axios.post(baseUrl + "/member/signup",si
 
 
 export const login =  (loginData) => {
-    return axios.post("/login", loginData)
+console.log(process.env.NEXT_PUBLIC_API_URL);
+    return axios.post( "/login", loginData)
         .then(response => {
             // 성공적인 응답 처리
             const token = response.headers['authorization'] || response.headers['Authorization'];
@@ -21,11 +22,11 @@ export const login =  (loginData) => {
                 window.localStorage.setItem("token", pureToken);
                 window.localStorage.setItem("isAdmin", response.data.isAdmin);
                 window.localStorage.setItem("refresh", response.data.refresh);
-                window.localStorage.setItem("isSubscribe", response.data.subscribeYN);
+                window.localStorage.setItem("isSubscribe", response.data.isSubscribe);
                 window.localStorage.setItem("memberNo", response.data.memberNo);
                 authStore.setIsAdmin(response.data.isAdmin);
                 authStore.setMemberNo(response.data.memberNo);  
-                authStore.setIsSubscribe(response.data.subscribeYN);            
+                authStore.setIsSubscribe(response.data.isSubscribe);            
                 authStore.checkLoggedIn();
                 
             }

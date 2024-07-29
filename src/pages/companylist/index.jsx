@@ -9,6 +9,7 @@ import Loading from "../../components/designTool/Loading";
 import CustomDropdown from '../../components/designTool/CustomDropdown';
 import SortComponent from "../../components/companylist/SortComponent";
 
+const PYTHON_URL = process.env.NEXT_PUBLIC_AI_URL;
 const CompanyComponent = observer(()=> { 
     const columns = useMemo(() =>[{ Header: 'No', accessor: 'index' },
         { Header: '공고명', accessor: 'title' },
@@ -44,7 +45,7 @@ const CompanyComponent = observer(()=> {
       }, [sortKey, selectHeader]);
     
     const mutation = useMutation(
-        (newKeyword) => axios.post("http://127.0.0.1:8080/companylistsearch", { keyword: newKeyword }),
+        (newKeyword) => axios.post(PYTHON_URL +  "/companylistsearch", { keyword: newKeyword }),
         {
             onSuccess: (response) => {
                 setDataSet(response.data);

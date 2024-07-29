@@ -5,7 +5,7 @@ import instance from "./axiosApi";
 // 인터셉터 적용된 axios 사용하세요
 
 //기본 url 지정
-const COMMUNITY_URL = "/community";
+const COMMUNITY_URL = "/api/community";
 
 const CommunityAxios = {
     //게시글 -----------------------------------------------------------------------------------------------------------------
