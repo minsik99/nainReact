@@ -26,10 +26,12 @@ const InterviewComponent = observer(() => {
     const [isRecording, setIsRecording] = useState(false);
     const [count, setcount] = useState(0);
     const [saved, setSaved] = useState(true);
-    let que = '';
+    const [quest, setQuest] = useState({});
+    const [que, setQue] = useState([]);
+     // 아직 준비되지 않았으면 아무것도 렌더링하지 않음
     useEffect(() => {
-        if(!router.isReady) return;
-        console.log(itvNo, memberNo, decodeURIComponent(question));
+        if (!router.isReady) {
+            return null;}
 
         if (!authStore.isSubscribe) {
             console.log("구독여부", authStore.isSubscribe);
@@ -38,13 +40,15 @@ const InterviewComponent = observer(() => {
         }
 
      try {
-        que = JSON.parse(decodeURIComponent(question));
-        console.log(que);
+        const parsedQue = JSON.parse(decodeURIComponent(question));
+        setQuest(parsedQue);
+        console.log("que:::::", parsedQue);
       } catch (error) {
         console.error('Error parsing JSON:', error);
       }	   
-    }, [router.isReady, question]);
-      
+    }, [router.isReady, question, itvNo]);
+
+
     const paths = [
         { name: '메인', link: '/' },
         { name: 'AI history', link: '/interview' },
@@ -60,7 +64,8 @@ const InterviewComponent = observer(() => {
         } else if (!isRecording) {
             setIsRecording(prevState => !prevState);
         }
-        setcount((preCount)=> preCount + 1);
+        setcount(preCount => preCount + 1);
+
     };
 
     useEffect(() => {
@@ -180,7 +185,8 @@ const InterviewComponent = observer(() => {
                 const formData = new FormData();
                 formData.append('video', blob, `${fileIndex}.webm`);
                 formData.append('itvNo', itvNo);
-                formData.append('qNo', que[fileIndex].qno);
+		console.log('질문확인' ,quest[fileIndex].qno);
+                formData.append('qNo', quest[fileIndex].qno);
                 console.log("FormData prepared:", formData);
                 await stopRecording();
                 await saveOneVideo(formData).then(res => {
@@ -335,7 +341,7 @@ const InterviewComponent = observer(() => {
                                     (
                                         handleInterviewEnd()
                                 ) :
-                                    <span>Q{count} : {que[count - 1].qcontent}</span> 
+                                    <span>Q{count} : {quest[count].qcontent}</span> 
                                 )}
                                 <div>
                                 {count < 11 && isCameraOn &&
@@ -372,4 +378,5 @@ const InterviewComponent = observer(() => {
 
 export default InterviewComponent;
           
+
 

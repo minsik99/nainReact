@@ -1,8 +1,8 @@
 import axios from "axios";
 import instance from "../axiosApi";
 
-const python_url ='http://127.0.0.1:8080';
-const boot_url ='/video';
+const python_url =process.env.NEXT_PUBLIC_AI_URL;
+const boot_url ='/api/video';
 
 //문제는 여기임 cors
 export const saveOneVideo = async (formData) => {

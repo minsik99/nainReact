@@ -1,6 +1,6 @@
 import instance from "../axiosApi";
 
-const BASE_URL = "/interview";
+const BASE_URL = "/api/interview";
 
 export const getInterviewList = async (page, size, memberNo) => {
   try {

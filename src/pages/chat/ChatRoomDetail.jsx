@@ -4,8 +4,7 @@ import instance from '../../api/axiosApi';
 import { formatDistanceToNow, parseISO, format } from 'date-fns';
 import ko from 'date-fns/locale/ko';
 
-const MQTT_BROKER_URL = process.env.MQTT_BROKER_URL;
-
+const MQTT_BROKER_URL = process.env.NEXT_PUBLIC_MQTT_BROKER_URL;
 const ChatRoomDetail = ({ room, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -35,7 +34,7 @@ const ChatRoomDetail = ({ room, onClose }) => {
 
     const fetchMessages = async () => {
       try {
-        const response = await instance.get(`/chat/rooms/${room.chatRoomNo}/messages`);
+        const response = await instance.get(`/api/chat/rooms/${room.chatRoomNo}/messages`);
         setMessages(response.data);
         scrollToBottom();
       } catch (error) {
@@ -103,7 +102,7 @@ const ChatRoomDetail = ({ room, onClose }) => {
       chatRoomNo: room.chatRoomNo,
     };
     try {
-      const response = await instance.post(`/chat/rooms/${room.chatRoomNo}/send`, message);
+      const response = await instance.post(`/api/chat/rooms/${room.chatRoomNo}/send`, message);
       console.log('Sent message response:', response.data);
 
       if (response.data && response.data.messageDate) {

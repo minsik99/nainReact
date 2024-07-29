@@ -1,7 +1,7 @@
 import instance from "./axiosApi";
 
 //기본 url 지정
-const NOTICE_URL = "/notice";
+const NOTICE_URL = "/api/notice";
 
 const noticeAxios = {
     

@@ -1,6 +1,9 @@
 
 
 module.exports = {
+   compiler: {
+     styledComponents: true,
+   },
     async redirects() {
       return [
         {
@@ -10,4 +13,5 @@ module.exports = {
         },
       ];
     },
+	distDir: 'build',
 };

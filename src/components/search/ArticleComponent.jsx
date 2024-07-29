@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import styles from "../../styles/search/article.module.css";
 import Loading from "../designTool/Loading";
 
+const PYTHON_URL = process.env.NEXT_PUBLIC_AI_URL;
 const ArticleComponent = () => {
   const [articles, setArticles] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -20,7 +21,7 @@ const ArticleComponent = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8080/data", {
+      const response = await axios.post(PYTHON_URL +  "/data", {
         keyword,
         page_number: reset ? 1 : page,
         page_size: 10,

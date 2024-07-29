@@ -1,6 +1,6 @@
 import instance from "../axiosApi";
 
-const BASE_URL = "/interview/voice";
+const BASE_URL = "/api/interview/voice";
 
 export const getQrecord = async (itvNo) => {
   try {

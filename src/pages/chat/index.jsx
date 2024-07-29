@@ -15,7 +15,7 @@ const ChatRoomsPage = () => {
     useEffect(() => {
         const fetchRooms = async () => {
             try {
-                const response = await instance.get('/chat/rooms');
+                const response = await instance.get('/api/chat/rooms');
                 setRooms(response.data);
             } catch (error) {
                 console.error('Error fetching rooms:', error);
@@ -43,7 +43,7 @@ const ChatRoomsPage = () => {
 
     const handleRoomSubmit = async (newRoom) => {
         try {
-            const response = await instance.post('/chat/rooms', newRoom);
+            const response = await instance.post('/api/chat/rooms', newRoom);
             setRooms([...rooms, response.data]);
             setShowCreateRoomPopup(false);
         } catch (error) {
